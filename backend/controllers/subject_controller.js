@@ -163,7 +163,7 @@ exports.readSubject = (req,res) =>
     }
 }
 
-exports.changeDescription() = (req,res) => {
+exports.changeDescription = (req,res) => {
 
     try {
         const description = req.body.description; 
