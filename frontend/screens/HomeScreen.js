@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
+import {FaFontAwesome } from 'react-icons/fa' 
 
 const HomeScreen = () => {
   return (
