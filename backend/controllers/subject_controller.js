@@ -130,7 +130,6 @@ exports.getSubjectMode = async (req, res) => {
     }
 };
 
-
 exports.readSubject = (req,res) => 
 {
     
