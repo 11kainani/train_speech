@@ -1,7 +1,7 @@
 //colours.js
 export const COLORS = {
     primary: '#181819', // Example main color
-    secondary: '#FFD700',
+    primaryText: '#FFD700',
     selection: "#36A5F0", 
     subAccent: "#A8A387",
     backgroundDark:"#171414",
