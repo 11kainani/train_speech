@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
+import ScreenContainer from '../components/Display/screenContainer';
 
 const SubjectBankScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <ScreenContainer>
       <Text>Subject Bank!</Text>
-    </View>
+    </ScreenContainer>
   );
 };
 

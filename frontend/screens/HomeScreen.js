@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
-import {FaFontAwesome } from 'react-icons/fa' 
+import ScreenContainer from '../components/Display/screenContainer';
 
 const HomeScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <ScreenContainer>
       <Text>Home! Sweet Home</Text>
-    </View>
+    </ScreenContainer>
   );
 };
 
