@@ -2,13 +2,12 @@ import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
 
-const PanelButton = ({ title, style }) => {
+const PanelButton = ({ title, style, pressAction }) => {
   return (
     <TouchableOpacity
       style={[panelStyle.panel, style]}
-      onPress={() => {
-        console.log(title);
-      }}
+      onPress={pressAction}
+      
     >
       <View style={panelStyle.container}>
         <Text style={panelStyle.text}> {title} </Text>
