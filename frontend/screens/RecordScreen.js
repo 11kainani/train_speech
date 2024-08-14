@@ -26,7 +26,8 @@ const horizontalPanel = StyleSheet.create({
 })
 
 
-const RecordScreen = () => {
+
+const RecordScreen = ({navigation}) => {
 
   const [selectedTitle, setSelectedTitle] = useState(null);
 
@@ -34,9 +35,9 @@ const RecordScreen = () => {
 
   const [readTitle, subjectTitle, questionTitle] = ["Reading Prompt","New Subject","Random Question" ];
   
-  const panels = [<PanelButton key="1" title = {readTitle} style={[horizontalPanel.panel, selectedTitle == readTitle && horizontalPanel.selectedPanel] } pressAction={() => titleSelection(readTitle)} />,
-    <PanelButton key="2" title = {subjectTitle}  style={[horizontalPanel.panel, selectedTitle == subjectTitle && horizontalPanel.selectedPanel] }  pressAction={() => {titleSelection(subjectTitle)}} />,
-    <PanelButton key="3" title = {questionTitle}  style={[horizontalPanel.panel, selectedTitle == questionTitle && horizontalPanel.selectedPanel] }  pressAction={() => titleSelection(questionTitle)}/> ];
+  const panels = [<PanelButton key="1" title = {readTitle} style={[horizontalPanel.panel, selectedTitle == readTitle && horizontalPanel.selectedPanel] } onPress={() => titleSelection(readTitle)} />,
+    <PanelButton key="2" title = {subjectTitle}  style={[horizontalPanel.panel, selectedTitle == subjectTitle && horizontalPanel.selectedPanel] }  onPress={() => {titleSelection(subjectTitle)}} />,
+    <PanelButton key="3" title = {questionTitle}  style={[horizontalPanel.panel, selectedTitle == questionTitle && horizontalPanel.selectedPanel] }  onPress={() => titleSelection(questionTitle)}/> ];
 
 
   return (
@@ -45,13 +46,7 @@ const RecordScreen = () => {
         {panels}
       </View>
       
-      <Button 
-        onPress={() => {
-          console.log("check");
-        }}
-        title = "Start"
-      />
-
+      <PanelButton title={"START"} onPress={() => navigation.navigate('Record Settings',{source: selectedTitle})} /> 
       
 
     </ScreenContainer>

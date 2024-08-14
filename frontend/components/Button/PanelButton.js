@@ -1,12 +1,13 @@
 import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
+import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 
-const PanelButton = ({ title, style, pressAction }) => {
+const PanelButton = ({ title, style, onPress }) => {
   return (
     <TouchableOpacity
       style={[panelStyle.panel, style]}
-      onPress={pressAction}
+      onPress={onPress}
       
     >
       <View style={panelStyle.container}>
@@ -20,6 +21,9 @@ const panelStyle = StyleSheet.create({
   panel: {
     backgroundColor: COLORS.primary,
     margin: 10,
+    height: responsiveHeight(5),
+    width: responsiveWidth(50),
+
   },
 
   text: {

@@ -5,13 +5,13 @@ import RecordScreen from '../screens/RecordScreen';
 import SubjectBankScreen from '../screens/SubjectBankScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../utils/colors';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import RecordStack from './stack/RecordStack';
 
 const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
   return (
-    <Tab.Navigator
+    <Tab.Navigator 
     screenOptions={({ route }) => ({
       tabBarIcon: ({focused, color}) => {
         let iconName; 
@@ -28,11 +28,11 @@ const Navigation = () => {
       },
       tabBarActiveTintColor : COLORS.selection , 
       tabBarInactiveTintColor: COLORS.subAccent,
-
+      headerShown: false 
     })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Record" component={RecordScreen} />
+      <Tab.Screen name="Record" component={RecordStack}  />
       <Tab.Screen name="SubjectBank" component={SubjectBankScreen} />
     </Tab.Navigator>
   );
