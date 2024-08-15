@@ -3,6 +3,7 @@ const Question = require('../models/question');
 const Prompt = require('../models/prompt')
 const crypto = require("crypto");
 const Sequelize = require('../config');
+const { error } = require('console');
 
 const maxSizeDescription = 400
 
@@ -133,8 +134,6 @@ exports.getSubjectMode = async (req, res) => {
 exports.readSubject = (req,res) => 
 {
     
-
-    
     try {
         const idSubject= req.params.idSubject;
         if(!idSubject)
@@ -179,4 +178,21 @@ exports.changeDescription = (req,res) => {
         console.error(error);
         return res.status(500).json({ error: "Server error" });
     }
+}
+
+exports.readAllSubjects = async (req,res) => 
+{
+    try {
+        const subjects = await Subject.findAll();
+        if(!subjects) {
+            return res.status(400).json({error: "There aren't any subjects"})
+        }
+
+        return res.status(200).json({subjects: subjects})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
+    }
+    
+
 }

@@ -10,5 +10,6 @@ router.post('/create',subjectController.createSubject);
 router.post('/assign',subjectController.assignSubject);
 router.get('/check/:idSubject',subjectController.getSubjectMode);
 router.get('/read/:idSubject',subjectController.readSubject)
+router.get('/all', subjectController.readAllSubjects);
 
 module.exports = router;
