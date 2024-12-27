@@ -2,10 +2,10 @@
 
 import React, {useState} from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import PanelButton from '../components/Button/PanelButton';
-import { responsiveHeight, responsiveWidth } from '../utils/responsive';
-import ScreenContainer from '../components/Display/screenContainer';
-import { COLORS } from '../utils/colors';
+import PanelButton from '../../components/Button/PanelButton';
+import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
+import ScreenContainer from '../../components/Display/screenContainer';
+import { COLORS } from '../../utils/colors';
 
 const horizontalPanel = StyleSheet.create({
   horizontalContainer: 

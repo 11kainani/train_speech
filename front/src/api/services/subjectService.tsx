@@ -3,7 +3,7 @@ import apiConfig from '../config/apiConfig';
 
 const subjectEndpoint = "subject";
 
-const getSubjects = async () => {
+export const getSubjects = async () => {
     try {
         const url = `${apiConfig.baseURL}/${subjectEndpoint}/all`;
         const response = await fetch(url, {
@@ -26,4 +26,3 @@ const getSubjects = async () => {
       }
 };
 
-export { getSubjects };

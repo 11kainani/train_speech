@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import ScreenContainer from '../components/Display/screenContainer';
-import { subjectService } from '../api/index';
+import { getSubjects } from '../api';
 
 const SubjectBankScreen = () => {
 
@@ -12,7 +12,7 @@ const SubjectBankScreen = () => {
 
   const fetchSubjects = async () => {
     try {
-        const results = await subjectService.getSubjects();
+        const results = await getSubjects();
         console.log("Fetched Subjects:", results);
         setData(results.subjects);
         
@@ -48,5 +48,6 @@ const SubjectBankScreen = () => {
     </ScreenContainer>  
   );
 };
+
 
 export default SubjectBankScreen;

@@ -3,7 +3,9 @@ import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
 import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 
-const PanelButton = ({ title, style, onPress }) => {
+
+
+const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
   return (
     <TouchableOpacity
       style={[panelStyle.panel, style]}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
-import RecordScreen from '../screens/RecordScreen';
+import RecordScreen from '../screens/record/RecordScreen';
 import SubjectBankScreen from '../screens/SubjectBankScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../utils/colors';
