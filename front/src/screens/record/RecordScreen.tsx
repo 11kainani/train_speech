@@ -1,10 +1,10 @@
 // RecordScreen.js
 
 import React, {useState} from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
 import PanelButton from '../../components/Button/PanelButton';
 import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
-import ScreenContainer from '../../components/Display/screenContainer';
+import ScreenContainer from '../../components/Display/ScreenContainer';
 import { COLORS } from '../../utils/colors';
 
 const horizontalPanel = StyleSheet.create({
@@ -22,10 +22,17 @@ const horizontalPanel = StyleSheet.create({
   selectedPanel: {
     backgroundColor: COLORS.selection,
 
-  }
+  }, 
 })
 
-
+const styles = StyleSheet.create({ 
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
 
 const RecordScreen = ({navigation}) => {
 
@@ -41,7 +48,7 @@ const RecordScreen = ({navigation}) => {
 
 
   return (
-    <ScreenContainer>
+    <SafeAreaView style={styles.container}>
       <View style={horizontalPanel.horizontalContainer}>
         {panels}
       </View>
@@ -49,7 +56,7 @@ const RecordScreen = ({navigation}) => {
       <PanelButton title={"START"} onPress={() => navigation.navigate('Record Settings',{source: selectedTitle})} /> 
       
 
-    </ScreenContainer>
+    </SafeAreaView>
   );
 };
 
