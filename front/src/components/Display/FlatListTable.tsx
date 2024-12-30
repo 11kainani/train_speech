@@ -1,0 +1,107 @@
+import React from "react";
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { COLORS, DIMENSIONS } from "../../utils";
+
+const FlatListTable: React.FC<FlatListTableProps> = ({ data }) => {
+  const handleItemPress = (itemName: string) => {
+    console.log(itemName);
+  };
+
+  const handleLeftButtonPress = (idSubject: string) => {
+    console.log(`Left button pressed for ID: ${idSubject}`);
+  };
+
+  const handleRightButtonPress = (idSubject: string) => {
+    console.log(`Right button pressed for ID: ${idSubject}`);
+  };
+
+  const renderItem = ({
+    item,
+  }: {
+    item: { idSubject: string; description: string };
+  }) => (
+    <View>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => handleLeftButtonPress(item.idSubject)}>
+          <Ionicons
+            name="settings"
+            size={DIMENSIONS.iconSize}
+            color={COLORS.white}
+            
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.text}
+          onPress={() => handleItemPress(item.description)}
+        >
+          <Text style={styles.item}>{item.description}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleRightButtonPress(item.idSubject)}
+        >
+          <Ionicons
+            name="trash-outline"
+            size={DIMENSIONS.iconSize}
+            color={COLORS.white}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.line} />
+    </View>
+  );
+  return (
+    <View style={styles.segmentation}>
+      <FlatList
+        data={data}
+        keyExtractor={({ idSubject }) => idSubject}
+        renderItem={renderItem}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  segmentation: {
+    backgroundColor: COLORS.subSecondary,
+    height: "75%",
+  },
+
+  item: {
+    padding: 16,
+    backgroundColor: COLORS.subSecondary,
+    color: COLORS.white,
+    textAlign: "center",
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+
+  line: {
+    borderBottomWidth: DIMENSIONS.smallMargin,
+    borderBottomColor: COLORS.white,
+    width: "75%",
+    alignSelf: "center",
+  },
+
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingVertical: DIMENSIONS.padding,
+    marginVertical: DIMENSIONS.margin,
+  },
+  text: {
+    width: "65%",
+    
+  },
+});
+
+export default FlatListTable;
