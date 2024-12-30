@@ -16,7 +16,7 @@ export const getSubjects = async () => {
     
         const data = await response.json();
 
-        //console.log("Response Status:", data); 
+        console.log("Response Status:", data); 
 
         return data;
 
