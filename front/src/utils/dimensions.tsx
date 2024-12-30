@@ -6,4 +6,5 @@ export const DIMENSIONS = {
     margin: 5,
     smallMargin: 3,
     iconSize: 16,
+    padding: 5,
 }
