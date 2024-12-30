@@ -13,7 +13,7 @@ const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
       
     >
       <View style={panelStyle.container}>
-        <Text style={panelStyle.text}> {title} </Text>
+        <Text style={[panelStyle.text, style]}> {title} </Text>
       </View>
     </TouchableOpacity>
   );
@@ -30,6 +30,7 @@ const panelStyle = StyleSheet.create({
 
   text: {
     color: COLORS.primaryText,
+    textTransform: 'uppercase',
   },
 
   container: {
