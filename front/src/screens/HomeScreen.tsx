@@ -1,15 +1,24 @@
 // HomeScreen.js
 
 import React from 'react';
-import { View, Text } from 'react-native';
-import ScreenContainer from '../components/Display/screenContainer';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+import ScreenContainer from '../components/Display/ScreenContainer';
+import { COLORS } from '../utils';
 
 const HomeScreen = () => {
   return (
-    <ScreenContainer>
+    <SafeAreaView style={styles.container}>
       <Text>Home! Sweet Home</Text>
-    </ScreenContainer>
+    </SafeAreaView>
   );
 };
 
+
+const styles = StyleSheet.create({
+  container: {
+
+    backgroundColor: COLORS.backgroundDark,
+
+  },
+})
 export default HomeScreen;
