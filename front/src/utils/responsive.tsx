@@ -3,11 +3,11 @@ import { Dimensions } from "react-native";
 
 const {height: screenHeight, width : screenWidth} = Dimensions.get('window');
 
-const responsiveHeight = (percentage) => {
+const responsiveHeight = (percentage : number) => {
     return percentage*screenHeight/100;
 };
 
-const responsiveWidth = (percentage) => {
+const responsiveWidth = (percentage : number) => {
     return percentage*screenWidth/100;
 };
 
