@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import PanelButton from './PanelButton';
 
 
-const HorizontalButtons = (buttonList) => {
+const HorizontalButtons: React.FC<HorizontalButtonsProps> = (buttonList) => {
     return (
         <View>
             {buttonList.map((title,index) =>(
