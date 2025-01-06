@@ -7,11 +7,21 @@ const { error } = require('console');
 
 const maxSizeDescription = 400
 
+/**
+ * Generate Hex key
+ * @returns random 8bytes hex key
+ */
 function generateHexKey()
 {
     return crypto.randomBytes(8).toString("hex");
 }
 
+/**
+ * 
+ * @param {description} req 
+ * @param {*} res 
+ * @returns code response depending on if the Subject is created
+ */
 exports.createSubject= async (req,res) =>
 { 
     try {
@@ -52,6 +62,8 @@ exports.createSubject= async (req,res) =>
         return res.status(500).json({ error: "Server error" });
     }    
 }
+
+
 exports.assignSubject = async (req, res) => {
     try {
         const idSubject = req.body.idSubject;
@@ -161,9 +173,20 @@ exports.readSubject = (req,res) =>
     }
 }
 
-exports.changeDescription = (req,res) => {
+exports.changeDescription = async (req,res) => {
 
     try {
+        const idSubject = req.body.idSubject; 
+        if (!idSubject) {
+            return res.status(400).json({error: "idSubject not defined"});
+        }
+
+        const subject = await Subject.findByPk(idSubject); 
+
+        if (!subject){
+            return res.status(400).json({error: "idSubject not assigned to a subject"});
+        }
+
         const description = req.body.description; 
         if(!description)
         {
@@ -173,6 +196,10 @@ exports.changeDescription = (req,res) => {
         {
             return res.status(400).json({error: "Length of your description is too much"})
         }
+
+        subject.description = description; 
+        await subject.save();
+        return res.status(200).json({message: "Reccord updated successfully", subject: subject});
 
     } catch (error) {
         console.error(error);
@@ -194,5 +221,30 @@ exports.readAllSubjects = async (req,res) =>
         return res.status(500).json({ error: "Server error" });
     }
     
+
+}
+
+exports.deleteSubject = async (req,res) => {
+
+    const idSubject = req.body.idSubject;
+
+    try {
+
+        if (!idSubject)
+        {
+            return res.status(400).json({error: "IdSubject not defined"});
+        }
+
+        Subject.findOne(idSubject).then((subject)=> {
+             subject.destroy().then(() => {
+                return res.status(200).json({message: f`Subject ${idSubject} has been deleted`});
+             } );
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
+    }
+
 
 }
