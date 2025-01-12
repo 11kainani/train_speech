@@ -4,8 +4,8 @@ import React, {useState} from 'react';
 import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
 import PanelButton from '../../components/Button/PanelButton';
 import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
-import ScreenContainer from '../../components/Display/ScreenContainer';
 import { COLORS } from '../../utils/colors';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const horizontalPanel = StyleSheet.create({
   horizontalContainer: 
@@ -13,11 +13,13 @@ const horizontalPanel = StyleSheet.create({
     flexDirection: 'row', 
     padding: 10,
     margin: 20,
+    
   },
   panel: {
     margin: 5,
     height: responsiveHeight(20), 
     width: responsiveWidth(26),
+    
   },
   selectedPanel: {
     backgroundColor: COLORS.selection,
@@ -28,7 +30,6 @@ const horizontalPanel = StyleSheet.create({
 const styles = StyleSheet.create({ 
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
   },

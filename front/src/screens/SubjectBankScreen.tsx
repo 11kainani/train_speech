@@ -10,7 +10,6 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import ScreenContainer from "../components/Display/ScreenContainer";
 import { getSubjects } from "../api";
 import { COLORS } from "../utils";
 import { FlatListTable } from "../components/Display";

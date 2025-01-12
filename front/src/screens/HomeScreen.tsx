@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
-import ScreenContainer from '../components/Display/ScreenContainer';
 import { COLORS } from '../utils';
 
 const HomeScreen = () => {
