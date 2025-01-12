@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: subject_controller.js</title>
+    <title>JSDoc: Source: controllers/subject_controller.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: subject_controller.js</h1>
+    <h1 class="page-title">Source: controllers/subject_controller.js</h1>
 
     
 
@@ -33,12 +33,19 @@ const crypto = require("crypto");
 const Sequelize = require("../config");
 const { error } = require("console");
 
+/**
+ * @module controllers/subject_controller
+ * @description This module contains controller functions for managing subjects, including creating, updating, retrieving, and deleting subjects.
+ */
 
-
+/**
+ * Maximum size of a description
+ */
 const maxSizeDescription = 400;
 
 /**
  * Generate Hex key
+ * @function generateHexKey
  * @returns random 8bytes hex key
  */
 function generateHexKey() {
@@ -51,8 +58,7 @@ function generateHexKey() {
  *
  * @async
  * @function createSubject
- * @method POST
- * @route /create
+ * @route {POST} /create
  * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body.
  * @param {string} req.body.description - The description of the subject to be created.
@@ -99,12 +105,11 @@ exports.createSubject = async (req, res) => {
  * 
  * @async 
  * @function assignSubject
- * @method POST
- * @route /assign
+ * @route {POST} /assign
  * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body.
- * @param {Object} req.body.idSubject - The id associated to the subject.
- * @param {Object} req.body.mode - The mode of the subject : It can either be a "question"  or "prompt". CASE_SENSITIVE
+ * @param {string} req.body.idSubject - The id associated to the subject.
+ * @param {string} req.body.mode - The mode of the subject : It can either be a "question"  or "prompt". CASE_SENSITIVE
  * @param {Object} res - Express response object.
  * @returns {Promise&lt;void>} - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
@@ -183,8 +188,7 @@ exports.assignSubject = async (req, res) => {
  * Get the mode the subject: either prompt or question.
  * @async
  * @function getSubjectMode 
- * @method GET
- * @route @route /check/:idSubject
+ * @route {GET}/check/:idSubject
  * @param {Object} req - Express request object.
  * @param {Object} req.params - Express the params of the request 
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
@@ -234,6 +238,7 @@ exports.getSubjectMode = async (req, res) => {
  * Get the mode the subject: either prompt or question.
  * @async
  * @function readSubject 
+ * @route {GET} /read/:idSubject
  * @param {Object} req - Express request object.
  * @param {Object} req.params - Express the params of the request 
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
@@ -263,6 +268,18 @@ exports.readSubject = (req, res) => {
   }
 };
 
+/**
+ * Change the description of a subject
+ * @async
+ * @function changeDescription
+ * @route {PATCH} /updateDescription
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - The request body
+ * @param {Object} req.body.idSubject - The id associated to the subject. 
+ * @param {Object} res - Espress response object
+ * @returns - Sends a JSON response with the result of the operation.
+ * @throws {Error} - Sends a 500 status if there is a server error.
+ */
 exports.changeDescription = async (req, res) => {
   try {
     const idSubject = req.body.idSubject;
@@ -301,6 +318,16 @@ exports.changeDescription = async (req, res) => {
   }
 };
 
+/**
+ * Read all the subjects
+ * @async 
+ * @function readAllSubjects 
+ * @route {GET} /all
+ * @param {Object} req - Express request object. 
+ * @param {Object} res - Espress response object
+ * @returns - Sends a JSON response with the result of the operation.
+ * @throws {Error} - Sends a 500 status if there is a server error.
+ */
 exports.readAllSubjects = async (req, res) => {
   try {
     const subjects = await Subject.findAll();
@@ -315,6 +342,18 @@ exports.readAllSubjects = async (req, res) => {
   }
 };
 
+/**
+ * Delete a subject 
+ * @async
+ * @function deleteSubject
+ * @route {DELETE} /delete
+ * @param {Object} req - Express request object. 
+ * @param {Object} req.body - The request body
+ * @param {Object} req.body.idSubject - The id associated to the subject. 
+ * @param {Object} res - Espress response object
+ * @returns - Sends a JSON response with the result of the operation.
+ * @throws {Error} - Sends a 500 status if there is a server error.
+ */
 exports.deleteSubject = async (req, res) => {
   const idSubject = req.body.idSubject;
 
@@ -335,6 +374,7 @@ exports.deleteSubject = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
+
 </code></pre>
         </article>
     </section>
@@ -345,13 +385,13 @@ exports.deleteSubject = async (req, res) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#GET">GET</a></li><li><a href="global.html#POST">POST</a></li><li><a href="global.html#generateHexKey">generateHexKey</a></li><li><a href="global.html#readSubject">readSubject</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_subject_controller.html">controllers/subject_controller</a></li><li><a href="module-routes_subject.html">routes/subject</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Jan 06 2025 17:18:26 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jan 08 2025 18:03:51 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
