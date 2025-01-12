@@ -7,4 +7,5 @@ export const DIMENSIONS = {
     smallMargin: 3,
     iconSize: 16,
     padding: 5,
+    unit: 1,
 }
