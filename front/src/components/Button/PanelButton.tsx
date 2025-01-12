@@ -31,6 +31,9 @@ const panelStyle = StyleSheet.create({
   text: {
     color: COLORS.primaryText,
     textTransform: 'uppercase',
+    textAlignVertical: "center",
+    textAlign: "center",
+
   },
 
   container: {

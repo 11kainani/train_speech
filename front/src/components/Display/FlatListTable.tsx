@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
   },
 
   line: {
-    borderBottomWidth: DIMENSIONS.smallMargin,
-    borderBottomColor: COLORS.white,
-    width: "75%",
+    borderBottomWidth: DIMENSIONS.unit,
+    borderBottomColor: COLORS.subAccent,
+    width: "85%",
     alignSelf: "center",
   },
 
