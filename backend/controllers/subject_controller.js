@@ -319,14 +319,14 @@ exports.readAllSubjects = async (req, res) => {
  * @function deleteSubject
  * @route {DELETE} /delete
  * @param {Object} req - Express request object. 
- * @param {Object} req.body - The request body
- * @param {Object} req.body.idSubject - The id associated to the subject. 
+ * @param {Object} req.query - The request query
+ * @param {Object} req.query.idSubject - The id associated to the subject. 
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
  */
 exports.deleteSubject = async (req, res) => {
-  const idSubject = req.body.idSubject;
+  const idSubject = req.query.idSubject;
 
   try {
     if (!idSubject) {

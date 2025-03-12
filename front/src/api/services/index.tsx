@@ -1,3 +1,3 @@
-import { getSubjects } from './subjectService';
+import subjectService from './subjectService';
 
-export * from './subjectService';
+export {default as subjectService} from './subjectService';

@@ -10,7 +10,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { getSubjects } from "../api";
+import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import { FlatListTable } from "../components/Display";
 import PanelButton from "../components/Button/PanelButton";
@@ -18,10 +18,16 @@ import PanelButton from "../components/Button/PanelButton";
 const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [refreshData, setRefreshData] = useState(false);
 
+
+  const handleSubjectRefresh = () => {
+    console.log("Data Refreshed");
+    setRefreshData(prev => !prev);
+  };
   const fetchSubjects = async () => {
     try {
-      const results = await getSubjects();
+      const results = await subjectService.getSubjects();
       console.log("Fetched Subjects:", results);
       setData(results.subjects);
     } catch (error) {
@@ -33,19 +39,23 @@ const SubjectBankScreen = () => {
 
   const addSubject = async () => {
     console.log("Pressed Add button");
+    handleSubjectRefresh();
   };
   const filterQuestion = async () => {
     console.log("Filter Questions");
+    handleSubjectRefresh();
   };
 
   const filterPrompt = async () => {
     console.log("Filter Prompt");
+    handleSubjectRefresh();
   };
   // Use useEffect to fetch subjects when component mounts
   useEffect(() => {
     fetchSubjects();
     setLoading(false);
-  }, []); // Empty dependency array means this runs only on mount
+    
+  }, [refreshData]); // Empty dependency array means this runs only on mount
 
   return (
     <View style={styles.container}>
@@ -66,7 +76,8 @@ const SubjectBankScreen = () => {
                 onPress={filterPrompt}
               />
             </View>
-            <FlatListTable data={data} />
+            <FlatListTable data={data } 
+            onDeleteSuccess={handleSubjectRefresh} />
 
             <PanelButton
               style={styles.addButton}
