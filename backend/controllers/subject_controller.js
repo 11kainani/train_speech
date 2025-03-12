@@ -2,6 +2,7 @@ const {Subject, Question, Prompt, sequelize} = require('../models');
 const crypto = require("crypto");
 const Sequelize = require("../config");
 const { error } = require("console");
+const subject = require('../models/subject');
 
 /**
  * @module controllers/subject_controller
@@ -332,13 +333,14 @@ exports.deleteSubject = async (req, res) => {
       return res.status(400).json({ error: "IdSubject not defined" });
     }
 
-    Subject.findOne(idSubject).then((subject) => {
-      subject.destroy().then(() => {
-        return res
-          .status(200)
-          .json({ message: f`Subject ${idSubject} has been deleted` });
-      });
-    });
+    const subject = await  Subject.findByPk(idSubject);
+    if(!subject)
+    {
+      return res.status(400).json({error: `Subject ${idSubject} doesn't exist.`})
+    }
+    await subject.destroy()
+    return res.status(200).json({ message: `Subject ${idSubject} has been deleted` });
+    
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
