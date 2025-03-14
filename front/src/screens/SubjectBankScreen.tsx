@@ -3,32 +3,44 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   ActivityIndicator,
-  FlatList,
   StyleSheet,
-  SafeAreaView,
-  ScrollView,
+
 } from "react-native";
 import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import { FlatListTable } from "../components/Display";
 import PanelButton from "../components/Button/PanelButton";
+import { Subject, Prompt } from "../models";
 
 const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Subject[]>([]);
+  const [filteredData, setfilteredData] = useState<Subject[]>([]);
   const [refreshData, setRefreshData] = useState(false);
+  const [promptIds, setPromptIds] = useState<string[]>([]);
+  const [isFiltered, setIsFiltered] = useState(false);
 
 
-  const handleSubjectRefresh = () => {
-    console.log("Data Refreshed");
+  const handleSubjectRefresh = async () => {
     setRefreshData(prev => !prev);
+
+    console.log("Is Filtered:", isFiltered, "Filter", filteredData)
   };
+
+  const jsonToSubject = (data: { subjects: Subject[]}): Subject[] => {
+      return data.subjects.map((subject:any) => ({ 
+        description: subject.description,
+        idSubject: subject.idSubject,
+      }));
+  };
+
   const fetchSubjects = async () => {
     try {
+      setLoading(true);
       const results = await subjectService.getSubjects();
-      console.log("Fetched Subjects:", results);
+      const check = jsonToSubject(results)
+      //console.log("Fetched Subjects:", check);
       setData(results.subjects);
     } catch (error) {
       console.error("Failed to fetch subjects:", error);
@@ -47,9 +59,29 @@ const SubjectBankScreen = () => {
   };
 
   const filterPrompt = async () => {
-    console.log("Filter Prompt");
+
+    setIsFiltered(prev => !prev)
+    //console.log("Filter Prompt");
+    try{
+      setLoading(true);
+      const results = await subjectService.getPromptId();
+      setPromptIds(parserPromptId(results));
+      const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
+      setfilteredData(filteredData);
+    }catch(error)
+    {
+
+    }finally{
+      setLoading(false);
+    }
     handleSubjectRefresh();
   };
+
+  const parserPromptId = (promptJson: any): string[] => {
+   const id = promptJson.prompts.map((prompt: { idPrompt: string; }) => prompt.idPrompt);
+    return id;
+
+  }
   // Use useEffect to fetch subjects when component mounts
   useEffect(() => {
     fetchSubjects();
@@ -76,8 +108,13 @@ const SubjectBankScreen = () => {
                 onPress={filterPrompt}
               />
             </View>
-            <FlatListTable data={data } 
-            onDeleteSuccess={handleSubjectRefresh} />
+            
+            
+              {isFiltered ? (<FlatListTable data={filteredData } 
+            onDeleteSuccess={handleSubjectRefresh} />) : (<FlatListTable data={data } 
+            onDeleteSuccess={handleSubjectRefresh} />)}
+        
+            
 
             <PanelButton
               style={styles.addButton}

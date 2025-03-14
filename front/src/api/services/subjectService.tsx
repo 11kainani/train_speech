@@ -61,7 +61,36 @@ const subjectService = {
       console.error('Error deleting subject:', error);
       throw error;
     }
+  },
+
+  getPromptId:async () => {
+    try {
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompts`
+      const response = await fetch(url, {
+        method: 'GET', 
+        headers: apiConfig.headers,
+      });
+
+      if(!response.ok)
+      {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response Status:", data); 
+      return data;
+
+      
+      
+    } catch (error) {
+      console.error('Error deleting subject:', error);
+      throw error;
+    }
+
+    
+
   }
 };
+
 
 export default subjectService;
