@@ -19,6 +19,7 @@ const SubjectBankScreen = () => {
   const [filteredData, setfilteredData] = useState<Subject[]>([]);
   const [refreshData, setRefreshData] = useState(false);
   const [promptIds, setPromptIds] = useState<string[]>([]);
+  const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
 
 
@@ -54,17 +55,41 @@ const SubjectBankScreen = () => {
     handleSubjectRefresh();
   };
   const filterQuestion = async () => {
-    console.log("Filter Questions");
-    handleSubjectRefresh();
+    
+    console.log("questions", questionIds);
+    if(!filteredData)
+      {
+        searchQuestionsIds();
+      }else
+      {
+        const filteredData = data.filter(subject => questionIds.includes(subject.idSubject));
+        console.log(filteredData);
+        setfilteredData(filteredData);
+      }
+      setIsFiltered(prev => !prev)
+      
+      handleSubjectRefresh();
   };
 
   const filterPrompt = async () => {
 
+    if(!filteredData)
+    {
+      searchPromptIds();
+    }else
+    {
+      const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
+      setfilteredData(filteredData);
+    }
     setIsFiltered(prev => !prev)
-    //console.log("Filter Prompt");
+    
+    handleSubjectRefresh();
+  };
+
+  const searchPromptIds = async () => {
     try{
       setLoading(true);
-      const results = await subjectService.getPromptId();
+      const results = await subjectService.getPrompts();
       setPromptIds(parserPromptId(results));
       const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
       setfilteredData(filteredData);
@@ -74,8 +99,22 @@ const SubjectBankScreen = () => {
     }finally{
       setLoading(false);
     }
-    handleSubjectRefresh();
-  };
+  }
+
+    const searchQuestionsIds = async () => {
+    try{
+      setLoading(true);
+      const results = await subjectService.getQuestions();
+      setQuestionIds(parserPromptId(results));
+      const filteredData = data.filter(subject => questionIds.includes(subject.idSubject));
+      setfilteredData(filteredData);
+    }catch(error)
+    {
+
+    }finally{
+      setLoading(false);
+    }
+  }
 
   const parserPromptId = (promptJson: any): string[] => {
    const id = promptJson.prompts.map((prompt: { idPrompt: string; }) => prompt.idPrompt);

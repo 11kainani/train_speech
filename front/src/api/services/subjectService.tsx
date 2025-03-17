@@ -63,7 +63,7 @@ const subjectService = {
     }
   },
 
-  getPromptId:async () => {
+  getPrompts:async () => {
     try {
       const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompts`
       const response = await fetch(url, {
@@ -83,11 +83,35 @@ const subjectService = {
       
       
     } catch (error) {
-      console.error('Error deleting subject:', error);
+      console.error('Error retreiving prompts:', error);
       throw error;
     }
 
-    
+  },
+
+  getQuestions:async () => {
+    try {
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/questions`
+      const response = await fetch(url, {
+        method: 'GET', 
+        headers: apiConfig.headers,
+      });
+
+      if(!response.ok)
+      {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response Status:", data); 
+      return data;
+
+      
+      
+    } catch (error) {
+      console.error('Error retreiving questions:', error);
+      throw error;
+    }
 
   }
 };

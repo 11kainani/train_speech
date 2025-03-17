@@ -1,8 +1,6 @@
 const {Subject, Question, Prompt, sequelize} = require('../models');
 const crypto = require("crypto");
-const Sequelize = require("../config");
-const { error } = require("console");
-const subject = require('../models/subject');
+
 
 /**
  * @module controllers/subject_controller
