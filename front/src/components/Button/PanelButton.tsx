@@ -6,6 +6,9 @@ import { responsiveHeight, responsiveWidth } from '../../utils/responsive';
 
 
 const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
+
+  
+
   return (
     <TouchableOpacity
       style={[panelStyle.panel, style]}

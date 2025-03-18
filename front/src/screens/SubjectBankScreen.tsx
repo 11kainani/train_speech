@@ -14,19 +14,28 @@ import PanelButton from "../components/Button/PanelButton";
 import { Subject, Prompt } from "../models";
 
 const SubjectBankScreen = () => {
+
+  enum FilterState  {
+    NONE = "none", 
+    PROMPT = "prompt",
+    QUESTION = "question",
+  }
+
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Subject[]>([]);
   const [filteredData, setfilteredData] = useState<Subject[]>([]);
   const [refreshData, setRefreshData] = useState(false);
   const [promptIds, setPromptIds] = useState<string[]>([]);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
-  const [isFiltered, setIsFiltered] = useState(false);
+  const [isFiltered, setIsFiltered] = useState<FilterState>(FilterState.NONE);
+
+
 
 
   const handleSubjectRefresh = async () => {
     setRefreshData(prev => !prev);
 
-    console.log("Is Filtered:", isFiltered, "Filter", filteredData)
+    console.log("Is Filtered: ", isFiltered, "Filter: ", filteredData, "Prompts: ", promptIds, "Questions: ", questionIds);
   };
 
   const jsonToSubject = (data: { subjects: Subject[]}): Subject[] => {
@@ -36,13 +45,19 @@ const SubjectBankScreen = () => {
       }));
   };
 
+  useEffect(() => {
+
+    fetchQuestionsIds();
+    fetchPromptIds(); 
+    
+  }, []);
+  
   const fetchSubjects = async () => {
     try {
       setLoading(true);
       const results = await subjectService.getSubjects();
       const check = jsonToSubject(results)
-      //console.log("Fetched Subjects:", check);
-      setData(results.subjects);
+      setData(check);
     } catch (error) {
       console.error("Failed to fetch subjects:", error);
     } finally {
@@ -55,62 +70,57 @@ const SubjectBankScreen = () => {
     handleSubjectRefresh();
   };
   const filterQuestion = async () => {
-    
-    console.log("questions", questionIds);
-    if(!filteredData)
+      
+
+      if(isFiltered === FilterState.QUESTION)
       {
-        searchQuestionsIds();
+        setIsFiltered(FilterState.NONE);
       }else
       {
         const filteredData = data.filter(subject => questionIds.includes(subject.idSubject));
-        console.log(filteredData);
         setfilteredData(filteredData);
+        setIsFiltered(FilterState.QUESTION);
       }
-      setIsFiltered(prev => !prev)
-      
-      handleSubjectRefresh();
+
+       
   };
 
   const filterPrompt = async () => {
 
-    if(!filteredData)
-    {
-      searchPromptIds();
-    }else
-    {
-      const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
-      setfilteredData(filteredData);
-    }
-    setIsFiltered(prev => !prev)
+    if(isFiltered === FilterState.PROMPT)
+      {
+        setIsFiltered(FilterState.NONE);
+      }else
+      {
+        const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
+        setfilteredData(filteredData);
+        setIsFiltered(FilterState.PROMPT);
+      }
+   
     
-    handleSubjectRefresh();
   };
 
-  const searchPromptIds = async () => {
+  const fetchPromptIds = async () => {
     try{
       setLoading(true);
       const results = await subjectService.getPrompts();
       setPromptIds(parserPromptId(results));
-      const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
-      setfilteredData(filteredData);
     }catch(error)
     {
-
+      console.error("Error fetching prompts", error);
     }finally{
       setLoading(false);
     }
   }
 
-    const searchQuestionsIds = async () => {
+    const fetchQuestionsIds = async () => {
     try{
       setLoading(true);
       const results = await subjectService.getQuestions();
-      setQuestionIds(parserPromptId(results));
-      const filteredData = data.filter(subject => questionIds.includes(subject.idSubject));
-      setfilteredData(filteredData);
+      setQuestionIds(parserQuesionsId(results));
     }catch(error)
     {
-
+      console.error("Error fetching prompts", error);
     }finally{
       setLoading(false);
     }
@@ -121,6 +131,12 @@ const SubjectBankScreen = () => {
     return id;
 
   }
+
+  const parserQuesionsId = (questionsJson: any): string[] => {
+    const id = questionsJson.questions.map((question: { idQuestion: string; }) => question.idQuestion);
+     return id;
+ 
+   }
   // Use useEffect to fetch subjects when component mounts
   useEffect(() => {
     fetchSubjects();
@@ -137,19 +153,19 @@ const SubjectBankScreen = () => {
           <View style={styles.control}>
             <View style={styles.filterBar}>
               <PanelButton
-                style={styles.filterButton}
+                style={[styles.filterButton ,isFiltered === FilterState.QUESTION ? styles.activeFilter : styles.unactiveFilter]}
                 title={"Questions"}
                 onPress={filterQuestion}
               />
               <PanelButton
-                style={styles.filterButton}
+                style={[styles.filterButton, isFiltered === FilterState.PROMPT ? styles.activeFilter : styles.unactiveFilter ] }
                 title={"Prompt"}
                 onPress={filterPrompt}
               />
             </View>
             
             
-              {isFiltered ? (<FlatListTable data={filteredData } 
+              {isFiltered != FilterState.NONE ? (<FlatListTable data={filteredData } 
             onDeleteSuccess={handleSubjectRefresh} />) : (<FlatListTable data={data } 
             onDeleteSuccess={handleSubjectRefresh} />)}
         
@@ -208,6 +224,15 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.backgroundDark,
     color: COLORS.white,
   },
+
+  activeFilter: {
+    color : COLORS.primaryText,
+    fontWeight: "bold",
+  }, 
+
+  unactiveFilter: {
+
+  }
 });
 
 export default SubjectBankScreen;
