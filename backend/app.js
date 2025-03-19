@@ -4,10 +4,6 @@ const sequelize = require('./config');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// models
-const Subject = require('./models/subject'); 
-
-
 
 //Middlewares
 const logRequests= require('./middlewares/logger');
@@ -25,7 +21,8 @@ sequelize.sync({ force: false }).then(() => {
 
 
 // Routes
-const subjectRoutes = require('./routes/subject_routes')
+const subjectRoutes = require('./routes/subject_routes');
+const answerRoutes = require('./routes/answer_routes');
 
 
 /////////////
@@ -34,7 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));// Use body-parser for JSON requests
 app.use(logRequests);
 /////////////
-app.use('/subject',subjectRoutes)
+app.use('/subject',subjectRoutes);
+app.use('/answer', answerRoutes);
 
 
 

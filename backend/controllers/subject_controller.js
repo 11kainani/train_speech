@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 /**
  * @module controllers/subject_controller
- * @description This module contains controller functions for managing subjects, including creating, updating, retrieving, and deleting subjects.
+ * @description This module contains the controller functions for managing subjects, including creating, updating, retrieving, and deleting subjects.
  */
 
 /**
