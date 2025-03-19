@@ -11,7 +11,8 @@ import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import { FlatListTable } from "../components/Display";
 import PanelButton from "../components/Button/PanelButton";
-import { Subject, Prompt } from "../models";
+import { Subject } from "../models";
+import { PopupPage } from "../components";
 
 const SubjectBankScreen = () => {
 
@@ -29,13 +30,13 @@ const SubjectBankScreen = () => {
   const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [isFiltered, setIsFiltered] = useState<FilterState>(FilterState.NONE);
 
+  const [isPopUpVisible, setPopUpVisible] = useState(false);
+
 
 
 
   const handleSubjectRefresh = async () => {
     setRefreshData(prev => !prev);
-
-    console.log("Is Filtered: ", isFiltered, "Filter: ", filteredData, "Prompts: ", promptIds, "Questions: ", questionIds);
   };
 
   const jsonToSubject = (data: { subjects: Subject[]}): Subject[] => {
@@ -67,10 +68,13 @@ const SubjectBankScreen = () => {
 
   const addSubject = async () => {
     console.log("Pressed Add button");
+    setPopUpVisible(prev => !prev);
+    console.log("Pop up", isPopUpVisible);
     handleSubjectRefresh();
+
   };
   const filterQuestion = async () => {
-      
+      setLoading(true);
 
       if(isFiltered === FilterState.QUESTION)
       {
@@ -82,11 +86,12 @@ const SubjectBankScreen = () => {
         setIsFiltered(FilterState.QUESTION);
       }
 
+      setLoading(false);
        
   };
 
   const filterPrompt = async () => {
-
+    setLoading(true);
     if(isFiltered === FilterState.PROMPT)
       {
         setIsFiltered(FilterState.NONE);
@@ -96,7 +101,7 @@ const SubjectBankScreen = () => {
         setfilteredData(filteredData);
         setIsFiltered(FilterState.PROMPT);
       }
-   
+      setLoading(false);
     
   };
 
@@ -144,11 +149,13 @@ const SubjectBankScreen = () => {
     
   }, [refreshData]); // Empty dependency array means this runs only on mount
 
+
   return (
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
+        
         <View style={styles.container}>
           <View style={styles.control}>
             <View style={styles.filterBar}>
@@ -176,9 +183,14 @@ const SubjectBankScreen = () => {
               title={"Add/Subject"}
               onPress={addSubject}
             />
+            
+         
+
+            
           </View>
         </View>
       )}
+       <PopupPage isVisible={isPopUpVisible} onClose={() => setPopUpVisible(false)}></PopupPage>
     </View>
   );
 };
@@ -193,6 +205,8 @@ export const styles = StyleSheet.create({
     alignContent: "center",
     flex: 1,
   },
+
+
 
   control : {
     width: "90%",

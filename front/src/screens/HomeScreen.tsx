@@ -7,7 +7,7 @@ import { COLORS } from '../utils';
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Home! Sweet Home</Text>
+      <Text>Home!Sweet Home</Text>
     </SafeAreaView>
   );
 };
