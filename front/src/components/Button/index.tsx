@@ -1,2 +1,2 @@
-export * from './HorizontalButton';
-export * from './PanelButton';
+export {default as HorizontalButton} from './HorizontalButton';
+export {default as PanelButton} from './PanelButton';

@@ -1,6 +1,8 @@
 interface PopUpPageProps{
-    isVisible: boolean,
+    isVisible: boolean;
     onClose: () => void;
+    description: string;
+    setDescription : (text:string) => void;
 
 }
 

@@ -1,1 +1,1 @@
-export {default as PopupPage} from './PopUpPage';
+export {default as PopupPage} from './PopUpPage'; 

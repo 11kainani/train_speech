@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
 import Modal from "react-native-modal";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { COLORS, DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
-import PanelButton from "../Button/PanelButton";
+import {PanelButton} from "../Button";
+import { DescriptionInput } from "../Input";
 
 
-const PopUpPage : React.FC<PopUpPageProps> = ({isVisible, onClose}) => {
+const PopUpPage : React.FC<PopUpPageProps> = ({isVisible, onClose, description, setDescription}) => {
 
     const [isModalVisible, setModalVisible] = useState(isVisible);
+    
 
     useEffect(() => {
         setModalVisible(isVisible);
@@ -23,11 +24,15 @@ const PopUpPage : React.FC<PopUpPageProps> = ({isVisible, onClose}) => {
             animationIn="fadeIn"
             animationOut="fadeOut"
             useNativeDriver={true}
+            backdropColor={COLORS.primary}
+            backdropOpacity={DIMENSIONS.opacity}
             >
                 
                 <View style={styles.overlay}>
                 <View style={styles.container}>
-                    <Text style={styles.text}>This pop-up page!</Text>
+                    <Text style={styles.text}>Description</Text>
+                    <DescriptionInput description={description}
+                    onDescriptionChange={setDescription}/>
                     <PanelButton title={"CREATE"} />
                 </View>
             </View>
@@ -41,6 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        
     },
     container: {
         height: responsiveHeight(50),
@@ -54,6 +60,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: COLORS.white,
+        padding: DIMENSIONS.padding,
     },
 });
 export default PopUpPage;

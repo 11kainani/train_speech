@@ -9,10 +9,9 @@ import {
 } from "react-native";
 import { subjectService } from "../api";
 import { COLORS } from "../utils";
-import { FlatListTable } from "../components/Display";
 import PanelButton from "../components/Button/PanelButton";
 import { Subject } from "../models";
-import { PopupPage } from "../components";
+import { PopupPage, FlatListTable } from "../components";
 
 const SubjectBankScreen = () => {
 
@@ -31,7 +30,7 @@ const SubjectBankScreen = () => {
   const [isFiltered, setIsFiltered] = useState<FilterState>(FilterState.NONE);
 
   const [isPopUpVisible, setPopUpVisible] = useState(false);
-
+  const [description, setDescription] = useState('');
 
 
 
@@ -180,7 +179,7 @@ const SubjectBankScreen = () => {
 
             <PanelButton
               style={styles.addButton}
-              title={"Add/Subject"}
+              title={"Add Subject"}
               onPress={addSubject}
             />
             
@@ -190,7 +189,12 @@ const SubjectBankScreen = () => {
           </View>
         </View>
       )}
-       <PopupPage isVisible={isPopUpVisible} onClose={() => setPopUpVisible(false)}></PopupPage>
+       <PopupPage isVisible={isPopUpVisible}
+      onClose={() => setPopUpVisible(false)} 
+      description={description} 
+      setDescription={setDescription}>
+        
+      </PopupPage>
     </View>
   );
 };
