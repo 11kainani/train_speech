@@ -4,6 +4,8 @@ const sequelize = require('./config');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// IMPLEMET CORS !!!!
+
 
 //Middlewares
 const logRequests= require('./middlewares/logger');
