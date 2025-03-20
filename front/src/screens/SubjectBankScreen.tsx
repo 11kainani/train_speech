@@ -1,12 +1,7 @@
 // SubjectBankScreen.js
 
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-
-} from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import PanelButton from "../components/Button/PanelButton";
@@ -14,9 +9,8 @@ import { Subject } from "../models";
 import { PopupPage, FlatListTable } from "../components";
 
 const SubjectBankScreen = () => {
-
-  enum FilterState  {
-    NONE = "none", 
+  enum FilterState {
+    NONE = "none",
     PROMPT = "prompt",
     QUESTION = "question",
   }
@@ -30,33 +24,29 @@ const SubjectBankScreen = () => {
   const [isFiltered, setIsFiltered] = useState<FilterState>(FilterState.NONE);
 
   const [isPopUpVisible, setPopUpVisible] = useState(false);
-  const [description, setDescription] = useState('');
-
-
+  const [description, setDescription] = useState("");
 
   const handleSubjectRefresh = async () => {
-    setRefreshData(prev => !prev);
+    setRefreshData((prev) => !prev);
   };
 
-  const jsonToSubject = (data: { subjects: Subject[]}): Subject[] => {
-      return data.subjects.map((subject:any) => ({ 
-        description: subject.description,
-        idSubject: subject.idSubject,
-      }));
+  const jsonToSubject = (data: { subjects: Subject[] }): Subject[] => {
+    return data.subjects.map((subject: any) => ({
+      description: subject.description,
+      idSubject: subject.idSubject,
+    }));
   };
 
   useEffect(() => {
-
     fetchQuestionsIds();
-    fetchPromptIds(); 
-    
+    fetchPromptIds();
   }, []);
-  
+
   const fetchSubjects = async () => {
     try {
       setLoading(true);
       const results = await subjectService.getSubjects();
-      const check = jsonToSubject(results)
+      const check = jsonToSubject(results);
       setData(check);
     } catch (error) {
       console.error("Failed to fetch subjects:", error);
@@ -67,134 +57,139 @@ const SubjectBankScreen = () => {
 
   const addSubject = async () => {
     console.log("Pressed Add button");
-    setPopUpVisible(prev => !prev);
+    setPopUpVisible((prev) => !prev);
     console.log("Pop up", isPopUpVisible);
     handleSubjectRefresh();
-
   };
   const filterQuestion = async () => {
-      setLoading(true);
+    setLoading(true);
 
-      if(isFiltered === FilterState.QUESTION)
-      {
-        setIsFiltered(FilterState.NONE);
-      }else
-      {
-        const filteredData = data.filter(subject => questionIds.includes(subject.idSubject));
-        setfilteredData(filteredData);
-        setIsFiltered(FilterState.QUESTION);
-      }
+    if (isFiltered === FilterState.QUESTION) {
+      setIsFiltered(FilterState.NONE);
+    } else {
+      const filteredData = data.filter((subject) =>
+        questionIds.includes(subject.idSubject)
+      );
+      setfilteredData(filteredData);
+      setIsFiltered(FilterState.QUESTION);
+    }
 
-      setLoading(false);
-       
+    setLoading(false);
   };
 
   const filterPrompt = async () => {
     setLoading(true);
-    if(isFiltered === FilterState.PROMPT)
-      {
-        setIsFiltered(FilterState.NONE);
-      }else
-      {
-        const filteredData = data.filter(subject => promptIds.includes(subject.idSubject));
-        setfilteredData(filteredData);
-        setIsFiltered(FilterState.PROMPT);
-      }
-      setLoading(false);
-    
+    if (isFiltered === FilterState.PROMPT) {
+      setIsFiltered(FilterState.NONE);
+    } else {
+      const filteredData = data.filter((subject) =>
+        promptIds.includes(subject.idSubject)
+      );
+      setfilteredData(filteredData);
+      setIsFiltered(FilterState.PROMPT);
+    }
+    setLoading(false);
   };
 
   const fetchPromptIds = async () => {
-    try{
+    try {
       setLoading(true);
       const results = await subjectService.getPrompts();
       setPromptIds(parserPromptId(results));
-    }catch(error)
-    {
+    } catch (error) {
       console.error("Error fetching prompts", error);
-    }finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
-    const fetchQuestionsIds = async () => {
-    try{
+  const fetchQuestionsIds = async () => {
+    try {
       setLoading(true);
       const results = await subjectService.getQuestions();
       setQuestionIds(parserQuesionsId(results));
-    }catch(error)
-    {
+    } catch (error) {
       console.error("Error fetching prompts", error);
-    }finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   const parserPromptId = (promptJson: any): string[] => {
-   const id = promptJson.prompts.map((prompt: { idPrompt: string; }) => prompt.idPrompt);
+    const id = promptJson.prompts.map(
+      (prompt: { idPrompt: string }) => prompt.idPrompt
+    );
     return id;
-
-  }
+  };
 
   const parserQuesionsId = (questionsJson: any): string[] => {
-    const id = questionsJson.questions.map((question: { idQuestion: string; }) => question.idQuestion);
-     return id;
- 
-   }
+    const id = questionsJson.questions.map(
+      (question: { idQuestion: string }) => question.idQuestion
+    );
+    return id;
+  };
   // Use useEffect to fetch subjects when component mounts
   useEffect(() => {
     fetchSubjects();
     setLoading(false);
-    
   }, [refreshData]); // Empty dependency array means this runs only on mount
-
 
   return (
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        
         <View style={styles.container}>
           <View style={styles.control}>
             <View style={styles.filterBar}>
               <PanelButton
-                style={[styles.filterButton ,isFiltered === FilterState.QUESTION ? styles.activeFilter : styles.unactiveFilter]}
+                style={[
+                  styles.filterButton,
+                  isFiltered === FilterState.QUESTION
+                    ? styles.activeFilter
+                    : styles.unactiveFilter,
+                ]}
                 title={"Questions"}
                 onPress={filterQuestion}
               />
               <PanelButton
-                style={[styles.filterButton, isFiltered === FilterState.PROMPT ? styles.activeFilter : styles.unactiveFilter ] }
+                style={[
+                  styles.filterButton,
+                  isFiltered === FilterState.PROMPT
+                    ? styles.activeFilter
+                    : styles.unactiveFilter,
+                ]}
                 title={"Prompt"}
                 onPress={filterPrompt}
               />
             </View>
-            
-            
-              {isFiltered != FilterState.NONE ? (<FlatListTable data={filteredData } 
-            onDeleteSuccess={handleSubjectRefresh} />) : (<FlatListTable data={data } 
-            onDeleteSuccess={handleSubjectRefresh} />)}
-        
-            
+
+            {isFiltered != FilterState.NONE ? (
+              <FlatListTable
+                data={filteredData}
+                onDeleteSuccess={handleSubjectRefresh}
+              />
+            ) : (
+              <FlatListTable
+                data={data}
+                onDeleteSuccess={handleSubjectRefresh}
+              />
+            )}
 
             <PanelButton
               style={styles.addButton}
               title={"Add Subject"}
               onPress={addSubject}
             />
-            
-         
-
-            
           </View>
         </View>
       )}
-       <PopupPage isVisible={isPopUpVisible}
-      onClose={() => setPopUpVisible(false)} 
-      description={description} 
-      setDescription={setDescription}>
-        
-      </PopupPage>
+      <PopupPage
+        isVisible={isPopUpVisible}
+        onClose={() => setPopUpVisible(false)}
+        description={description}
+        setDescription={setDescription}
+      ></PopupPage>
     </View>
   );
 };
@@ -210,13 +205,11 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
 
-
-
-  control : {
+  control: {
     width: "90%",
     alignSelf: "center",
     justifyContent: "center",
-  }, 
+  },
 
   table: {
     maxHeight: "90%",
@@ -224,7 +217,6 @@ export const styles = StyleSheet.create({
   },
 
   addButton: {
-    
     alignSelf: "center",
     backgroundColor: COLORS.subSecondary,
     color: COLORS.white,
@@ -232,25 +224,21 @@ export const styles = StyleSheet.create({
 
   filterBar: {
     flexDirection: "row",
-    
-    
   },
 
   filterButton: {
     flex: 1,
-    
+
     backgroundColor: COLORS.backgroundDark,
     color: COLORS.white,
   },
 
   activeFilter: {
-    color : COLORS.primaryText,
+    color: COLORS.primaryText,
     fontWeight: "bold",
-  }, 
+  },
 
-  unactiveFilter: {
-
-  }
+  unactiveFilter: {},
 });
 
 export default SubjectBankScreen;

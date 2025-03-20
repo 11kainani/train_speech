@@ -8,6 +8,6 @@ export const DIMENSIONS = {
     iconSize: 16,
     padding: 5,
     unit: 1,
-    opacity: 40,
+    opacity: 10,
     maxDescriptionInput: 400,
 }
