@@ -4,11 +4,12 @@ const sequelize = require('./config');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// IMPLEMET CORS !!!!
+// IMPLEMET CORS !!!! ADD LIMITER FOR API USAGE
 
 
 //Middlewares
 const logRequests= require('./middlewares/logger');
+const apiKeyRequests = require('./middlewares/apiKeyMiddleware');
 
 const dotenv = require('dotenv');
 dotenv.config();
