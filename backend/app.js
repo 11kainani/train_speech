@@ -32,12 +32,16 @@ app.use(express.json());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));// Use body-parser for JSON requests
 app.use(logRequests);
+app.use(apiKeyRequests);
 /////////////
 app.use('/subject',subjectRoutes);
 app.use('/answer', answerRoutes);
 
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening at port : ${port}`);
 });
+
+
+module.exports = { app, server };
