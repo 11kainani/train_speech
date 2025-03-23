@@ -8,6 +8,9 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   host: process.env.DB_HOST,
   dialect: process.env.DB_DIALECT,
   logging: false, // Set to false to disable all logging
+  dialectOptions: {
+    charset: 'utf8mb4', // Ensure the correct charset is used
+  },
 });
 
 // Function to test the database connection
