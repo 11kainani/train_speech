@@ -47,4 +47,6 @@ jobs:
 
     - name: Run Jest tests
       working-directory: ./backend
+      env:
+        NODE_ENV: test # Set the NODE_ENV to test
       run: npm test

@@ -11,7 +11,8 @@ describe("Subject API Tests", () => {
     });
 
     it( "POST /subject/create - should fail to create because subject duplicate", async () => {
-        const res = await request(app).post("/subject/create").send({ description: "Test-Subject" }).set('x-api-key', process.env.API_KEY);
+       
+        const res = await request(app).post("/subject/create").send({ description: "TSubject" }).set('x-api-key', process.env.API_KEY);
         expect(res.statusCode).toBe(400);
 
     });

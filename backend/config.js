@@ -4,15 +4,27 @@ dotenv.config();
 
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: process.env.DB_DIALECT || 'sqlite',
-  storage: process.env.NODE_ENV === 'test' ? ':memory:' : process.env.DB_STORAGE,
-  logging: false, // Set to false to disable all logging
-  dialectOptions: {
-    charset: 'utf8mb4', // Ensure the correct charset is used
-  },
-});
+
+let sequelize;
+
+if (process.env.NODE_ENV === 'test') {
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: ':memory:', // In-memory database for testing
+  });
+} else {
+  sequelize= new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    logging: false, // Set to false to disable all logging
+    dialectOptions: {
+      charset: 'utf8mb4', // Ensure the correct charset is used
+    },
+  });
+}
+
+
+
 
 // Function to test the database connection
 console.log('Connecting to database...');
