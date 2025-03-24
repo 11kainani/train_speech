@@ -2,10 +2,10 @@
 const express = require('express');
 const sequelize = require('./config');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+
 
 // IMPLEMET CORS !!!! ADD LIMITER FOR API USAGE
-
+//const cors = require('cors');
 
 //Middlewares
 const logRequests= require('./middlewares/logger');

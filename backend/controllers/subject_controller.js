@@ -1,4 +1,4 @@
-const {Subject, Question, Prompt, sequelize} = require('../models');
+const {Subject, Question, Prompt} = require('../models');
 const crypto = require("crypto");
 
 
@@ -48,7 +48,7 @@ exports.createSubject = async (req, res) => {
         .json({ error: "Length of the description is too long" });
     }
     const idSubject = generateHexKey();
-    subject_to_create = {
+    const subject_to_create = {
       idSubject: idSubject,
       description: description,
     };
@@ -127,17 +127,17 @@ exports.assignSubject = async (req, res) => {
         } else {
           if (mode === "question") {
             const question_to_create = { idQuestion: idSubject };
-            Question.create(question_to_create).then((create_question) => {
+            Question.create(question_to_create).then(() => {
               return res
                 .status(201)
                 .json({ message: "Subject correctly assigned to question" });
             });
           } else if (mode === "prompt") {
             const prompt_to_create = { idPrompt: idSubject };
-            Prompt.create(prompt_to_create).then((create_prompt) => {
+            Prompt.create(prompt_to_create).then(() => {
               return res
                 .status(201)
-                .json({ message: "Subject correctly assigned to prompt" });
+                .json({ message: "Subject ${create_prompt} correctly assigned to prompt" });
             });
           } else {
             return res

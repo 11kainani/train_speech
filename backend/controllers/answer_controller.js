@@ -26,16 +26,27 @@ exports.createAnswer = async (req, res) => {
         return res.status(400).json({error: "Request body incomplet"});
      }
 
+     const subject = await Subject.findByPk(idSubject);
+     if(!subject)
+     {
+      return res.status(400).json({error:"The subject defined by the idSubject doesn't exist"});
+     }
+
      
      const idAnswer = generateHexKey();
 
-     answerToCreate = {
+     const answerToCreate = {
         idAnswer: idAnswer,
         file_location: file_location, 
         answer_time: answer_time, 
         idSubject: idSubject,
         review: review,
      }
+
+     await Answer.create(answerToCreate);
+
+
+     
 
     }catch(error){
         console.log(error);
