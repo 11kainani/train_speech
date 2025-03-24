@@ -5,7 +5,10 @@ const dotenv = require('dotenv');
 dotenv.config();  
 
 
-
+beforeAll(async () => {
+    await sequelize.sync({ force: true }); // Reset the database before all tests
+  });
+  
 
 afterAll(async () => {
 

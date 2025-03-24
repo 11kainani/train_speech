@@ -31,6 +31,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+        NODE_ENV: test 
+        API_KEY: ${{ secrets.API_KEY }}  # Inject the secret into the environment
 
     steps:
     - name: Checkout code
@@ -47,6 +50,4 @@ jobs:
 
     - name: Run Jest tests
       working-directory: ./backend
-      env:
-        NODE_ENV: test # Set the NODE_ENV to test
       run: npm test

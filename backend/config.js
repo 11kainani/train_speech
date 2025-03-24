@@ -10,7 +10,7 @@ let sequelize;
 if (process.env.NODE_ENV === 'test') {
   sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: ':memory:', // In-memory database for testing
+    storage: './test.sqlite', // In-memory database for testing
   });
 } else {
   sequelize= new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
