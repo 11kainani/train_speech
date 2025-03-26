@@ -1,10 +1,12 @@
 // src/api/config/apiConfig.js
-const API_BASE_URL = 'http://10.0.2.2:3006';
+import {API_KEY, API_URL,API_PORT} from '@env';
 
-const apiConfig = {
-  baseURL: API_BASE_URL,
+
+const apiConfig = {  
+  baseURL: `${API_URL}:${API_PORT}`,
   headers: {
     'Content-Type': 'application/json',
+    'x-api-key': API_KEY,
   },
 };
 
