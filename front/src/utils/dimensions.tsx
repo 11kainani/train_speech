@@ -9,5 +9,5 @@ export const DIMENSIONS = {
     padding: 5,
     unit: 1,
     opacity: 10,
-    maxDescriptionInput: 400,
+    maxDescriptionInput: 200,
 }

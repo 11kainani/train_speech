@@ -7,8 +7,10 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "../../utils";
-import { HorizontalButton, PanelButton } from "../Button";
+import { PanelButton } from "../Button";
 import { DescriptionInput } from "../Input";
+import { subjectService } from "../../api";
+import { PromptResponse, QuestionResponse, SubjectType } from "../../models";
 
 const PopUpPage: React.FC<PopUpPageProps> = ({
   isVisible,
@@ -17,20 +19,72 @@ const PopUpPage: React.FC<PopUpPageProps> = ({
   setDescription,
 }) => {
   const [isModalVisible, setModalVisible] = useState(isVisible);
-  enum subjectType {
-    NONE = "none",
-    PROMPT = "prompt",
-    QUESTION = "question",
-  }
-  const [subjectSelector, setSubjectSelector] = useState<subjectType>(
-    subjectType.NONE
+
+  const [subjectSelector, setSubjectSelector] = useState<SubjectType>(
+    SubjectType.NONE
   );
 
-  const handleSubjectSelector = (type: subjectType) => {
+  const handleSubjectSelector = (type: SubjectType) => {
     if (subjectSelector != type) {
       setSubjectSelector(type);
     } else {
-      setSubjectSelector(subjectType.NONE);
+      setSubjectSelector(SubjectType.NONE);
+    }
+  };
+
+  const handleQuestionCreation = async () => {
+    try {
+      //Add directly to data and to the list of questionsID
+      const question: QuestionResponse = await subjectService.createQuestions(
+        description
+      );
+      setDescription("");
+      onClose();
+      return question;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePromptCreation = async () => {
+    //Add directly to data and to the list of promptID
+    try {
+      const prompt: PromptResponse = await subjectService.createPrompt(
+        description
+      );
+      setDescription("");
+      onClose();
+
+      return prompt;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSubjectCreation = async () => {
+    if (description == "") {
+      throw new Error("The description is emplty");
+    }
+
+    if (description.length > DIMENSIONS.maxDescriptionInput) {
+      throw new Error("The description is too long");
+    }
+
+    let createdSubject;
+    switch (subjectSelector) {
+      case SubjectType.NONE:
+        throw new Error("Subject type needs to be selected");
+      case SubjectType.QUESTION:
+        createdSubject = await handleQuestionCreation();
+        break;
+      case SubjectType.PROMPT:
+        createdSubject = await handlePromptCreation();
+        break;
+    
+    }
+    if(createdSubject)
+    {
+      onClose(); 
+      return [subjectSelector, createdSubject];
     }
   };
   useEffect(() => {
@@ -58,17 +112,38 @@ const PopUpPage: React.FC<PopUpPageProps> = ({
           <View style={styles.horizontal}>
             <PanelButton
               title={"Prompt"}
-              style={[styles.defaultButton, subjectSelector === subjectType.PROMPT ? styles.select : styles.unselect]}
-              onPress={() => handleSubjectSelector(subjectType.PROMPT)}
+              style={[
+                styles.defaultButton,
+                subjectSelector === SubjectType.PROMPT
+                  ? styles.select
+                  : styles.unselect,
+              ]}
+              onPress={() => handleSubjectSelector(SubjectType.PROMPT)}
             />
             <PanelButton
               title={"Question"}
-              style={[styles.defaultButton, subjectSelector === subjectType.QUESTION ? styles.select : styles.unselect ]}
-              onPress={() => handleSubjectSelector(subjectType.QUESTION)}
+              style={[
+                styles.defaultButton,
+                subjectSelector === SubjectType.QUESTION
+                  ? styles.select
+                  : styles.unselect,
+              ]}
+              onPress={() => handleSubjectSelector(SubjectType.QUESTION)}
             />
           </View>
 
-          <PanelButton title={"CREATE"} />
+          <PanelButton
+            title={"CREATE"}
+            style={styles.createButton}
+            onPress={async () => {
+              try {
+                const result = await handleSubjectCreation();
+                console.log(result);
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          />
         </View>
       </View>
     </Modal>
@@ -96,22 +171,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
+  createButton: {
+    backgroundColor: COLORS.subSecondary,
+    borderRadius: DIMENSIONS.radius,
+  },
+
   defaultButton: {
     maxWidth: responsiveWidth(27),
     maxHeight: responsiveHeight(4),
     borderRadius: DIMENSIONS.radius / 2,
-    
   },
   select: {
     backgroundColor: COLORS.selection,
     color: COLORS.white,
-
-  }, 
+  },
 
   unselect: {
     color: COLORS.primary,
     backgroundColor: COLORS.white,
-  }, 
+  },
 
   text: {
     color: COLORS.white,

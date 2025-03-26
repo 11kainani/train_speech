@@ -5,15 +5,11 @@ import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import PanelButton from "../components/Button/PanelButton";
-import { Subject } from "../models";
+import { Subject, SubjectType } from "../models";
 import { PopupPage, FlatListTable } from "../components";
 
 const SubjectBankScreen = () => {
-  enum FilterState {
-    NONE = "none",
-    PROMPT = "prompt",
-    QUESTION = "question",
-  }
+
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Subject[]>([]);
@@ -21,12 +17,14 @@ const SubjectBankScreen = () => {
   const [refreshData, setRefreshData] = useState(false);
   const [promptIds, setPromptIds] = useState<string[]>([]);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
-  const [isFiltered, setIsFiltered] = useState<FilterState>(FilterState.NONE);
+  const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
 
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
 
   const handleSubjectRefresh = async () => {
+    //Handle delete to directly remove from data the deleted element instead of doing an api call
+    //Same for transformation
     setRefreshData((prev) => !prev);
   };
 
@@ -64,14 +62,14 @@ const SubjectBankScreen = () => {
   const filterQuestion = async () => {
     setLoading(true);
 
-    if (isFiltered === FilterState.QUESTION) {
-      setIsFiltered(FilterState.NONE);
+    if (isFiltered === SubjectType.QUESTION) {
+      setIsFiltered(SubjectType.NONE);
     } else {
       const filteredData = data.filter((subject) =>
         questionIds.includes(subject.idSubject)
       );
       setfilteredData(filteredData);
-      setIsFiltered(FilterState.QUESTION);
+      setIsFiltered(SubjectType.QUESTION);
     }
 
     setLoading(false);
@@ -79,14 +77,14 @@ const SubjectBankScreen = () => {
 
   const filterPrompt = async () => {
     setLoading(true);
-    if (isFiltered === FilterState.PROMPT) {
-      setIsFiltered(FilterState.NONE);
+    if (isFiltered === SubjectType.PROMPT) {
+      setIsFiltered(SubjectType.NONE);
     } else {
       const filteredData = data.filter((subject) =>
         promptIds.includes(subject.idSubject)
       );
       setfilteredData(filteredData);
-      setIsFiltered(FilterState.PROMPT);
+      setIsFiltered(SubjectType.PROMPT);
     }
     setLoading(false);
   };
@@ -134,6 +132,10 @@ const SubjectBankScreen = () => {
     setLoading(false);
   }, [refreshData]); // Empty dependency array means this runs only on mount
 
+  function handleDataCreation(type: SubjectType, createdSubject: any) {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -145,7 +147,7 @@ const SubjectBankScreen = () => {
               <PanelButton
                 style={[
                   styles.filterButton,
-                  isFiltered === FilterState.QUESTION
+                  isFiltered === SubjectType.QUESTION
                     ? styles.activeFilter
                     : styles.unactiveFilter,
                 ]}
@@ -155,7 +157,7 @@ const SubjectBankScreen = () => {
               <PanelButton
                 style={[
                   styles.filterButton,
-                  isFiltered === FilterState.PROMPT
+                  isFiltered === SubjectType.PROMPT
                     ? styles.activeFilter
                     : styles.unactiveFilter,
                 ]}
@@ -164,7 +166,7 @@ const SubjectBankScreen = () => {
               />
             </View>
 
-            {isFiltered != FilterState.NONE ? (
+            {isFiltered != SubjectType.NONE ? (
               <FlatListTable
                 data={filteredData}
                 onDeleteSuccess={handleSubjectRefresh}

@@ -3,7 +3,13 @@ import apiConfig from '../config/apiConfig';
 
 const subjectEndpoint = "subject";
 
+
+enum subjectType {
+  PROMPT = "prompt",
+  QUESTION= "question"
+}
 const subjectService = {
+
   /**
    * Fetches all subjects from the API.
    *
@@ -14,13 +20,15 @@ const subjectService = {
   getSubjects: async () => {
     try {
       const url = `${apiConfig.baseURL}/${subjectEndpoint}/all`;
+      console.log(url);
       const response = await fetch(url, {
         method: 'GET',
         headers: apiConfig.headers,
       });
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
       }
 
       const data = await response.json();
@@ -50,7 +58,8 @@ const subjectService = {
       });
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
       }
 
       const data = await response.json();
@@ -73,7 +82,8 @@ const subjectService = {
 
       if(!response.ok)
       {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
       }
 
       const data = await response.json();
@@ -99,7 +109,8 @@ const subjectService = {
 
       if(!response.ok)
       {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
       }
 
       const data = await response.json();
@@ -110,6 +121,59 @@ const subjectService = {
       
     } catch (error) {
       console.error('Error retreiving questions:', error);
+      throw error;
+    }
+
+  },
+  createQuestions: async (description : string) => {
+    try {
+
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/question/create`
+      const response = await fetch(url, {
+        method: 'POST', 
+        headers: apiConfig.headers,
+        body: JSON.stringify({description: description}),
+      });
+
+      if(!response.ok)
+        {
+          const errorData = await response.json();
+          throw new Error(`${response.status}-${errorData.error}`);
+        }
+  
+        const data = await response.json();
+        console.log("Response Status:", data); 
+        return data;
+      
+    } catch (error) {
+      console.error('Error retreiving questions:', error);
+      throw error;
+    }
+
+  },
+
+  createPrompt: async (description : string) => {
+    try {
+
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompt/create`
+      const response = await fetch(url, {
+        method: 'POST', 
+        headers: apiConfig.headers,
+        body: JSON.stringify({description: description}),
+      });
+
+      if(!response.ok)
+        {
+          const errorData = await response.json();
+          throw new Error(`${response.status}-${errorData.error}`);
+        }
+  
+        const data = await response.json();
+        console.log("Response Status:", data); 
+        return data;
+      
+    } catch (error) {
+      console.error('Error retreiving questions', error);
       throw error;
     }
 
