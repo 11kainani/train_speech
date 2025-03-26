@@ -34,6 +34,7 @@ describe("Subject API Tests", () => {
     });
 
  
+    
     it("DELETE /subjects/delete - should delete the subject that was created by the first test", async () => {
         const res = await request(app).delete("/subject/delete").query({idSubject : createdSubjectId}).set('x-api-key', process.env.API_KEY);
         expect(res.statusCode).toBe(200);

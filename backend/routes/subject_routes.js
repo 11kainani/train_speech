@@ -81,4 +81,18 @@ router.get('/prompts',subjectController.getAllPrompts);
  */
 router.get('/questions',subjectController.getAllQuestions);
 
+/**
+ * Create a prompt
+ * @route POST /prompt/create
+ * @access Public
+ */
+router.post('/prompt/create',subjectController.createPrompt);
+
+/**
+ * Create a Question
+ * @route POST /prompt/create
+ * @access Public
+ */
+router.post('/question/create',subjectController.createQuestion);
+
 module.exports = router;

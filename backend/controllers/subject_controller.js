@@ -10,7 +10,7 @@ const crypto = require("crypto");
 /**
  * Maximum size of a description
  */
-const maxSizeDescription = 400;
+const maxSizeDescription = 200;
 
 /**
  * Generate Hex key
@@ -137,7 +137,7 @@ exports.assignSubject = async (req, res) => {
             Prompt.create(prompt_to_create).then(() => {
               return res
                 .status(201)
-                .json({ message: "Subject ${create_prompt} correctly assigned to prompt" });
+                .json({ message: "Subject correctly assigned to prompt" });
             });
           } else {
             return res
@@ -403,4 +403,83 @@ exports.getAllQuestions = async (req,res) => {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
+}
+
+
+exports.createPrompt = async (req,res) => {
+  try {
+    const description = req.body.description;
+    if(!description)
+    {
+      return res.status(400).json({error: "Description is not defined"});
+    }
+
+    if(description.length>maxSizeDescription)
+    {
+      return res.status(400).json({error: "Description too long"});
+    }
+
+    const subject = await Subject.findOne({where: {description: description}});
+    if(subject)
+    {
+      return res.status(400).json({error: "Subject already exists"});
+    }
+
+    const subjectToCreate = {
+      idSubject: generateHexKey(),
+      description: description,
+    };
+
+    
+    const newSubject = await Subject.create(subjectToCreate);
+    
+    const newPrompt = await Prompt.create({ idPrompt: newSubject.idSubject });
+
+    return res.status(201).json({ prompt: newPrompt, subject: newSubject });
+
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+
+}
+
+exports.createQuestion = async (req,res) => {
+  try {
+    const description = req.body.description;
+    if(!description)
+    {
+      return res.status(400).json({error: "Description is not defined"});
+    }
+
+    if(description.length>maxSizeDescription)
+    {
+      return res.status(400).json({error: "Description too long"});
+    }
+
+    const subject = await Subject.findOne({where: {description: description}});
+    if(subject)
+    {
+      return res.status(400).json({error: "Subject already exists"});
+    }
+
+    const subjectToCreate = {
+      idSubject: generateHexKey(),
+      description: description,
+    };
+
+    
+    const newSubject = await Subject.create(subjectToCreate);
+    
+    const newQuestion = await Question.create({ idQuestion: newSubject.idSubject });
+
+    return res.status(201).json({ question: newQuestion, subject: newSubject });
+
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+
 }
