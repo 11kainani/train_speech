@@ -1,6 +1,5 @@
-const {Subject, Question, Prompt} = require('../models');
+const { Subject, Question, Prompt } = require("../models");
 const crypto = require("crypto");
-
 
 /**
  * @module controllers/subject_controller
@@ -71,8 +70,8 @@ exports.createSubject = async (req, res) => {
 
 /**
  * Assign a subject as a prompt or a question.
- * 
- * @async 
+ *
+ * @async
  * @function assignSubject
  * @route {POST} /assign
  * @param {Object} req - Express request object.
@@ -86,18 +85,16 @@ exports.createSubject = async (req, res) => {
 exports.assignSubject = async (req, res) => {
   try {
     const idSubject = req.body.idSubject;
-    const mode =  req.body.mode;
+    const mode = req.body.mode;
 
     if (!idSubject || !mode) {
       return res.status(400).json({ error: "Request body incomplete" });
     }
 
     if (mode !== "question" && mode !== "prompt") {
-      return res
-        .status(400)
-        .json({
-          error: "Mode not correct, it should only be \"prompt\" or \"question\"",
-        });
+      return res.status(400).json({
+        error: 'Mode not correct, it should only be "prompt" or "question"',
+      });
     }
 
     Subject.findByPk(idSubject).then(async (subject) => {
@@ -115,11 +112,9 @@ exports.assignSubject = async (req, res) => {
           (mode === "question" && isIdInPromptTable) ||
           (mode === "prompt" && isIdInQuestionTable)
         ) {
-          return res
-            .status(400)
-            .json({
-              error: `Subject is already assigned to the other table other than ${mode}`,
-            });
+          return res.status(400).json({
+            error: `Subject is already assigned to the other table other than ${mode}`,
+          });
         } else if (isIdInQuestionTable || isIdInPromptTable) {
           return res
             .status(400)
@@ -156,10 +151,10 @@ exports.assignSubject = async (req, res) => {
 /**
  * Get the mode the subject: either prompt or question.
  * @async
- * @function getSubjectMode 
+ * @function getSubjectMode
  * @route {GET}/check/:idSubject
  * @param {Object} req - Express request object.
- * @param {Object} req.params - Express the params of the request 
+ * @param {Object} req.params - Express the params of the request
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
  * @param {Object} res - Express response object.
  * @returns  {Promise<void>} - Sends a JSON response with the result of the operation.
@@ -206,10 +201,10 @@ exports.getSubjectMode = async (req, res) => {
 /**
  * Get the mode the subject: either prompt or question.
  * @async
- * @function readSubject 
+ * @function readSubject
  * @route {GET} /read/:idSubject
  * @param {Object} req - Express request object.
- * @param {Object} req.params - Express the params of the request 
+ * @param {Object} req.params - Express the params of the request
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
  * @param {Object} res - Express response object.
  * @returns  {Promise<void>} - Sends a JSON response with the result of the operation.
@@ -244,7 +239,7 @@ exports.readSubject = (req, res) => {
  * @route {PATCH} /updateDescription
  * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body
- * @param {Object} req.body.idSubject - The id associated to the subject. 
+ * @param {Object} req.body.idSubject - The id associated to the subject.
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
@@ -289,10 +284,10 @@ exports.changeDescription = async (req, res) => {
 
 /**
  * Read all the subjects
- * @async 
- * @function readAllSubjects 
+ * @async
+ * @function readAllSubjects
  * @route {GET} /all
- * @param {Object} req - Express request object. 
+ * @param {Object} req - Express request object.
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
@@ -312,13 +307,13 @@ exports.readAllSubjects = async (req, res) => {
 };
 
 /**
- * Delete a subject 
+ * Delete a subject
  * @async
  * @function deleteSubject
  * @route {DELETE} /delete
- * @param {Object} req - Express request object. 
+ * @param {Object} req - Express request object.
  * @param {Object} req.query - The request query
- * @param {Object} req.query.idSubject - The id associated to the subject. 
+ * @param {Object} req.query.idSubject - The id associated to the subject.
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
@@ -331,14 +326,16 @@ exports.deleteSubject = async (req, res) => {
       return res.status(400).json({ error: "IdSubject not defined" });
     }
 
-    const subject = await  Subject.findByPk(idSubject);
-    if(!subject)
-    {
-      return res.status(400).json({error: `Subject ${idSubject} doesn't exist.`})
+    const subject = await Subject.findByPk(idSubject);
+    if (!subject) {
+      return res
+        .status(400)
+        .json({ error: `Subject ${idSubject} doesn't exist.` });
     }
-    await subject.destroy()
-    return res.status(200).json({ message: `Subject ${idSubject} has been deleted` });
-    
+    await subject.destroy();
+    return res
+      .status(200)
+      .json({ message: `Subject ${idSubject} has been deleted` });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
@@ -346,83 +343,85 @@ exports.deleteSubject = async (req, res) => {
 };
 
 /**
- * Get all prompt 
+ * Get all prompt
  * @async
  * @function getAllPrompts
  * @route {GET} /prompts
- * @param {Object} req - Express request object. 
+ * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
  */
-exports.getAllPrompts = async (req,res) => {
-
+exports.getAllPrompts = async (req, res) => {
   try {
-    const subjects = await Prompt.findAll({include : [{
-      model: Subject,
-      as: 'subject'
-    }]});
+    const subjects = await Prompt.findAll({
+      include: [
+        {
+          model: Subject,
+          as: "subject",
+        },
+      ],
+    });
     if (!subjects) {
       return res.status(400).json({ error: "There aren't any subjects" });
     }
-
 
     return res.status(200).json({ prompts: subjects });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
-}
+};
 
 /**
- * Get all prompt 
+ * Get all prompt
  * @async
  * @function getAllQuestions
  * @route {GET} /questions
- * @param {Object} req - Express request object. 
+ * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body
  * @param {Object} res - Espress response object
  * @returns - Sends a JSON response with the result of the operation.
  * @throws {Error} - Sends a 500 status if there is a server error.
  */
-exports.getAllQuestions = async (req,res) => {
-
+exports.getAllQuestions = async (req, res) => {
   try {
-    const subjects = await Question.findAll({include : [{
-      model: Subject,
-      as: 'subject'
-    }]});
+    const subjects = await Question.findAll({
+      include: [
+        {
+          model: Subject,
+          as: "subject",
+        },
+      ],
+    });
     if (!subjects) {
       return res.status(400).json({ error: "There aren't any subjects" });
     }
-
 
     return res.status(200).json({ questions: subjects });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
-}
+};
 
-
-exports.createPrompt = async (req,res) => {
+exports.createPrompt = async (req, res) => {
   try {
     const description = req.body.description;
-    if(!description)
-    {
-      return res.status(400).json({error: "Description is not defined"});
+    if (!description) {
+      return res.status(400).json({ error: "Description is not defined" });
     }
 
-    if(description.length>maxSizeDescription)
-    {
-      return res.status(400).json({error: "Description too long"});
+    if (description.length > maxSizeDescription) {
+      return res.status(400).json({ error: "Description too long" });
     }
 
-    const subject = await Subject.findOne({where: {description: description}});
-    if(subject)
-    {
-      return res.status(400).json({error: "Subject already exists"});
+    const subject = await Subject.findOne({
+      where: { description: description },
+    });
+    if (subject) {
+      return res.status(400).json({ error: "Subject already exists" });
     }
 
     const subjectToCreate = {
@@ -430,38 +429,33 @@ exports.createPrompt = async (req,res) => {
       description: description,
     };
 
-    
     const newSubject = await Subject.create(subjectToCreate);
-    
+
     const newPrompt = await Prompt.create({ idPrompt: newSubject.idSubject });
 
     return res.status(201).json({ prompt: newPrompt, subject: newSubject });
-
-    
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
+};
 
-}
-
-exports.createQuestion = async (req,res) => {
+exports.createQuestion = async (req, res) => {
   try {
     const description = req.body.description;
-    if(!description)
-    {
-      return res.status(400).json({error: "Description is not defined"});
+    if (!description) {
+      return res.status(400).json({ error: "Description is not defined" });
     }
 
-    if(description.length>maxSizeDescription)
-    {
-      return res.status(400).json({error: "Description too long"});
+    if (description.length > maxSizeDescription) {
+      return res.status(400).json({ error: "Description too long" });
     }
 
-    const subject = await Subject.findOne({where: {description: description}});
-    if(subject)
-    {
-      return res.status(400).json({error: "Subject already exists"});
+    const subject = await Subject.findOne({
+      where: { description: description },
+    });
+    if (subject) {
+      return res.status(400).json({ error: "Subject already exists" });
     }
 
     const subjectToCreate = {
@@ -469,17 +463,15 @@ exports.createQuestion = async (req,res) => {
       description: description,
     };
 
-    
     const newSubject = await Subject.create(subjectToCreate);
-    
-    const newQuestion = await Question.create({ idQuestion: newSubject.idSubject });
+
+    const newQuestion = await Question.create({
+      idQuestion: newSubject.idSubject,
+    });
 
     return res.status(201).json({ question: newQuestion, subject: newSubject });
-
-    
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
-
-}
+};
