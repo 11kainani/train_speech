@@ -140,7 +140,7 @@ exports.assignSubject = async (req, res) => {
  * Get the mode the subject: either prompt or question.
  * @async
  * @function getSubjectMode
- * @route {GET}/check/:idSubject
+ * @route {GET}/mode/:idSubject
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
  * @param {Object} res - Express response object.
  * @returns  {Promise<Response>} - Sends a JSON response with the result of the operation.
@@ -184,7 +184,7 @@ exports.getSubjectMode = async (req, res) => {
  * Get the mode the subject: either prompt or question.
  *  @async
  * @function readSubject
- * @route {GET} /read/:idSubject
+ * @route {GET} /:idSubject
  * @param {Object} req - Express request object.
  * @param {Object} req.params - Express the params of the request
  * @param {Object} req.params.idSubject - The subject for which the information is necessary.
@@ -318,7 +318,7 @@ exports.deleteSubject = async (req, res) => {
     await subject.destroy();
     return res
       .status(200)
-      .json({ message: `Subject with id ${idSubject} has been deleted` });
+      .json({ message: `Subject ${idSubject} has been deleted successfully` });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" }); 
@@ -347,6 +347,8 @@ exports.getAllPrompts = async (req, res) => {
         },
       ],
     });
+
+    if (!prompts || prompts.length === 0) return res.status(404).json({error: "No prompts found"});
 
     return res.status(200).json({ prompts: prompts });
   } catch (error) {
@@ -377,6 +379,7 @@ exports.getAllQuestions = async (req, res) => {
       ],
     });
 
+    if (!questions || questions.length === 0) return res.status(404).json({error: "No questions found"});
     return res.status(200).json({ questions: questions });
   } catch (error) {
     console.error(error);

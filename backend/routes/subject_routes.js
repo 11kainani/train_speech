@@ -29,19 +29,19 @@ router.post('/assign', subjectController.assignSubject);
 
 /**
  * Check the mode of a subject (e.g., prompt or question).
- * @route GET /check/:idSubject
+ * @route GET /mode/:idSubject
  * @param {string} idSubject - The ID of the subject to check.
  * @access Public
  */
-router.get('/check/:idSubject', subjectController.getSubjectMode);
+router.get('/mode/:idSubject', subjectController.getSubjectMode);
 
 /**
  * Read detailed information about a specific subject.
- * @route GET /read/:idSubject
+ * @route GET /:idSubject
  * @param {string} idSubject - The ID of the subject to read.
  * @access Public
  */
-router.get('/read/:idSubject', subjectController.readSubject);
+router.get('/:idSubject', subjectController.readSubject);
 
 /**
  * Retrieve all subjects.
