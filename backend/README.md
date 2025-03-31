@@ -8,3 +8,4 @@ This is the backend par of train speech
 - Express
 
 ## Test
+npm run test

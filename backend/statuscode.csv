@@ -1,0 +1,21 @@
+Code,Status,Description
+100,Continue,The server acknowledges the request and expects the client to proceed.
+101,Switching Protocols,The server agrees to switch protocols (e.g., upgrading from HTTP to WebSocket).
+200,OK,Request was successful, and the server returned the expected data.
+201,Created,A new resource was successfully created.
+202,Accepted,The request has been accepted for processing but is not completed yet.
+204,No Content,The request was successful, but there is no response body.
+301,Moved Permanently,The resource has been permanently moved to a new URL.
+302,Found,The resource is temporarily moved to a different URL.
+304,Not Modified,The resource has not changed; use cached version.
+400,Bad Request,The request is malformed or missing required parameters.
+401,Unauthorized,Authentication is required or has failed.
+403,Forbidden,The user is authenticated but does not have permission.
+404,Not Found,The requested resource does not exist.
+409,Conflict,The request conflicts with the current state of the resource (e.g., duplicate entry).
+422,Unprocessable Entity,The request is well-formed but cannot be processed (e.g., validation errors).
+500,Internal Server Error,A generic error occurred on the server.
+502,Bad Gateway,The server received an invalid response from an upstream server.
+503,Service Unavailable,The server is overloaded or under maintenance.
+504,Gateway Timeout,The server did not receive a timely response from an upstream server.
+
