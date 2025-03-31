@@ -13,7 +13,7 @@ describe("Create Subject - API Tests", () => {
     it( "POST /subject/create - should fail to create because subject duplicate", async () => {
        
         const res = await request(app).post("/subject/create").send({ description: "Test_subject" }).set('x-api-key', process.env.API_KEY);
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(409);
 
     });
 
@@ -30,7 +30,7 @@ describe("Create Subject - API Tests", () => {
     it("POST /subject/create - should fail if description is too long", async () => {
         const longDescription = "a".repeat(maxSizeDescription); // Adjust max length
         const res = await request(app).post("/subject/create").send({ description: longDescription }).set('x-api-key', process.env.API_KEY);
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(422);
     });
 });
 
@@ -46,13 +46,13 @@ describe("Prompt Manipulation - API TEST", () => {
     it("POST /subject/prompt/create - should fail because the description is too long", async () => {
         const longDescription = "b".repeat(maxSizeDescription);
         const res = await request(app).post("/subject/prompt/create").send({ description: longDescription }).set('x-api-key', process.env.API_KEY);
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(422);
 
     });
 
     it("POST /subject/prompt/create - should fail because the description is absent", async () => {
         const res = await request(app).post("/subject/prompt/create").set('x-api-key', process.env.API_KEY);
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(404);
 
     });
 });
