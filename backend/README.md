@@ -1,6 +1,6 @@
 # Train Speech - Backend
 
-This is the backend par of train speech 
+This is the backend par of train speech for api usage.
 
 ## Technologies 
 
@@ -9,3 +9,4 @@ This is the backend par of train speech
 
 ## Test
 npm run test
+
