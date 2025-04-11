@@ -12,7 +12,7 @@ return (
         editable
         style={styles.input}
         multiline
-        maxLength={DIMENSIONS.maxDescriptionInput}
+        maxLength={DIMENSIONS.maxDescriptionLength}
         onChangeText={(newText) =>{ 
             onChangeText(newText); 
             onDescriptionChange(newText);}

@@ -6,7 +6,7 @@ import { subjectService } from "../api";
 import { COLORS } from "../utils";
 import PanelButton from "../components/Button/PanelButton";
 import { Subject, SubjectType } from "../models";
-import { PopupPage, FlatListTable } from "../components";
+import { AddSubject, FlatListTable } from "../components";
 
 const SubjectBankScreen = () => {
 
@@ -186,12 +186,12 @@ const SubjectBankScreen = () => {
           </View>
         </View>
       )}
-      <PopupPage
+      <AddSubject
         isVisible={isPopUpVisible}
         onClose={() => setPopUpVisible(false)}
         description={description}
         setDescription={setDescription}
-      ></PopupPage>
+      ></AddSubject>
     </View>
   );
 };

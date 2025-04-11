@@ -125,7 +125,36 @@ const subjectService = {
     }
 
   },
-  createQuestions: async (description : string) => {
+
+  createSubject: async (description: string) => {
+    try {
+
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/create`
+      const response = await fetch(url, {
+        method: 'POST', 
+        headers: apiConfig.headers,
+        body: JSON.stringify({description: description}),
+      });
+
+      if(!response.ok)
+        {
+          const errorData = await response.json();
+          throw new Error(`${response.status}-${errorData.error}`);
+        }
+  
+        const data = await response.json();
+        console.log("Response Status:", data); 
+        return data;
+      
+    } catch (error) {
+      console.error('Error creating subject:', error);
+      throw error;
+    }
+
+
+  },
+
+  createQuestion: async (description : string) => {
     try {
 
       const url = `${apiConfig.baseURL}/${subjectEndpoint}/question/create`
@@ -146,7 +175,7 @@ const subjectService = {
         return data;
       
     } catch (error) {
-      console.error('Error retreiving questions:', error);
+      console.error('Error creating questions:', error);
       throw error;
     }
 
@@ -173,7 +202,7 @@ const subjectService = {
         return data;
       
     } catch (error) {
-      console.error('Error retreiving questions', error);
+      console.error('Error creating questions', error);
       throw error;
     }
 
