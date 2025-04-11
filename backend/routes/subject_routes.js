@@ -35,13 +35,6 @@ router.post('/assign', subjectController.assignSubject);
  */
 router.get('/mode/:idSubject', subjectController.getSubjectMode);
 
-/**
- * Read detailed information about a specific subject.
- * @route GET /:idSubject
- * @param {string} idSubject - The ID of the subject to read.
- * @access Public
- */
-router.get('/:idSubject', subjectController.readSubject);
 
 /**
  * Retrieve all subjects.
@@ -80,6 +73,14 @@ router.get('/prompts',subjectController.getAllPrompts);
  * @access Public
  */
 router.get('/questions',subjectController.getAllQuestions);
+
+/**
+ * Read detailed information about a specific subject.
+ * @route GET /:idSubject
+ * @param {string} idSubject - The ID of the subject to read.
+ * @access Public
+ */
+router.get('/:idSubject', subjectController.readSubject);
 
 /**
  * Create a prompt

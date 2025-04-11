@@ -22,9 +22,9 @@ describe("Create Subject - API Tests", () => {
         expect(res.statusCode).toBe(400);
     });
 
-    it("GET /subject/all - should fetch subjects but since there is no subject, it should fail", async () => {
+    it("GET /subject/all - should fetch subjects ", async () => {
         const res = await request(app).get("/subject/all").set('x-api-key', process.env.API_KEY);
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(200);
     });
 
     it("POST /subject/create - should fail if description is too long", async () => {

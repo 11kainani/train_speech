@@ -275,11 +275,7 @@ exports.changeDescription = async (req, res) => {
 exports.readAllSubjects = async (req, res) => {
   try {
     const subjects = await Subject.findAll();
-    
-    // If no subjects are found, return 404 instead of 400
-    if (subjects.length === 0) {
-      return res.status(404).json({ error: "No subjects found" });
-    }
+    console.log(subjects);
 
     return res.status(200).json({ subjects: subjects }); 
   } catch (error) {
@@ -287,6 +283,7 @@ exports.readAllSubjects = async (req, res) => {
     return res.status(500).json({ error: "Server error" }); 
   }
 };
+
 
 /**
  * Delete a subject
@@ -348,7 +345,6 @@ exports.getAllPrompts = async (req, res) => {
       ],
     });
 
-    if (!prompts || prompts.length === 0) return res.status(404).json({error: "No prompts found"});
 
     return res.status(200).json({ prompts: prompts });
   } catch (error) {
@@ -379,7 +375,7 @@ exports.getAllQuestions = async (req, res) => {
       ],
     });
 
-    if (!questions || questions.length === 0) return res.status(404).json({error: "No questions found"});
+ 
     return res.status(200).json({ questions: questions });
   } catch (error) {
     console.error(error);
