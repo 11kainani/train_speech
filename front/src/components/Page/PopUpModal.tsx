@@ -29,30 +29,35 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
       animationOut="fadeOut"
       useNativeDriver={true}
       backdropOpacity={DIMENSIONS.opacity}
+      style={styles.modalContainer}
+      backdropColor={COLORS.primary}
     >
-      <View style={styles.overlay}>
-        <View style={styles.container}>{children}</View>
-      </View>
+
+
+        <View style={styles.modalContent}>{children}</View>
+    
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    padding: DIMENSIONS.padding,
+
+  modalContainer: {
     justifyContent: "center",
     alignItems: "center",
-    
+    margin: 0, 
+
+  
   },
-  container: {
-    flex: 1,
+  modalContent: {
+    backgroundColor: COLORS.backgroundDark,
+    maxWidth: "80%",
+    width: "70%",
+    height: "60%", // Adjust to your needs
+    borderRadius: 10,
+    padding: DIMENSIONS.padding,
     justifyContent: "center",
     alignItems: "center",
-    padding: DIMENSIONS.padding,
-    width: "80%",
-    
-    backgroundColor: COLORS.backgroundDark,
-    borderRadius: DIMENSIONS.radius / 2,
   },
 });
 

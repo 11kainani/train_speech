@@ -1,4 +1,4 @@
-export  enum SubjectType {
+export enum SubjectType {
     NONE = "none",
     PROMPT = "prompt",
     QUESTION = "question",

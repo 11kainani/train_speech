@@ -13,6 +13,7 @@ interface AddSubjectProps {
   onClose: () => void;
   description: string;
   setDescription: (text: string) => void;
+  onSubmit: (SubjectType:SubjectType, Subject:Subject) => void;
 }
 
 const AddSubject: React.FC<AddSubjectProps> = ({
@@ -20,6 +21,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
   onClose,
   description,
   setDescription,
+  onSubmit
 }) => {
     const [isModalVisible, setModalVisible] = useState(isVisible);
 
@@ -57,7 +59,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         );
         setDescription("");
         onClose();
-        return question;
+        return question.subject;
       } catch (error) {
         console.log(error);
       }
@@ -72,7 +74,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         setDescription("");
         onClose();
   
-        return prompt;
+        return prompt.subject;
       } catch (error) {
         console.log(error);
       }
@@ -92,13 +94,14 @@ const AddSubject: React.FC<AddSubjectProps> = ({
                 throw new Error("The description is too short");
               }
           
-              let createdSubject;
+              let createdSubject : Subject | undefined;
               switch (subjectSelector) {
                 case SubjectType.NONE:
                     createdSubject = await handleUnassignedCreation();
                     break;
                 case SubjectType.QUESTION:
                   createdSubject = await handleQuestionCreation();
+                  onClose()
                   break;
                 case SubjectType.PROMPT:
                   createdSubject = await handlePromptCreation();
@@ -108,7 +111,8 @@ const AddSubject: React.FC<AddSubjectProps> = ({
               if(createdSubject)
               {
                 onClose(); 
-                return [subjectSelector, createdSubject];
+
+                onSubmit(subjectSelector, createdSubject);
               }
             
         } catch (error) {
@@ -165,9 +169,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   createButton: {
-    backgroundColor: COLORS.subSecondary,
+    backgroundColor: COLORS.primary,
     borderRadius: DIMENSIONS.radius,
-    marginTop: 10,
+  
+
   },
   defaultButton: {
     maxWidth: responsiveWidth(27),

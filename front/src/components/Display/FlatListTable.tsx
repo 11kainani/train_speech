@@ -10,6 +10,18 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { COLORS, DIMENSIONS } from "../../utils";
 import { subjectService } from "../../api";
+import { Subject } from "../../models";
+
+
+interface FlatListTableProps {
+  data:{
+      idSubject: string; 
+      description: string;
+      
+  }[],
+  onDeleteSuccess?: (subjectId : string)=>  void;
+}
+
 
 const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) => {
   const handleItemPress = (itemName: string) => {
@@ -21,13 +33,19 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
   };
 
   const handleRightButtonPress = async (idSubject: string) => {
-    console.log(`Right button pressed for ID: ${idSubject}`);
-    await subjectService.deleteSubject(idSubject);
-    if (onDeleteSuccess) {
-      onDeleteSuccess();
+    console.log(`Deleting subject ${idSubject}`);
+    try {
+      await subjectService.deleteSubject(idSubject);
+      console.log("Deleted successfully");
+  
+      if (onDeleteSuccess) {
+        onDeleteSuccess(idSubject);
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
     }
-
   };
+  
 
   const renderItem = ({
     item,
