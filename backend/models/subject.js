@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-    },
+    }
   }, {
     freezeTableName: true,
-    timestamps: false,
+    timestamps: true,
   });
 
   return Subject;

@@ -56,7 +56,7 @@ exports.createSubject = async (req, res) => {
 
     // Create the new subject
     const created_subject = await Subject.create(subject_to_create);
-    return res.status(201).json({ Subject: created_subject });
+    return res.status(201).json({ subject: created_subject });
 
   } catch (error) {
     console.error(error);

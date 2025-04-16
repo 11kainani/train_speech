@@ -24,14 +24,15 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 
-
-
 // Function to test the database connection
 console.log('Connecting to database...');
 sequelize
   .authenticate()
   .then(() => {
     console.log('Database connection has been established successfully.');
+    return sequelize.sync({ alter: true });
+  }).then(() => {
+    console.log('Database schema updated.');
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
