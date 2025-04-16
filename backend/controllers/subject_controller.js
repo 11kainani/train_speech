@@ -1,4 +1,4 @@
-const { Subject, Question, Prompt } = require("../models");
+const { Subject, Answer ,Question, Prompt } = require("../models");
 const crypto = require("crypto");
 
 /**
@@ -471,5 +471,58 @@ exports.createQuestion = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
+  }
+};
+
+/**
+ * @route GET /subject/with-answers
+ * @description Get all subjects that have at least one answer
+ * @returns {Object[]} 200 - Array of subjects with answers
+ * @returns {Object} 500 - Internal server error
+ */
+exports.getSubjectsWithAnswers = async (req, res) => {
+  try {
+    const subjects = await Subject.findAll({
+      include: [
+        {
+          model: Answer,
+          as: 'answers',
+          required: true, // INNER JOIN to filter only subjects with answers
+          attributes: [],
+        },
+      ],
+    });
+    return res.status(200).json({ subjects });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+/**
+ * @route GET /subject/without-answers
+ * @description Get all subjects that have no answers
+ * @returns {Object[]} 200 - Array of subjects without answers
+ * @returns {Object} 500 - Internal server error
+ */
+exports.getSubjectsWithoutAnswers = async (req, res) => {
+  try {
+    const subjects = await Subject.findAll({
+      include: [
+        {
+          model: Answer,
+          as: 'answers',
+          required: false, // LEFT OUTER JOIN
+          attributes: [],
+        },
+      ],
+      where: {
+        '$Answers.idAnswer$': null, // Sequelize alias path
+      },
+    });
+    return res.status(200).json({ subjects });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
   }
 };

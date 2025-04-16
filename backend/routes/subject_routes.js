@@ -35,7 +35,6 @@ router.post('/assign', subjectController.assignSubject);
  */
 router.get('/mode/:idSubject', subjectController.getSubjectMode);
 
-
 /**
  * Retrieve all subjects.
  * @route GET /all
@@ -73,6 +72,18 @@ router.get('/prompts',subjectController.getAllPrompts);
  * @access Public
  */
 router.get('/questions',subjectController.getAllQuestions);
+
+/**
+ * @route GET /subject/with-answers
+ * @description Route to fetch all subjects that have at least one answer
+ */
+router.get('/with-answers', subjectController.getSubjectsWithAnswers);
+
+/**
+ * @route GET /subject/without-answers
+ * @description Route to fetch all subjects that have no answers
+ */
+router.get('/without-answers', subjectController.getSubjectsWithoutAnswers);
 
 /**
  * Read detailed information about a specific subject.
