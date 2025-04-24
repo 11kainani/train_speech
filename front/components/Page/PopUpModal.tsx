@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   
   },
   modalContent: {
-    backgroundColor: COLORS.backgroundDark,
+    backgroundColor: COLORS.background,
     maxWidth: "80%",
     width: "70%",
     height: "60%", // Adjust to your needs

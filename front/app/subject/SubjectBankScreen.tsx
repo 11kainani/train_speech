@@ -253,7 +253,7 @@ export const styles = StyleSheet.create({
   filterButton: {
     flex: 1,
 
-    backgroundColor: COLORS.backgroundDark,
+    backgroundColor: COLORS.background,
     color: COLORS.white,
   },
 
