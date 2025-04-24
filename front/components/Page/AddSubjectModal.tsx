@@ -4,7 +4,7 @@ import PopUpModal from "./PopUpModal";
 import { DescriptionInput } from "../Input";
 import { PanelButton } from "../Button";
 import { COLORS, DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
-import { SubjectType, PromptResponse, QuestionResponse, Subject } from "../../models";
+import { SubjectType, PromptResponse, QuestionResponse, Subject, SubjectResponse } from "../../models/Subject";
 import { subjectService } from "../../api";
 
 
@@ -40,12 +40,16 @@ const AddSubject: React.FC<AddSubjectProps> = ({
     const handleUnassignedCreation = async () => {
         try {
             //Add directly to data and to the list of questionsID
-            const subject: Subject = await subjectService.createSubject(
+            const subject: SubjectResponse = await subjectService.createSubject(
               description
             );
+
+            if (!subject ) {
+              throw new Error("Invalid response from createSubject.");
+            }
             setDescription("");
             onClose();
-            return subject;
+            return subject.subject;
           } catch (error) {
             console.log(error);
           }
@@ -101,7 +105,6 @@ const AddSubject: React.FC<AddSubjectProps> = ({
                     break;
                 case SubjectType.QUESTION:
                   createdSubject = await handleQuestionCreation();
-                  onClose()
                   break;
                 case SubjectType.PROMPT:
                   createdSubject = await handlePromptCreation();
@@ -110,9 +113,9 @@ const AddSubject: React.FC<AddSubjectProps> = ({
               }
               if(createdSubject)
               {
-                onClose(); 
-
+                
                 onSubmit(subjectSelector, createdSubject);
+                onClose(); 
               }
             
         } catch (error) {

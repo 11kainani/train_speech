@@ -1,7 +1,7 @@
 {
   "name": "front",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "type": "module",
   "scripts": {
     "start": "expo start",
@@ -21,7 +21,8 @@
     "react-native": "^0.76.7",
     "react-native-dotenv": "^3.4.11",
     "react-native-modal": "^14.0.0-rc.1",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "expo-router": "~4.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

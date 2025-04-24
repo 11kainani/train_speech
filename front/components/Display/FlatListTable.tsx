@@ -8,9 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { COLORS, DIMENSIONS } from "../../utils";
+import { COLORS, DIMENSIONS } from '../../utils';
 import { subjectService } from "../../api";
-import { Subject } from "../../models";
 
 
 interface FlatListTableProps {
@@ -87,6 +86,8 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
         data={data}
         keyExtractor={({ idSubject }) => idSubject}
         renderItem={renderItem}
+        persistentScrollbar={true}
+        
       />
     </View>
   );

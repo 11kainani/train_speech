@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { subjectService } from "../api";
-import { COLORS } from "../utils";
-import PanelButton from "../components/Button/PanelButton";
-import { Subject, SubjectType } from "../models";
-import { AddSubject, FlatListTable } from "../components";
+import { subjectService } from "../../api";
+import { COLORS } from "../../utils/colors";
+import PanelButton from "../../components/Button/PanelButton";
+import { Subject, SubjectType } from "../../models/Subject";
+import { AddSubject, FlatListTable } from "../../components";
 
 const SubjectBankScreen = () => {
 
@@ -203,6 +203,7 @@ const SubjectBankScreen = () => {
               title={"Add Subject"}
               onPress={addSubject}
             />
+            
           </View>
         </View>
       )}
@@ -222,7 +223,7 @@ export const styles = StyleSheet.create({
     color: COLORS.white,
   },
   container: {
-    backgroundColor: COLORS.backgroundDark,
+    backgroundColor: COLORS.background,
     justifyContent: "center",
     alignContent: "center",
     flex: 1,
