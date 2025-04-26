@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import Modal from "react-native-modal";
-import { COLORS, DIMENSIONS } from "../../utils";
+import { COLORS, DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
 
 interface PopUpModalProps {
   title: string;
@@ -34,47 +34,36 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
       style={styles.modalContainer}
       backdropColor={COLORS.backgroundBlur}
     >
-
-        
-        <View style={styles.modalContent}>
+      <View style={styles.modalContent}>
         <Text style={styles.title}>{title} </Text>
-          {children}
-          </View>
-    
+        {children}
+      </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-
   modalContainer: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 0, 
-
-  
+    margin: 0,
+    
   },
 
-  title: 
-  {
+  title: {
     textAlign: "left",
-    fontSize: DIMENSIONS.font,
+    fontSize: DIMENSIONS.fontLarge,
     fontWeight: "bold",
-    marginTop: DIMENSIONS.marginLarge,
     textTransform: "uppercase",
-    color: COLORS.text,
-    
+    color: COLORS.textPrimary,
   },
   modalContent: {
     backgroundColor: COLORS.background,
-    maxWidth: "80%",
-    width: "70%",
-    height: "50%", // Adjust to your needs
+    width: responsiveWidth(90),
+    height: responsiveHeight(66),
     borderRadius: DIMENSIONS.radius,
     padding: DIMENSIONS.padding,
-   
     justifyContent: "center",
-
   },
 });
 

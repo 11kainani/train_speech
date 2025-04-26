@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
-import { responsiveHeight, responsiveWidth } from '../../utils';
+import { DIMENSIONS, responsiveHeight, responsiveWidth } from '../../utils';
 
 
 
-const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
+const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress, selected=true }) => {
 
   
 
@@ -16,7 +16,7 @@ const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
       
     >
       <View style={panelStyle.container}>
-        <Text style={[panelStyle.text, style]}> {title} </Text>
+        <Text style={selected ? panelStyle.selectedText : panelStyle.nonSelectedText}> {title} </Text>
       </View>
     </TouchableOpacity>
   );
@@ -25,24 +25,41 @@ const PanelButton: React.FC<PanelButtonProps> = ({ title, style, onPress }) => {
 const panelStyle = StyleSheet.create({
   panel: {
     backgroundColor: COLORS.primary,
-    margin: 10,
-    height: responsiveHeight(5),
-    width: responsiveWidth(50),
+    borderRadius: DIMENSIONS.radiusSmall,
+    paddingVertical: DIMENSIONS.paddingSmall,
+    paddingHorizontal: DIMENSIONS.paddingLarge,
+    justifyContent: "center",
+    alignItems: "center",
+    margin:DIMENSIONS.margin,
+
 
   },
 
-  text: {
-    color: COLORS.primaryText,
+  selectedText: {
+    color: COLORS.textOnPrimary,
+    fontSize: DIMENSIONS.font,
+    fontWeight: "bold",
     textTransform: 'uppercase',
     textAlignVertical: "center",
     textAlign: "center",
+    
+
 
   },
 
+  nonSelectedText : {
+    color: COLORS.primary,
+    fontSize: DIMENSIONS.font,
+    fontWeight: "bold",
+    textTransform: 'uppercase',
+    textAlignVertical: "center",
+    textAlign: "center",
+  },
+
   container: {
-    justifyContent: "center", //Centered vertically
-    alignItems: "center", //Centered horizontally
-    flex: 1,
+    justifyContent: "center", 
+    alignItems: "center", 
+
   },
 });
 

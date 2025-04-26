@@ -12,6 +12,7 @@ return (
         editable
         style={styles.input}
         multiline
+        scrollEnabled={true}
         maxLength={DIMENSIONS.maxDescriptionLength}
         onChangeText={(newText) =>{ 
             onChangeText(newText); 
@@ -27,18 +28,18 @@ return (
 const styles = StyleSheet.create({
     container:{
 
-        backgroundColor: COLORS.white,
-        padding: DIMENSIONS.padding*2,
-        height: responsiveHeight(30),
-        width: responsiveWidth(60),
+        backgroundColor: COLORS.secondary,
+        padding: DIMENSIONS.padding,
         borderRadius: DIMENSIONS.radius,
-        borderColor: COLORS.primaryText,
-        borderWidth: DIMENSIONS.unit*2,
+        borderColor: COLORS.primary,
+        borderWidth: DIMENSIONS.border,
+        height: "40%"
     },
 
     input: {
-        color: COLORS.primary,
-        textAlign:"center",
+        color: COLORS.textPrimary,
+        textAlign:"justify",
+        fontSize: DIMENSIONS.font,
         
     },
 });

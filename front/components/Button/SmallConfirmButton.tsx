@@ -12,10 +12,11 @@ const SmallConfirmButton: React.FC<SmallConfirmButtonProps> = ({title, style, on
 
     return (
         <TouchableOpacity 
+        onPress={onPress}
         style = {[styles.container, style]}>
             <View>
                 <Text 
-                style = {[styles.text, style]}>{title}</Text>
+                style = {styles.text}>{title}</Text>
             </View>
         </TouchableOpacity>
     );

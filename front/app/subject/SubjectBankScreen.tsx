@@ -220,7 +220,7 @@ const SubjectBankScreen = () => {
 
 export const styles = StyleSheet.create({
   text: {
-    color: COLORS.white,
+    color: COLORS.primary,
   },
   container: {
     backgroundColor: COLORS.background,
@@ -242,8 +242,9 @@ export const styles = StyleSheet.create({
 
   addButton: {
     alignSelf: "center",
-    backgroundColor: COLORS.subSecondary,
-    color: COLORS.white,
+    backgroundColor: COLORS.primary,
+    color: COLORS.textOnPrimary,
+    borderRadius: DIMENSIONS.radius,
   },
 
   filterBar: {
@@ -254,7 +255,7 @@ export const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: COLORS.background,
-    color: COLORS.white,
+    color: COLORS.textOnPrimary,
   },
 
   activeFilter: {

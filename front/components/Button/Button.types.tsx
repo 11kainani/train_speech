@@ -2,6 +2,7 @@ interface PanelButtonProps {
     title: string; 
     style?: object; 
     onPress?: () => void;
+    selected?: boolean;
     }
 
 interface HorizontalButtonsProps {

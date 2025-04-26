@@ -29,7 +29,7 @@ export const COLORS = {
   cardAccent: '#D4AF37',     // Slightly darker accent for card elements
 
  
-  backgroundBlur: "rgba(168, 196, 229, 0.95)",
+  backgroundBlur: "rgba(0, 0, 0, 0.95)",
   black: "#000000",
 
   primaryText: "#FFD700",
