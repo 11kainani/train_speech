@@ -8,21 +8,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { COLORS, DIMENSIONS } from '../../utils';
+import {
+  COLORS,
+  DIMENSIONS,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../utils";
 import { subjectService } from "../../api";
+import { SmallConfirmButton } from "../Button";
 
-
-interface FlatListTableProps {
-  data:{
-      idSubject: string; 
-      description: string;
-      
-  }[],
-  onDeleteSuccess?: (subjectId : string)=>  void;
+interface SubjectListTableProps {
+  data: {
+    idSubject: string;
+    description: string;
+  }[];
+  onDeleteSuccess?: (subjectId: string) => void;
 }
 
-
-const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) => {
+const SubjectListTable: React.FC<SubjectListTableProps> = ({
+  data,
+  onDeleteSuccess,
+}) => {
   const handleItemPress = (itemName: string) => {
     console.log(itemName);
   };
@@ -36,7 +42,7 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
     try {
       await subjectService.deleteSubject(idSubject);
       console.log("Deleted successfully");
-  
+
       if (onDeleteSuccess) {
         onDeleteSuccess(idSubject);
       }
@@ -44,40 +50,34 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
       console.error("Delete failed", err);
     }
   };
-  
 
   const renderItem = ({
     item,
   }: {
     item: { idSubject: string; description: string };
   }) => (
-    <View>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => handleLeftButtonPress(item.idSubject)}>
-          <Ionicons
-            name="settings"
-            size={DIMENSIONS.iconSize}
-            color={COLORS.white}
-            
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.text}
-          onPress={() => handleItemPress(item.description)}
-        >
-          <Text style={styles.item}>{item.description}</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.text}
+        onPress={() => handleItemPress(item.description)}
+      >
+        <Text style={styles.item}>{item.description}</Text>
+      </TouchableOpacity>
+
+      <View style= {styles.buttonContainer}>
+        <SmallConfirmButton title="Create Subject" />
+
         <TouchableOpacity
           onPress={() => handleRightButtonPress(item.idSubject)}
+          style={styles.delete}
         >
           <Ionicons
-            name="trash-outline"
+            name="settings-sharp"
             size={DIMENSIONS.iconSize}
-            color={COLORS.white}
+            color={COLORS.primary}
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.line} />
     </View>
   );
   return (
@@ -87,7 +87,6 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
         keyExtractor={({ idSubject }) => idSubject}
         renderItem={renderItem}
         persistentScrollbar={true}
-        
       />
     </View>
   );
@@ -95,38 +94,43 @@ const FlatListTable: React.FC<FlatListTableProps> = ({ data, onDeleteSuccess }) 
 
 const styles = StyleSheet.create({
   segmentation: {
-    backgroundColor: COLORS.subSecondary,
+   
+    width: responsiveWidth(90),
     height: "75%",
   },
 
   item: {
-    padding: 16,
-    backgroundColor: COLORS.subSecondary,
-    color: COLORS.white,
-    textAlign: "center",
-    flex: 1,
-    fontSize: 12,
+    padding: DIMENSIONS.paddingSmall,
+    color: COLORS.textPrimary,
+    fontSize: DIMENSIONS.font,
     fontWeight: "bold",
-  },
-
-  line: {
-    borderBottomWidth: DIMENSIONS.unit,
-    borderBottomColor: COLORS.subAccent,
-    width: "85%",
-    alignSelf: "center",
+    marginRight: DIMENSIONS.marginSmall,
+    textAlign: "justify",
   },
 
   container: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center",
-    paddingVertical: DIMENSIONS.padding,
-    marginVertical: DIMENSIONS.margin,
+    justifyContent: "space-around",
+    minHeight: responsiveHeight(5),
+    marginVertical: DIMENSIONS.marginSmall,
+    padding: DIMENSIONS.paddingSmall,
+    borderColor: COLORS.primary,
+    borderWidth: DIMENSIONS.border,
+    borderRadius: DIMENSIONS.radius,
+    paddingHorizontal: DIMENSIONS.paddingSmall,
   },
+
+  buttonContainer : {
+    flexDirection: "row", 
+    alignItems: "center",
+  },
+
+  delete: {},
   text: {
-    width: "65%",
-    
+    flex: 1, 
+    marginRight: DIMENSIONS.marginSmall,
   },
 });
 
-export default FlatListTable;
+export default SubjectListTable;

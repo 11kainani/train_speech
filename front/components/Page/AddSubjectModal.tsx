@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import PopUpModal from "./PopUpModal";
 import { DescriptionInput } from "../Input";
 import { PanelButton } from "../Button";
-import { COLORS, DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
+import { COLORS, DIMENSIONS } from "../../utils";
 import { SubjectType, PromptResponse, QuestionResponse, Subject, SubjectResponse } from "../../models/Subject";
 import { subjectService } from "../../api";
 
@@ -128,7 +128,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
     }, [isVisible]);
 
   return (
-    <PopUpModal isVisible={isVisible} onClose={onClose}>
+    <PopUpModal isVisible={isVisible} onClose={onClose} title="Add a new Subject">
       
       <Text style={styles.text}>Description</Text>
       <DescriptionInput
@@ -178,8 +178,8 @@ const styles = StyleSheet.create({
 
   },
   defaultButton: {
-    maxWidth: responsiveWidth(27),
-    maxHeight: responsiveHeight(4),
+    maxWidth: DIMENSIONS.responsiveWidth(27),
+    maxHeight: DIMENSIONS.responsiveHeight(4),
     borderRadius: DIMENSIONS.radius / 2,
   },
   select: {

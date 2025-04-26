@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { subjectService } from "../../api";
-import { COLORS } from "../../utils/colors";
+import { COLORS, DIMENSIONS } from "../../utils";
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
-import { AddSubject, FlatListTable } from "../../components";
+import { AddSubject, SubjectListTable } from "../../components";
 
 const SubjectBankScreen = () => {
 
@@ -187,12 +187,12 @@ const SubjectBankScreen = () => {
             </View>
 
             {isFiltered != SubjectType.NONE ? (
-              <FlatListTable
+              <SubjectListTable
                 data={filteredData}
                 onDeleteSuccess={removeSubjectFromData}
               />
             ) : (
-              <FlatListTable
+              <SubjectListTable
                 data={data}
                 onDeleteSuccess={removeSubjectFromData}
               />

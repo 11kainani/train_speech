@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import Modal from "react-native-modal";
 import { COLORS, DIMENSIONS } from "../../utils";
 
 interface PopUpModalProps {
+  title: string;
   isVisible: boolean;
   onClose: () => void;
   children: React.ReactNode;
 }
 
 const PopUpModal: React.FC<PopUpModalProps> = ({
+  title,
   isVisible,
   onClose,
   children,
@@ -30,11 +32,14 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
       useNativeDriver={true}
       backdropOpacity={DIMENSIONS.opacity}
       style={styles.modalContainer}
-      backdropColor={COLORS.primary}
+      backdropColor={COLORS.backgroundBlur}
     >
 
-
-        <View style={styles.modalContent}>{children}</View>
+        
+        <View style={styles.modalContent}>
+        <Text style={styles.title}>{title} </Text>
+          {children}
+          </View>
     
     </Modal>
   );
@@ -49,15 +54,27 @@ const styles = StyleSheet.create({
 
   
   },
+
+  title: 
+  {
+    textAlign: "left",
+    fontSize: DIMENSIONS.font,
+    fontWeight: "bold",
+    marginTop: DIMENSIONS.marginLarge,
+    textTransform: "uppercase",
+    color: COLORS.text,
+    
+  },
   modalContent: {
     backgroundColor: COLORS.background,
     maxWidth: "80%",
     width: "70%",
-    height: "60%", // Adjust to your needs
-    borderRadius: 10,
+    height: "50%", // Adjust to your needs
+    borderRadius: DIMENSIONS.radius,
     padding: DIMENSIONS.padding,
+   
     justifyContent: "center",
-    alignItems: "center",
+
   },
 });
 

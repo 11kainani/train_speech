@@ -3,9 +3,8 @@
 import React, {useState} from 'react';
 import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
 import PanelButton from '../../components/Button/PanelButton';
-import { responsiveHeight, responsiveWidth } from '../../utils/dimensions';
 import { COLORS } from '../../utils/colors';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { DIMENSIONS } from '../../utils';
 
 const horizontalPanel = StyleSheet.create({
   horizontalContainer: 
@@ -17,8 +16,8 @@ const horizontalPanel = StyleSheet.create({
   },
   panel: {
     margin: 5,
-    height: responsiveHeight(20), 
-    width: responsiveWidth(26),
+    height: DIMENSIONS.responsiveHeight(20), 
+    width: DIMENSIONS.responsiveWidth(26),
     
   },
   selectedPanel: {

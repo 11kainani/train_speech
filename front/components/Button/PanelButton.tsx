@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
-import { responsiveHeight, responsiveWidth } from '../../utils/dimensions';
+import { responsiveHeight, responsiveWidth } from '../../utils';
 
 
 
@@ -32,7 +32,7 @@ const panelStyle = StyleSheet.create({
   },
 
   text: {
-    color: COLORS.textPrimary,
+    color: COLORS.primaryText,
     textTransform: 'uppercase',
     textAlignVertical: "center",
     textAlign: "center",
