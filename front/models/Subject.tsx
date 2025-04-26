@@ -27,3 +27,7 @@ export interface QuestionResponse {
   };
   subject?: Subject
 };
+
+export interface SubjectResponse {
+    subject?: Subject
+}
