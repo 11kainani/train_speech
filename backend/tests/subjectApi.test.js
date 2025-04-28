@@ -39,19 +39,19 @@ describe("Prompt Manipulation - API TEST", () => {
 
     it("POST /subjects/prompt/ - should create a prompt", async () => {
 
-        const res = await request(app).post("/subjects/prompt/").send({description: "Prompt Test"}).set('x-api-key', process.env.API_KEY);
+        const res = await request(app).post("/subjects/prompts/").send({description: "Prompt Test"}).set('x-api-key', process.env.API_KEY);
         expect(res.statusCode).toBe(201);
     });
 
     it("POST /subjects/prompt/ - should fail because the description is too long", async () => {
         const longDescription = "b".repeat(maxSizeDescription);
-        const res = await request(app).post("/subjects/prompt/").send({ description: longDescription }).set('x-api-key', process.env.API_KEY);
+        const res = await request(app).post("/subjects/prompts/").send({ description: longDescription }).set('x-api-key', process.env.API_KEY);
         expect(res.statusCode).toBe(422);
 
     });
 
     it("POST /subjects/prompt/ - should fail because the description is absent", async () => {
-        const res = await request(app).post("/subjects/prompt/").set('x-api-key', process.env.API_KEY);
+        const res = await request(app).post("/subjects/prompts/").set('x-api-key', process.env.API_KEY);
         expect(res.statusCode).toBe(400);
 
     });

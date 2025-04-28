@@ -1,7 +1,7 @@
 // api/services/subjectService.js
 import apiConfig from '../config/apiConfig';
 
-const subjectEndpoint = "subject";
+const subjectEndpoint = "subjects";
 
 
 enum subjectType {
@@ -19,7 +19,7 @@ const subjectService = {
    */
   getSubjects: async () => {
     try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/all`;
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/`;
       console.log(url);
       const response = await fetch(url, {
         method: 'GET',
@@ -51,7 +51,7 @@ const subjectService = {
    */
   deleteSubject: async (idSubject: string) => {
     try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/delete?idSubject=${idSubject}`
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/${idSubject}`
       const response = await fetch(url, {
         method: 'DELETE',
         headers: apiConfig.headers,
@@ -129,7 +129,7 @@ const subjectService = {
   createSubject: async (description: string) => {
     try {
 
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/create`
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/`
       const response = await fetch(url, {
         method: 'POST', 
         headers: apiConfig.headers,
@@ -157,7 +157,7 @@ const subjectService = {
   createQuestion: async (description : string) => {
     try {
 
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/question/create`
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/questions/`
       const response = await fetch(url, {
         method: 'POST', 
         headers: apiConfig.headers,
@@ -184,7 +184,7 @@ const subjectService = {
   createPrompt: async (description : string) => {
     try {
 
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompt/create`
+      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompts/`
       const response = await fetch(url, {
         method: 'POST', 
         headers: apiConfig.headers,

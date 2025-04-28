@@ -98,13 +98,13 @@ router.get('/:idSubject', subjectController.readSubject);
  * @route POST /prompt/create
  * @access Public
  */
-router.post('/prompt',subjectController.createPrompt);
+router.post('/prompts',subjectController.createPrompt);
 
 /**
  * Create a Question
  * @route POST /prompt/create
  * @access Public
  */
-router.post('/question',subjectController.createQuestion);
+router.post('/questions',subjectController.createQuestion);
 
 module.exports = router;
