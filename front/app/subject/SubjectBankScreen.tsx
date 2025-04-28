@@ -8,7 +8,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { subjectService } from "../../api";
-import { COLORS, DIMENSIONS } from "../../utils";
+import {
+  COLORS,
+  DIMENSIONS,
+  responsiveHeight,
+  responsiveWidth,
+} from "../../utils";
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
 import { AddSubject, SubjectListTable } from "../../components";
@@ -32,12 +37,6 @@ const SubjectBankScreen = () => {
       idSubject: subject.idSubject,
     }));
   };
-
-  useEffect(() => {
-    fetchSubjects();
-    fetchQuestionsIds();
-    fetchPromptIds();
-  }, []);
 
   const fetchSubjects = async () => {
     try {
@@ -130,13 +129,14 @@ const SubjectBankScreen = () => {
   ) => {
     console.log("Received from modal:", subjectType, createdSubject);
 
-    data.push(createdSubject);
+    setData((prevData) => [...prevData, createdSubject]);
     switch (subjectType) {
       case SubjectType.PROMPT:
-        promptIds.push(createdSubject.idSubject);
+        setPromptIds((prev) => [...prev, createdSubject.idSubject]);
+
         break;
       case SubjectType.QUESTION:
-        questionIds.push(createdSubject.idSubject);
+        setQuestionIds((prev) => [...prev, createdSubject.idSubject]);
         break;
     }
   };
@@ -167,9 +167,8 @@ const SubjectBankScreen = () => {
     let filtered = [...data];
 
     if (searchQuery) {
-      filtered = filtered.filter(
-        (subject) =>
-          subject.description.toLowerCase().includes(searchQuery.toLowerCase()) 
+      filtered = filtered.filter((subject) =>
+        subject.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -189,8 +188,24 @@ const SubjectBankScreen = () => {
   const handleFilter = () => {};
 
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await fetchSubjects();
+        await fetchPromptIds();
+        await fetchQuestionsIds();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
     filterData();
-  }, [data, searchQuery, isFiltered]);
+  }, [data,searchQuery, isFiltered]);
 
   return (
     <View style={styles.container}>
@@ -199,43 +214,17 @@ const SubjectBankScreen = () => {
       ) : (
         <View style={styles.container}>
           <View style={styles.control}>
-            <View style={styles.filterBar}>
-              <PanelButton
-                style={[
-                  styles.filterButton,
-                  isFiltered === SubjectType.QUESTION
-                    ? styles.activeFilter
-                    : styles.unactiveFilter,
-                ]}
-                title={"Questions"}
-                onPress={filterQuestion}
-              />
-              <PanelButton
-                style={[
-                  styles.filterButton,
-                  isFiltered === SubjectType.PROMPT
-                    ? styles.activeFilter
-                    : styles.unactiveFilter,
-                ]}
-                title={"Prompt"}
-                onPress={filterPrompt}
-              />
-            </View>
             <View style={styles.horizontalBar}>
               <SearchBar value={searchQuery} onChangeText={handleSearch} />
-              <View style= {styles.filterButton}>
-              <TouchableOpacity
-                
-                onPress={handleFilter}
-              >
-                <Ionicons
-                  name="filter"
-                  size={DIMENSIONS.iconSize}
-                  color={COLORS.primary}
-                />
-              </TouchableOpacity>
+              <TouchableOpacity onPress={handleFilter}>
+                <View style={styles.filterButton}>
+                  <Ionicons
+                    name="filter"
+                    size={DIMENSIONS.iconSize}
+                    color={COLORS.primary}
+                  />
                 </View>
-              
+              </TouchableOpacity>
             </View>
 
             <SubjectListTable
@@ -295,13 +284,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
-  filterButton: {
-    flex: 1,
-    backgroundColor: COLORS.cardBackground,
-    marginLeft: DIMENSIONS.margin,
-
-  },
-
   activeFilter: {
     color: COLORS.primaryText,
     fontWeight: "bold",
@@ -312,8 +294,22 @@ export const styles = StyleSheet.create({
   horizontalBar: {
     flex: 1,
     flexDirection: "row",
-    marginVertical: DIMENSIONS.marginLarge,
-    justifyContent: "space-around",
+    marginVertical: DIMENSIONS.margin,
+    paddingVertical: DIMENSIONS.paddingSmall,
+    justifyContent: "space-between",
+    alignItems: "center",
+    maxHeight: responsiveHeight(7),
+  },
+
+  filterButton: {
+    flex: 1,
+    backgroundColor: COLORS.cardBackground,
+    justifyContent: "center",
+    alignItems: "center",
+    minWidth: responsiveWidth(7),
+    marginLeft: DIMENSIONS.marginSmall,
+
+    borderRadius: DIMENSIONS.border,
   },
 });
 

@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: COLORS.secondary,
+        backgroundColor: COLORS.cardBackground,
         borderRadius: DIMENSIONS.radius,
         paddingHorizontal: DIMENSIONS.padding,
-        height: DIMENSIONS.responsiveHeight(5),
         width: "90%",
         alignSelf: "center",
         marginVertical: DIMENSIONS.marginSmall,
+        height: '100%',
       },
       icon: {
         marginRight: 10,
