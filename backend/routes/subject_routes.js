@@ -15,10 +15,10 @@ const subjectController = require('../controllers/subject_controller');
 
 /**
  * Create a new subject.
- * @route POST /create
+ * @route POST /
  * @access Public
  */
-router.post('/create', subjectController.createSubject);
+router.post('/', subjectController.createSubject);
 
 /**
  * Assign a subject to a user or entity.
@@ -37,10 +37,10 @@ router.get('/mode/:idSubject', subjectController.getSubjectMode);
 
 /**
  * Retrieve all subjects.
- * @route GET /all
+ * @route GET /
  * @access Public
  */
-router.get('/all', subjectController.readAllSubjects);
+router.get('/', subjectController.readAllSubjects);
 
 /**
  * Update the description of a subject.
@@ -49,7 +49,7 @@ router.get('/all', subjectController.readAllSubjects);
  * @param {string} description - The new description for the subject.
  * @access Public
  */
-router.patch('/updateDescription', subjectController.changeDescription);
+router.patch('/update', subjectController.changeDescription);
 
 /**
  * Delete a subject.
@@ -57,7 +57,7 @@ router.patch('/updateDescription', subjectController.changeDescription);
  * @param {string} idSubject - The ID of the subject to delete.
  * @access Public
  */
-router.delete('/delete', subjectController.deleteSubject);
+router.delete('/:idSubject', subjectController.deleteSubject);
 
 /**
  * Get all prompts
@@ -98,13 +98,13 @@ router.get('/:idSubject', subjectController.readSubject);
  * @route POST /prompt/create
  * @access Public
  */
-router.post('/prompt/create',subjectController.createPrompt);
+router.post('/prompt',subjectController.createPrompt);
 
 /**
  * Create a Question
  * @route POST /prompt/create
  * @access Public
  */
-router.post('/question/create',subjectController.createQuestion);
+router.post('/question',subjectController.createQuestion);
 
 module.exports = router;

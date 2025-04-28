@@ -219,7 +219,7 @@ exports.readSubject = async (req, res) => {
  * Change the description of a subject
  * @async
  * @function changeDescription
- * @route {PATCH} /updateDescription
+ * @route {PATCH} /update
  * @param {Object} req - Express request object.
  * @param {Object} req.body - The request body
  * @param {Object} req.body.idSubject - The id associated to the subject.
@@ -266,7 +266,7 @@ exports.changeDescription = async (req, res) => {
  * Read all the subjects
  * @async
  * @function readAllSubjects
- * @route {GET} /all
+ * @route {GET} /
  * @param {Object} req - Express request object.
  * @param {Object} res - Espress response object
  * @returns {Promise<Response>} - Sends a JSON response with the result of the operation.
@@ -289,7 +289,7 @@ exports.readAllSubjects = async (req, res) => {
  * Delete a subject
  * @async
  * @function deleteSubject
- * @route {DELETE} /delete
+ * @route {DELETE} /:idSubject
  * @param {Object} req - Express request object.
  * @param {Object} req.query - The request query
  * @param {Object} req.query.idSubject - The id associated to the subject.
@@ -298,7 +298,7 @@ exports.readAllSubjects = async (req, res) => {
  * @throws {Error} - Sends a 500 status if there is a server error.
  */
 exports.deleteSubject = async (req, res) => {
-  const idSubject = req.query.idSubject;
+  const idSubject = req.params.idSubject;
 
   try {
     if (!idSubject) {
@@ -386,7 +386,7 @@ exports.getAllQuestions = async (req, res) => {
 /**
  * @async
  * @function createPrompt
- * @route /prompt/create
+ * @route /prompt
  * @param {Object} req - Express request object
  * @param {Object} req.body.description - Get the description of the prompt
  * @param {Object} res - Express response object
@@ -431,7 +431,7 @@ exports.createPrompt = async (req, res) => {
 /**
  * @async
  * @function createQuestion
- * @route /question/create
+ * @route /question
  * @param {Object} req - Express request object
  * @param {Object} req.body.description - Get the description of the question
  * @param {Object} res - Express response object

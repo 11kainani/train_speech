@@ -35,8 +35,8 @@ app.use(bodyParser.urlencoded({ extended: true }));// Use body-parser for JSON r
 app.use(logRequests);
 app.use(apiKeyRequests);
 /////////////
-app.use('/subject',subjectRoutes);
-app.use('/answer', answerRoutes);
+app.use('/subjects',subjectRoutes);
+app.use('/answers', answerRoutes);
 
 
 

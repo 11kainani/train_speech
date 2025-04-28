@@ -19,7 +19,7 @@ function generateHexKey() {
 }
 
 /**
- * @route POST /create
+ * @route POST /
  * @description Creates a new answer and associates it with a subject.
  * @param {string} req.body.file_location - The location of the answer file.
  * @param {number} req.body.answer_time - The time taken to answer.
@@ -73,7 +73,7 @@ exports.createAnswer = async (req, res) => {
 };
 
 /**
- * @route DELETE /answers
+ * @route DELETE /:idAnswer
  * @description Deletes an answer by its ID.
  * @param {string} req.body.idAnswer - The ID of the answer to delete.
  * @returns {Object} 200 - Confirmation message after deletion.
@@ -83,7 +83,7 @@ exports.createAnswer = async (req, res) => {
  */
 exports.deleteAnswer = async (req, res) => {
   try {
-    const { idAnswer } = req.body;
+    const { idAnswer } = req.params;
 
     if (!idAnswer) {
       return res.status(400).json({ error: "Request body is incomplete" });
@@ -106,7 +106,7 @@ exports.deleteAnswer = async (req, res) => {
 };
 
 /**
- * @route PATCH /answer/update
+ * @route PATCH /
  * @description Update an answer's review, file location, or answer time
  * @param {string} req.body.idAnswer - The ID of the answer to update (required)
  * @param {string} [req.body.review] - The updated review (optional)
@@ -200,7 +200,7 @@ exports.getAnswerById = async (req, res) => {
 };
 
 /**
- * @route GET /all
+ * @route GET /
  * @description Retrieve all answers
  * @returns {Object} 200 - List of all answers
  * @returns {Object} 404 - No answers found
