@@ -1,32 +1,30 @@
 // SubjectBankScreen.js
 
 import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { subjectService } from "../../api";
 import { COLORS, DIMENSIONS } from "../../utils";
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
 import { AddSubject, SubjectListTable } from "../../components";
+import { SearchBar } from "../../components";
+import { Ionicons } from "@expo/vector-icons";
 
 const SubjectBankScreen = () => {
-
-
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Subject[]>([]);
-  const [filteredData, setFilteredData] = useState<Subject[]>([]);
-  const [refreshData, setRefreshData] = useState(false);
+  const [filteredData, setFilteredData] = useState(data);
   const [promptIds, setPromptIds] = useState<string[]>([]);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
-
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
-
-  const handleSubjectRefresh = async () => {
-    //Handle delete to directly remove from data the deleted element instead of doing an api call
-    //Same for transformation
-    setRefreshData((prev) => !prev);
-  };
+  const [searchQuery, setSearchQuery] = useState("");
 
   const jsonToSubject = (data: { subjects: Subject[] }): Subject[] => {
     return data.subjects.map((subject: any) => ({
@@ -55,11 +53,9 @@ const SubjectBankScreen = () => {
   };
 
   const addSubject = async () => {
-    console.log("Pressed Add button");
-    setPopUpVisible((prev) => !prev);
-    console.log("Pop up", isPopUpVisible);
-    handleSubjectRefresh();
+    setPopUpVisible(true);
   };
+
   const filterQuestion = async () => {
     setLoading(true);
 
@@ -128,33 +124,73 @@ const SubjectBankScreen = () => {
     return id;
   };
 
-
-  const handleSubjectCreated = (subjectType: SubjectType, createdSubject: Subject) => {
+  const handleSubjectCreated = (
+    subjectType: SubjectType,
+    createdSubject: Subject
+  ) => {
     console.log("Received from modal:", subjectType, createdSubject);
 
     data.push(createdSubject);
-    switch(subjectType)
-    {
-      case  SubjectType.PROMPT:
+    switch (subjectType) {
+      case SubjectType.PROMPT:
         promptIds.push(createdSubject.idSubject);
         break;
       case SubjectType.QUESTION:
         questionIds.push(createdSubject.idSubject);
         break;
-    
     }
   };
 
   const removeSubjectFromData = (subjectId: string) => {
-    setPromptIds(prev => prev.filter(id => id !== subjectId));
-    setQuestionIds(prev => prev.filter(id => id !== subjectId));
-  
-    setData(prev => prev.filter(subject => subject.idSubject !== subjectId));
-    setFilteredData(prev =>
-      prev.filter(subject => subject.idSubject !== subjectId)
+    setPromptIds((prev) => prev.filter((id) => id !== subjectId));
+    setQuestionIds((prev) => prev.filter((id) => id !== subjectId));
+
+    setData((prev) =>
+      prev.filter((subject) => subject.idSubject !== subjectId)
     );
   };
-  
+
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
+
+    if (text.trim() === "") {
+      setFilteredData(data);
+    } else {
+      const newData = data.filter((item) =>
+        item.description.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredData(newData);
+    }
+  };
+
+  const filterData = () => {
+    let filtered = [...data];
+
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (subject) =>
+          subject.description.toLowerCase().includes(searchQuery.toLowerCase()) 
+      );
+    }
+
+    if (isFiltered === SubjectType.QUESTION) {
+      filtered = filtered.filter((subject) =>
+        questionIds.includes(subject.idSubject)
+      );
+    } else if (isFiltered === SubjectType.PROMPT) {
+      filtered = filtered.filter((subject) =>
+        promptIds.includes(subject.idSubject)
+      );
+    }
+
+    setFilteredData(filtered);
+  };
+
+  const handleFilter = () => {};
+
+  useEffect(() => {
+    filterData();
+  }, [data, searchQuery, isFiltered]);
 
   return (
     <View style={styles.container}>
@@ -185,25 +221,33 @@ const SubjectBankScreen = () => {
                 onPress={filterPrompt}
               />
             </View>
+            <View style={styles.horizontalBar}>
+              <SearchBar value={searchQuery} onChangeText={handleSearch} />
+              <View style= {styles.filterButton}>
+              <TouchableOpacity
+                
+                onPress={handleFilter}
+              >
+                <Ionicons
+                  name="filter"
+                  size={DIMENSIONS.iconSize}
+                  color={COLORS.primary}
+                />
+              </TouchableOpacity>
+                </View>
+              
+            </View>
 
-            {isFiltered != SubjectType.NONE ? (
-              <SubjectListTable
-                data={filteredData}
-                onDeleteSuccess={removeSubjectFromData}
-              />
-            ) : (
-              <SubjectListTable
-                data={data}
-                onDeleteSuccess={removeSubjectFromData}
-              />
-            )}
+            <SubjectListTable
+              data={filteredData}
+              onDeleteSuccess={removeSubjectFromData}
+            />
 
             <PanelButton
               style={styles.addButton}
               title={"Add Subject"}
               onPress={addSubject}
             />
-            
           </View>
         </View>
       )}
@@ -253,9 +297,9 @@ export const styles = StyleSheet.create({
 
   filterButton: {
     flex: 1,
+    backgroundColor: COLORS.cardBackground,
+    marginLeft: DIMENSIONS.margin,
 
-    backgroundColor: COLORS.background,
-    color: COLORS.textOnPrimary,
   },
 
   activeFilter: {
@@ -264,6 +308,13 @@ export const styles = StyleSheet.create({
   },
 
   unactiveFilter: {},
+
+  horizontalBar: {
+    flex: 1,
+    flexDirection: "row",
+    marginVertical: DIMENSIONS.marginLarge,
+    justifyContent: "space-around",
+  },
 });
 
 export default SubjectBankScreen;
