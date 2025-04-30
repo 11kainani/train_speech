@@ -137,48 +137,41 @@ exports.assignSubject = async (req, res) => {
 
 
 /**
- * Get the mode the subject: either prompt or question.
+ * Get the mode of the subject: either 'prompt', 'question', or 'unassigned'.
  * @async
  * @function getSubjectMode
- * @route {GET}/mode/:idSubject
- * @param {Object} req.params.idSubject - The subject for which the information is necessary.
+ * @route {GET} /mode/:idSubject
+ * @param {Object} req - Express request object containing `params.idSubject`.
  * @param {Object} res - Express response object.
- * @returns  {Promise<Response>} - Sends a JSON response with the result of the operation.
- * @throws {Error} - Sends a 500 status if there is a server error.
+ * @returns {Promise<void>} - Sends a JSON response with the mode or an error.
  */
 exports.getSubjectMode = async (req, res) => {
+  const { idSubject } = req.params;
+
+  if (!idSubject) {
+    return res.status(400).json({ error: "Missing subject ID." });
+  }
+
   try {
-    const { idSubject } = req.params;
-
-    if (!idSubject) {
-      return res.status(400).json({ error: "Request doesn't have the correct argument" });
-    }
-
-    // Find the subject by ID
+    // Check if the subject exists
     const subject = await Subject.findByPk(idSubject);
     if (!subject) {
-      return res.status(404).json({ error: "Subject not found" }); 
+      return res.status(404).json({ error: "Subject not found." });
     }
 
-    // Check if the subject exists in either the Prompt or Question tables
-    const prompt_item = await Prompt.findByPk(idSubject);
-    const question_item = await Question.findByPk(idSubject);
+    // Check if subject is a prompt or question
+    const [prompt, question] = await Promise.all([
+      Prompt.findByPk(idSubject),
+      Question.findByPk(idSubject),
+    ]);
 
-    if (!prompt_item && !question_item) {
-      return res.status(404).json({ error: "The item hasn't been assigned" }); 
-    }
-
-    // Determine the mode based on which table the subject is in
-    const mode = prompt_item ? "prompt" : "question";
-
-    return res.status(200).json({ mode: mode });
-
+    const mode = prompt ? "prompt" : question ? "question" : "unassigned";
+    return res.status(200).json({ mode });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Server error" }); 
+    console.error("Error getting subject mode:", error);
+    return res.status(500).json({ error: "Server error." });
   }
 };
-
 
 /**
  * Get the mode the subject: either prompt or question.
