@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import PopUpModal from "./PopUpModal";
+import PopUpModal from "../Page/PopUpModal";
 import { DescriptionInput } from "../Input";
 import { DefiniteActionButton, PanelButton } from "../Button";
 import { COLORS, DIMENSIONS } from "../../utils";

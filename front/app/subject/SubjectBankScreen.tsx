@@ -18,7 +18,7 @@ import {
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
 import {
-  AddSubject,
+  AddSubjectModal,
   DefiniteActionButton,
   SmallConfirmButton,
   SubjectListTable,
@@ -26,81 +26,27 @@ import {
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
 import FilterModal from "../../components/Page/FilterModal";
+import { useSubjects } from "../../hook";
+import { FilterPanel } from "../../components/SubjectBank";
 
 const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState<Subject[]>([]);
+  const {
+    data,
+    promptIds,
+    questionIds,
+    unassignedIds,
+    setData,
+    setPromptIds,
+    setQuestionIds,
+    setUnassignedIds
+  } = useSubjects(setLoading);
   const [filteredData, setFilteredData] = useState(data);
-  const [promptIds, setPromptIds] = useState<string[]>([]);
-  const [questionIds, setQuestionIds] = useState<string[]>([]);
-  const [unassignedIds, setUnassginedIds] = useState<string[]>([]);
   const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-
-  const jsonToSubject = (data: { subjects: Subject[] }): Subject[] => {
-    return data.subjects.map((subject: any) => ({
-      description: subject.description,
-      idSubject: subject.idSubject,
-    }));
-  };
-
-  const fetchSubjects = async () => {
-    try {
-      setLoading(true);
-      const results = await subjectService.getSubjects();
-      const check = jsonToSubject(results);
-      setData(check);
-    } catch (error) {
-      console.error("Failed to fetch subjects:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchPromptIds = async () => {
-    try {
-      const results = await subjectService.getPrompts();
-      setPromptIds(parserPromptId(results));
-    } catch (error) {
-      console.error("Error fetching prompts", error);
-    }
-  };
-
-  const fetchQuestionsIds = async () => {
-    try {
-      const results = await subjectService.getQuestions();
-      setQuestionIds(parserQuesionsId(results));
-    } catch (error) {
-      console.error("Error fetching prompts", error);
-    }
-  };
-
-  const fetchUnassignedIds = async () => {
-    try {
-      const response = await subjectService.getUnassignedSubjectIds();
-      const subjectIds = response.ids.map(
-        (item: { idSubject: string }) => item.idSubject
-      );
-      setUnassginedIds(subjectIds);
-    } catch (error) {}
-  };
-
-  const parserPromptId = (promptJson: any): string[] => {
-    const id = promptJson.prompts.map(
-      (prompt: { idPrompt: string }) => prompt.idPrompt
-    );
-    return id;
-  };
-
-  const parserQuesionsId = (questionsJson: any): string[] => {
-    const id = questionsJson.questions.map(
-      (question: { idQuestion: string }) => question.idQuestion
-    );
-    return id;
-  };
 
   const handleSubjectCreated = (
     subjectType: SubjectType,
@@ -123,6 +69,7 @@ const SubjectBankScreen = () => {
   const removeSubjectFromData = (subjectId: string) => {
     setPromptIds((prev) => prev.filter((id) => id !== subjectId));
     setQuestionIds((prev) => prev.filter((id) => id !== subjectId));
+    setUnassignedIds((prev)=> prev.filter((id) => id !==subjectId));
 
     setData((prev) =>
       prev.filter((subject) => subject.idSubject !== subjectId)
@@ -180,23 +127,7 @@ const SubjectBankScreen = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await fetchSubjects();
-        await fetchPromptIds();
-        await fetchQuestionsIds();
-        await fetchUnassignedIds();
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
+ 
   useEffect(() => {
     filterData();
   }, [data, searchQuery, isFiltered]);
@@ -234,56 +165,20 @@ const SubjectBankScreen = () => {
           </View>
         </View>
       )}
-      <AddSubject
+      <AddSubjectModal
         isVisible={isPopUpVisible}
         onClose={() => setPopUpVisible(false)}
         description={description}
         setDescription={setDescription}
         onSubmit={handleSubjectCreated}
-      ></AddSubject>
-      <FilterModal
-        isVisible={isFilterModalVisible}
-        onClose={() => setIsFilterModalVisible(false)}
-        children={
-          <View style={styles.filterContainer}>
-            <Text style={styles.filterTitle}>Filter By Type</Text>
-            <View style={styles.underline} />
-            <View style={styles.horizontalFilterButton}>
-              <PanelButton
-                title={"Prompt"}
-                selected={isFiltered === SubjectType.PROMPT}
-                style={styles.filterText}
-                onPress={() => handleFilterByType(SubjectType.PROMPT)}
-              />
-              <PanelButton
-                title={"Question"}
-                selected={isFiltered === SubjectType.QUESTION}
-                onPress={() => handleFilterByType(SubjectType.QUESTION)}
-              />
-              <PanelButton
-                title={"Unassigned"}
-                selected={isFiltered === SubjectType.UNASSIGNED}
-                onPress={() => handleFilterByType(SubjectType.UNASSIGNED)}
-              />
-            </View>
-            <Text style={styles.filterTitle}>Filter By Answer</Text>
-            <View style={styles.underline} />
-            <Text style={styles.filterTitle}>Order By Date</Text>
-            <View style={styles.underline} />
-            <View style={styles.horizontalFilterConfirmationButton}>
-              <View style={styles.filerClearButton}>
-                <DefiniteActionButton
-                  title={"Clear"}
-                  onPress={() => {
-                    setIsFiltered(SubjectType.NONE);
-                    setIsFilterModalVisible(false);
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        }
-      ></FilterModal>
+      ></AddSubjectModal>
+      <FilterPanel
+  isVisible={isFilterModalVisible}
+  isFiltered={isFiltered}
+  setIsFilterModalVisible={setIsFilterModalVisible}
+  setIsFiltered={setIsFiltered}
+  handleFilterByType={handleFilterByType}
+/>
     </View>
   );
 };

@@ -1,2 +1,2 @@
 export {default as PopUpModal} from './PopUpModal'; 
-export {default as AddSubject} from './AddSubjectModal'
+export {default as FilterModal} from './FilterModal';
