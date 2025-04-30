@@ -8,6 +8,8 @@ export enum SubjectType {
 export interface Subject {
     idSubject: string;
     description: string; 
+    createdAt?: string; 
+    ModifiedAt?: string;
   };
 
 export interface Prompt {
