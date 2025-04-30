@@ -1,4 +1,4 @@
-const { Subject, Answer ,Question, Prompt } = require("../models");
+const { Subject, Answer ,Question, Prompt, sequelize } = require("../models");
 const crypto = require("crypto");
 
 /**
@@ -145,7 +145,7 @@ exports.assignSubject = async (req, res) => {
  * @param {Object} res - Express response object.
  * @returns {Promise<void>} - Sends a JSON response with the mode or an error.
  */
-exports.getSubjectMode = async (req, res) => {
+exports.getSubjectType = async (req, res) => {
   const { idSubject } = req.params;
 
   if (!idSubject) {
@@ -165,8 +165,8 @@ exports.getSubjectMode = async (req, res) => {
       Question.findByPk(idSubject),
     ]);
 
-    const mode = prompt ? "prompt" : question ? "question" : "unassigned";
-    return res.status(200).json({ mode });
+    const type = prompt ? "prompt" : question ? "question" : "unassigned";
+    return res.status(200).json({ type });
   } catch (error) {
     console.error("Error getting subject mode:", error);
     return res.status(500).json({ error: "Server error." });
@@ -277,6 +277,58 @@ exports.readAllSubjects = async (req, res) => {
   }
 };
 
+
+/**
+ * @description Get all subjects that have neither a prompt nor a question
+ * @route GET /unassigned
+ * @returns {Subject[]} 200 - List of subject ids with no related prompt or question
+ * @returns {Error} 500 - Server error
+ */
+exports.getAllUnassignedSubjectId = async (req,res) => {
+  try {
+    const subjects = await Subject.findAll({
+      attributes: ['idSubject'],
+      include: [
+        {
+          model: Prompt,
+          as: 'prompt',
+          attributes: [],
+          required: false,
+          on: {
+            condition: sequelize.where(
+              sequelize.col('prompt.idPrompt'),
+              '=',
+              sequelize.col('Subject.idSubject')
+            ),
+          },
+        },
+        {
+          model: Question,
+          as: 'question',
+          attributes: [],
+          required: false,
+          on: {
+            condition: sequelize.where(
+              sequelize.col('question.idQuestion'),
+              '=',
+              sequelize.col('Subject.idSubject')
+            ),
+          },
+        },
+      ],
+      where: {
+        '$prompt.idPrompt$': null,
+        '$question.idQuestion$': null,
+      },
+    });
+
+    res.status(200).json({ids:subjects});
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" }); 
+  }
+}
 
 /**
  * Delete a subject

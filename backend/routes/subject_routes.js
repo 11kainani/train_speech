@@ -29,11 +29,11 @@ router.post('/assign', subjectController.assignSubject);
 
 /**
  * Check the mode of a subject (e.g., prompt or question).
- * @route GET /mode/:idSubject
+ * @route GET /type/:idSubject
  * @param {string} idSubject - The ID of the subject to check.
  * @access Public
  */
-router.get('/mode/:idSubject', subjectController.getSubjectMode);
+router.get('/type/:idSubject', subjectController.getSubjectType);
 
 /**
  * Retrieve all subjects.
@@ -51,6 +51,12 @@ router.get('/', subjectController.readAllSubjects);
  */
 router.patch('/update', subjectController.changeDescription);
 
+/**
+ * Get all unassigned subject ids
+ * @route GET /getAllUnassignedSubject
+ * @acces Public
+ */
+router.get('/unassigned', subjectController.getAllUnassignedSubjectId);
 /**
  * Delete a subject.
  * @route DELETE /delete

@@ -33,6 +33,7 @@ const SubjectBankScreen = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [promptIds, setPromptIds] = useState<string[]>([]);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
+  const [unassignedIds, setUnassginedIds] = useState<string[]>([]);
   const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
@@ -59,32 +60,32 @@ const SubjectBankScreen = () => {
     }
   };
 
-  const addSubject = async () => {
-    setPopUpVisible(true);
-  };
-
   const fetchPromptIds = async () => {
     try {
-      setLoading(true);
       const results = await subjectService.getPrompts();
       setPromptIds(parserPromptId(results));
     } catch (error) {
       console.error("Error fetching prompts", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchQuestionsIds = async () => {
     try {
-      setLoading(true);
       const results = await subjectService.getQuestions();
       setQuestionIds(parserQuesionsId(results));
     } catch (error) {
       console.error("Error fetching prompts", error);
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const fetchUnassignedIds = async () => {
+    try {
+      const response = await subjectService.getUnassignedSubjectIds();
+      const subjectIds = response.ids.map(
+        (item: { idSubject: string }) => item.idSubject
+      );
+      setUnassginedIds(subjectIds);
+    } catch (error) {}
   };
 
   const parserPromptId = (promptJson: any): string[] => {
@@ -150,20 +151,26 @@ const SubjectBankScreen = () => {
       );
     }
 
-    if (isFiltered === SubjectType.QUESTION) {
-      filtered = filtered.filter((subject) =>
-        questionIds.includes(subject.idSubject)
-      );
-    } else if (isFiltered === SubjectType.PROMPT) {
-      filtered = filtered.filter((subject) =>
-        promptIds.includes(subject.idSubject)
-      );
+    switch (isFiltered) {
+      case SubjectType.QUESTION:
+        filtered = filtered.filter((subject) =>
+          questionIds.includes(subject.idSubject)
+        );
+        break;
+      case SubjectType.PROMPT:
+        filtered = filtered.filter((subject) =>
+          promptIds.includes(subject.idSubject)
+        );
+        break;
+      case SubjectType.UNASSIGNED: {
+        filtered = filtered.filter((subject) =>
+          unassignedIds.includes(subject.idSubject)
+        );
+      }
     }
 
     setFilteredData(filtered);
   };
-
-  const handleFilter = () => {};
 
   const handleFilterByType = (type: SubjectType) => {
     if (type != isFiltered) {
@@ -180,6 +187,7 @@ const SubjectBankScreen = () => {
         await fetchSubjects();
         await fetchPromptIds();
         await fetchQuestionsIds();
+        await fetchUnassignedIds();
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -218,7 +226,11 @@ const SubjectBankScreen = () => {
               onDeleteSuccess={removeSubjectFromData}
             />
 
-            <DefiniteActionButton title={"Add Subject"} onPress={addSubject} buttonStyle={styles.confirmButton}/>
+            <DefiniteActionButton
+              title={"Add Subject"}
+              onPress={() => setPopUpVisible(true)}
+              buttonStyle={styles.confirmButton}
+            />
           </View>
         </View>
       )}
@@ -259,9 +271,8 @@ const SubjectBankScreen = () => {
             <Text style={styles.filterTitle}>Order By Date</Text>
             <View style={styles.underline} />
             <View style={styles.horizontalFilterConfirmationButton}>
-              <View  style={styles.filerClearButton}>
+              <View style={styles.filerClearButton}>
                 <DefiniteActionButton
-               
                   title={"Clear"}
                   onPress={() => {
                     setIsFiltered(SubjectType.NONE);
@@ -350,7 +361,6 @@ export const styles = StyleSheet.create({
 
   filerClearButton: {
     width: "100%",
-
   },
 
   confirmButton: {
