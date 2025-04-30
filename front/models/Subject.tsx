@@ -2,6 +2,7 @@ export enum SubjectType {
     NONE = "none",
     PROMPT = "prompt",
     QUESTION = "question",
+    UNASSIGNED = "unassigned",
   };
   
 export interface Subject {

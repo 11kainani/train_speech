@@ -30,7 +30,7 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
       animationIn="fadeIn"
       animationOut="fadeOut"
       useNativeDriver={true}
-      backdropOpacity={DIMENSIONS.opacity}
+
       style={styles.modalContainer}
       backdropColor={COLORS.backgroundBlur}
     >

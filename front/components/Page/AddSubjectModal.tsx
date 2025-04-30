@@ -143,32 +143,18 @@ const AddSubject: React.FC<AddSubjectProps> = ({
       <View style={styles.horizontal}>
         <PanelButton
           title="Prompt"
-          selected={subjectSelector === SubjectType.PROMPT }
+          selected={subjectSelector === SubjectType.PROMPT}
           onPress={() => handleSubjectSelector(SubjectType.PROMPT)}
-          style={[
-            styles.defaultButton,
-            subjectSelector === SubjectType.PROMPT
-              ? styles.select
-              : styles.unselect,
-          ]}
         />
         <PanelButton
           title="Question"
           onPress={() => handleSubjectSelector(SubjectType.QUESTION)}
-          selected={subjectSelector === SubjectType.QUESTION }
-          style={[
-            styles.defaultButton,
-            subjectSelector === SubjectType.QUESTION
-              ? styles.select
-              : styles.unselect,
-          ]}
+          selected={subjectSelector === SubjectType.QUESTION}
         />
       </View>
-      <PanelButton
-        title="CREATE"
-        onPress={handleSubjectCreation}
-  
-      />
+      
+        <PanelButton title="CREATE" onPress={handleSubjectCreation} />
+
     </PopUpModal>
   );
 };
@@ -180,27 +166,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   horizontal: {
-    
     flexDirection: "row",
     justifyContent: "center",
     padding: 10,
   },
-  
+
   defaultButton: {
     justifyContent: "center",
     alignItems: "center",
   },
-  select: {
-    backgroundColor: COLORS.primary,
-    color: COLORS.textOnPrimary,
-    borderWidth: 0,
-  },
-  unselect: {
-    backgroundColor: COLORS.background,
-    color: COLORS.primary,
-    borderWidth: DIMENSIONS.border,
-    borderColor: COLORS.primary,
-  },
+
   text: {
     color: COLORS.textPrimary,
     marginTop: DIMENSIONS.margin,
@@ -209,7 +184,7 @@ const styles = StyleSheet.create({
   underline: {
     borderWidth: DIMENSIONS.unit,
     marginBottom: DIMENSIONS.margin,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.textPrimary,
   },
 });
 

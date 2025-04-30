@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  Text
 } from "react-native";
 import { subjectService } from "../../api";
 import {
@@ -16,9 +17,10 @@ import {
 } from "../../utils";
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
-import { AddSubject, SubjectListTable } from "../../components";
+import { AddSubject, SmallConfirmButton, SubjectListTable } from "../../components";
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
+import FilterModal from "../../components/Page/FilterModal";
 
 const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
@@ -30,6 +32,7 @@ const SubjectBankScreen = () => {
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
   const jsonToSubject = (data: { subjects: Subject[] }): Subject[] => {
     return data.subjects.map((subject: any) => ({
@@ -55,35 +58,6 @@ const SubjectBankScreen = () => {
     setPopUpVisible(true);
   };
 
-  const filterQuestion = async () => {
-    setLoading(true);
-
-    if (isFiltered === SubjectType.QUESTION) {
-      setIsFiltered(SubjectType.NONE);
-    } else {
-      const filteredData = data.filter((subject) =>
-        questionIds.includes(subject.idSubject)
-      );
-      setFilteredData(filteredData);
-      setIsFiltered(SubjectType.QUESTION);
-    }
-
-    setLoading(false);
-  };
-
-  const filterPrompt = async () => {
-    setLoading(true);
-    if (isFiltered === SubjectType.PROMPT) {
-      setIsFiltered(SubjectType.NONE);
-    } else {
-      const filteredData = data.filter((subject) =>
-        promptIds.includes(subject.idSubject)
-      );
-      setFilteredData(filteredData);
-      setIsFiltered(SubjectType.PROMPT);
-    }
-    setLoading(false);
-  };
 
   const fetchPromptIds = async () => {
     try {
@@ -187,6 +161,17 @@ const SubjectBankScreen = () => {
 
   const handleFilter = () => {};
 
+  const handleFilterByType = (type: SubjectType) => {
+    if(type != isFiltered)
+    {
+      setIsFiltered(type);
+    }else 
+    {
+      setIsFiltered(SubjectType.NONE);
+    }
+   
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -202,10 +187,10 @@ const SubjectBankScreen = () => {
     };
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     filterData();
-  }, [data,searchQuery, isFiltered]);
+  }, [data, searchQuery, isFiltered]);
 
   return (
     <View style={styles.container}>
@@ -216,7 +201,7 @@ const SubjectBankScreen = () => {
           <View style={styles.control}>
             <View style={styles.horizontalBar}>
               <SearchBar value={searchQuery} onChangeText={handleSearch} />
-              <TouchableOpacity onPress={handleFilter}>
+              <TouchableOpacity onPress={() => setIsFilterModalVisible(true)}>
                 <View style={styles.filterButton}>
                   <Ionicons
                     name="filter"
@@ -230,10 +215,11 @@ const SubjectBankScreen = () => {
             <SubjectListTable
               data={filteredData}
               onDeleteSuccess={removeSubjectFromData}
+
             />
 
             <PanelButton
-              style={styles.addButton}
+              
               title={"Add Subject"}
               onPress={addSubject}
             />
@@ -247,6 +233,33 @@ const SubjectBankScreen = () => {
         setDescription={setDescription}
         onSubmit={handleSubjectCreated}
       ></AddSubject>
+      <FilterModal
+        isVisible={isFilterModalVisible}
+        onClose={() => setIsFilterModalVisible(false)}
+        children={
+          <View style= {styles.filterContainer}>
+            <Text style={styles.filterTitle}>Filter By Type</Text>
+            <View style={styles.underline} />
+            <View style={styles.horizontalFilterButton}>
+              <PanelButton title={"Prompt"} selected={isFiltered === SubjectType.PROMPT} style={styles.filterText} onPress={() => handleFilterByType(SubjectType.PROMPT)}/>
+              <PanelButton title={"Question"} selected={isFiltered === SubjectType.QUESTION} onPress={() => handleFilterByType(SubjectType.QUESTION)}/>
+              <PanelButton title={"Unassigned"} selected={isFiltered === SubjectType.UNASSIGNED} onPress={() => handleFilterByType(SubjectType.UNASSIGNED)}/>
+            </View>
+            <Text style={styles.filterTitle}>Filter By Answer</Text>
+            <View style={styles.underline} />
+            <Text style={styles.filterTitle}>Order By Date</Text>
+            <View style={styles.underline} />
+            <View style={styles.horizontalFilterConfirmationButton}>
+              <PanelButton title={"Clear"} selected={false} onPress={() => {
+                setIsFiltered(SubjectType.NONE);
+                setIsFilterModalVisible(false);}} />
+              <PanelButton title={"Filter"} />
+            </View>
+
+            
+          </View>
+        }
+      ></FilterModal>
     </View>
   );
 };
@@ -260,9 +273,12 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     flex: 1,
+    
+    
   },
 
   control: {
+  
     width: "90%",
     alignSelf: "center",
     justifyContent: "center",
@@ -273,26 +289,11 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.primaryText,
   },
 
-  addButton: {
-    alignSelf: "center",
-    backgroundColor: COLORS.primary,
-    color: COLORS.textOnPrimary,
-    borderRadius: DIMENSIONS.radius,
-  },
 
-  filterBar: {
-    flexDirection: "row",
-  },
-
-  activeFilter: {
-    color: COLORS.primaryText,
-    fontWeight: "bold",
-  },
-
-  unactiveFilter: {},
 
   horizontalBar: {
-    flex: 1,
+    width: "90%",
+    alignSelf:"center",
     flexDirection: "row",
     marginVertical: DIMENSIONS.margin,
     paddingVertical: DIMENSIONS.paddingSmall,
@@ -301,16 +302,47 @@ export const styles = StyleSheet.create({
     maxHeight: responsiveHeight(7),
   },
 
+  underline: {
+    borderWidth: DIMENSIONS.unit,
+    marginBottom: DIMENSIONS.margin,
+    borderColor: COLORS.textPrimary,
+  },
+
   filterButton: {
     flex: 1,
     backgroundColor: COLORS.cardBackground,
     justifyContent: "center",
     alignItems: "center",
-    minWidth: responsiveWidth(7),
     marginLeft: DIMENSIONS.marginSmall,
-
     borderRadius: DIMENSIONS.border,
+    paddingHorizontal: DIMENSIONS.paddingSmall,
   },
+
+  horizontalFilterConfirmationButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: DIMENSIONS.margin,
+  },
+
+  horizontalFilterButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    padding: DIMENSIONS.padding,
+
+  },
+  filterTitle: {
+    fontSize: DIMENSIONS.font,
+    fontWeight: "bold",
+
+  },
+  filterContainer: 
+  {
+    width: "100%",
+  },
+  filterText: {
+    fontSize: DIMENSIONS.bordersmall,
+  },
+
 });
 
 export default SubjectBankScreen;

@@ -64,7 +64,7 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
         <Text style={styles.item}>{item.description}</Text>
       </TouchableOpacity>
 
-      <View style= {styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         <SmallConfirmButton title="Create Subject" />
 
         <TouchableOpacity
@@ -94,9 +94,9 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
 
 const styles = StyleSheet.create({
   segmentation: {
-   
-    width: responsiveWidth(90),
+    width: "100%",
     height: "75%",
+    alignSelf: "center",
   },
 
   item: {
@@ -121,14 +121,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: DIMENSIONS.paddingSmall,
   },
 
-  buttonContainer : {
-    flexDirection: "row", 
+  buttonContainer: {
+    flexDirection: "row",
     alignItems: "center",
   },
 
   delete: {},
   text: {
-    flex: 1, 
+    flex: 1,
     marginRight: DIMENSIONS.marginSmall,
   },
 });

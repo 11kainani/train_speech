@@ -1,11 +1,6 @@
 export const COLORS = {
-
-  
-  // utils/colors.ts
-
-
   // Core Palette
-  background: '#F5FBEF',     // Soft white background
+  background: '#FDFDFD',     // Soft white background
   primary: '#004E98',        // Strong blue
   secondary: '#CED3DC',      // French gray (secondary tone)
 

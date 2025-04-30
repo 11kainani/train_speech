@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
-import { DIMENSIONS, COLORS } from "../../utils";
+import { DIMENSIONS, COLORS, responsiveHeight } from "../../utils";
 import { Ionicons } from "@expo/vector-icons";
 
 interface SearchBarProps {
@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.cardBackground,
         borderRadius: DIMENSIONS.radius,
         paddingHorizontal: DIMENSIONS.padding,
-        width: "90%",
         alignSelf: "center",
         marginVertical: DIMENSIONS.marginSmall,
-        height: '100%',
+        flex:1,
+        minHeight: responsiveHeight(5),
       },
       icon: {
         marginRight: 10,
