@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import PopUpModal from "./PopUpModal";
 import { DescriptionInput } from "../Input";
-import { PanelButton } from "../Button";
+import { DefiniteActionButton, PanelButton } from "../Button";
 import { COLORS, DIMENSIONS } from "../../utils";
 import {
   SubjectType,
@@ -153,7 +153,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         />
       </View>
       
-        <PanelButton title="CREATE" onPress={handleSubjectCreation} />
+        <DefiniteActionButton title="CREATE" onPress={handleSubjectCreation} buttonStyle={styles.confirmButton} />
 
     </PopUpModal>
   );
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     borderColor: COLORS.textPrimary,
   },
+  confirmButton: {backgroundColor: COLORS.primary},
 });
 
 export default AddSubject;

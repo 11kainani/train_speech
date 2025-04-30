@@ -9,13 +9,18 @@ export interface Subject {
     idSubject: string;
     description: string; 
     createdAt?: string; 
-    ModifiedAt?: string;
+    UpdatedAt?: string;
   };
 
 export interface Prompt {
     idPrompt: string; 
-    description?: string;
+    subject?: Subject;
 };
+
+export interface Question {
+  idQuestion: string; 
+  subject?: Subject; 
+}
 
 export interface PromptResponse {
   prompt: {

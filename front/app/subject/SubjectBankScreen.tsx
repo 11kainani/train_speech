@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
 } from "react-native";
 import { subjectService } from "../../api";
 import {
@@ -17,7 +17,12 @@ import {
 } from "../../utils";
 import PanelButton from "../../components/Button/PanelButton";
 import { Subject, SubjectType } from "../../models/Subject";
-import { AddSubject, SmallConfirmButton, SubjectListTable } from "../../components";
+import {
+  AddSubject,
+  DefiniteActionButton,
+  SmallConfirmButton,
+  SubjectListTable,
+} from "../../components";
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
 import FilterModal from "../../components/Page/FilterModal";
@@ -57,7 +62,6 @@ const SubjectBankScreen = () => {
   const addSubject = async () => {
     setPopUpVisible(true);
   };
-
 
   const fetchPromptIds = async () => {
     try {
@@ -162,15 +166,12 @@ const SubjectBankScreen = () => {
   const handleFilter = () => {};
 
   const handleFilterByType = (type: SubjectType) => {
-    if(type != isFiltered)
-    {
+    if (type != isFiltered) {
       setIsFiltered(type);
-    }else 
-    {
+    } else {
       setIsFiltered(SubjectType.NONE);
     }
-   
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -215,14 +216,9 @@ const SubjectBankScreen = () => {
             <SubjectListTable
               data={filteredData}
               onDeleteSuccess={removeSubjectFromData}
-
             />
 
-            <PanelButton
-              
-              title={"Add Subject"}
-              onPress={addSubject}
-            />
+            <DefiniteActionButton title={"Add Subject"} onPress={addSubject} buttonStyle={styles.confirmButton}/>
           </View>
         </View>
       )}
@@ -237,26 +233,43 @@ const SubjectBankScreen = () => {
         isVisible={isFilterModalVisible}
         onClose={() => setIsFilterModalVisible(false)}
         children={
-          <View style= {styles.filterContainer}>
+          <View style={styles.filterContainer}>
             <Text style={styles.filterTitle}>Filter By Type</Text>
             <View style={styles.underline} />
             <View style={styles.horizontalFilterButton}>
-              <PanelButton title={"Prompt"} selected={isFiltered === SubjectType.PROMPT} style={styles.filterText} onPress={() => handleFilterByType(SubjectType.PROMPT)}/>
-              <PanelButton title={"Question"} selected={isFiltered === SubjectType.QUESTION} onPress={() => handleFilterByType(SubjectType.QUESTION)}/>
-              <PanelButton title={"Unassigned"} selected={isFiltered === SubjectType.UNASSIGNED} onPress={() => handleFilterByType(SubjectType.UNASSIGNED)}/>
+              <PanelButton
+                title={"Prompt"}
+                selected={isFiltered === SubjectType.PROMPT}
+                style={styles.filterText}
+                onPress={() => handleFilterByType(SubjectType.PROMPT)}
+              />
+              <PanelButton
+                title={"Question"}
+                selected={isFiltered === SubjectType.QUESTION}
+                onPress={() => handleFilterByType(SubjectType.QUESTION)}
+              />
+              <PanelButton
+                title={"Unassigned"}
+                selected={isFiltered === SubjectType.UNASSIGNED}
+                onPress={() => handleFilterByType(SubjectType.UNASSIGNED)}
+              />
             </View>
             <Text style={styles.filterTitle}>Filter By Answer</Text>
             <View style={styles.underline} />
             <Text style={styles.filterTitle}>Order By Date</Text>
             <View style={styles.underline} />
             <View style={styles.horizontalFilterConfirmationButton}>
-              <PanelButton title={"Clear"} selected={false} onPress={() => {
-                setIsFiltered(SubjectType.NONE);
-                setIsFilterModalVisible(false);}} />
-              <PanelButton title={"Filter"} />
+              <View  style={styles.filerClearButton}>
+                <DefiniteActionButton
+               
+                  title={"Clear"}
+                  onPress={() => {
+                    setIsFiltered(SubjectType.NONE);
+                    setIsFilterModalVisible(false);
+                  }}
+                />
+              </View>
             </View>
-
-            
           </View>
         }
       ></FilterModal>
@@ -273,12 +286,9 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     flex: 1,
-    
-    
   },
 
   control: {
-  
     width: "90%",
     alignSelf: "center",
     justifyContent: "center",
@@ -289,11 +299,9 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.primaryText,
   },
 
-
-
   horizontalBar: {
     width: "90%",
-    alignSelf:"center",
+    alignSelf: "center",
     flexDirection: "row",
     marginVertical: DIMENSIONS.margin,
     paddingVertical: DIMENSIONS.paddingSmall,
@@ -328,21 +336,26 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     padding: DIMENSIONS.padding,
-
   },
   filterTitle: {
     fontSize: DIMENSIONS.font,
     fontWeight: "bold",
-
   },
-  filterContainer: 
-  {
+  filterContainer: {
     width: "100%",
   },
   filterText: {
     fontSize: DIMENSIONS.bordersmall,
   },
 
+  filerClearButton: {
+    width: "100%",
+
+  },
+
+  confirmButton: {
+    backgroundColor: COLORS.primary,
+  },
 });
 
 export default SubjectBankScreen;

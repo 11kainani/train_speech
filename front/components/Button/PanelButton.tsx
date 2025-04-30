@@ -3,6 +3,13 @@ import { TouchableOpacity, Text, View, StyleSheet, Button } from "react-native";
 import { COLORS } from "../../utils/colors";
 import { DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
 
+interface PanelButtonProps {
+  title: string; 
+  style?: object; 
+  onPress?: () => void;
+  selected?: boolean;
+
+  }
 const PanelButton: React.FC<PanelButtonProps> = ({
   title,
   style,
