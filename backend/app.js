@@ -26,6 +26,7 @@ sequelize.sync({ force: false }).then(() => {
 // Routes
 const subjectRoutes = require('./routes/subject_routes');
 const answerRoutes = require('./routes/answer_routes');
+const commentRoutes = require('./routes/commnet_routes');
 
 
 /////////////
@@ -37,6 +38,8 @@ app.use(apiKeyRequests);
 /////////////
 app.use('/subjects',subjectRoutes);
 app.use('/answers', answerRoutes);
+app.use('/comments', commentRoutes);
+
 
 
 
