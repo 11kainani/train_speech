@@ -16,13 +16,11 @@ import {
 } from "../../utils";
 import { subjectService } from "../../api";
 import { SmallConfirmButton } from "../Button";
+import { Subject } from "../../models";
 
 interface SubjectListTableProps {
-  data: {
-    idSubject: string;
-    description: string;
-  }[];
-  onDeleteSuccess?: (subjectId: string) => void;
+  data: Subject [];
+  onDeleteSuccess?: (idSubject: string) => void;
 }
 
 const SubjectListTable: React.FC<SubjectListTableProps> = ({

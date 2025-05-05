@@ -10,16 +10,14 @@ interface FilterPanelProps {
   isVisible: boolean;
   isFiltered: SubjectType;
   setIsFilterModalVisible: (val: boolean) => void;
-  setIsFiltered: (type: SubjectType) => void;
-  handleFilterByType: (type: SubjectType) => void;
+
+
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   isVisible,
-  isFiltered,
   setIsFilterModalVisible,
-  setIsFiltered,
-  handleFilterByType,
+
 }) => {
   return (
     <FilterModal
@@ -27,26 +25,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       onClose={() => setIsFilterModalVisible(false)}
     >
       <View style={styles.filterContainer}>
-        <Text style={styles.filterTitle}>Filter By Type</Text>
-        <View style={styles.underline} />
-        <View style={styles.horizontalFilterButton}>
-          <PanelButton
-            title={"Prompt"}
-            selected={isFiltered === SubjectType.PROMPT}
-            style={styles.filterText}
-            onPress={() => handleFilterByType(SubjectType.PROMPT)}
-          />
-          <PanelButton
-            title={"Question"}
-            selected={isFiltered === SubjectType.QUESTION}
-            onPress={() => handleFilterByType(SubjectType.QUESTION)}
-          />
-          <PanelButton
-            title={"Unassigned"}
-            selected={isFiltered === SubjectType.UNASSIGNED}
-            onPress={() => handleFilterByType(SubjectType.UNASSIGNED)}
-          />
-        </View>
+        
+         
+       
         <Text style={styles.filterTitle}>Filter By Answer</Text>
         <View style={styles.underline} />
         <Text style={styles.filterTitle}>Order By Date</Text>
@@ -56,7 +37,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             <DefiniteActionButton
               title={"Clear"}
               onPress={() => {
-                setIsFiltered(SubjectType.NONE);
                 setIsFilterModalVisible(false);
               }}
             />

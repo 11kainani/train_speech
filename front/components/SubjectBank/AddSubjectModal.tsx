@@ -18,7 +18,7 @@ interface AddSubjectProps {
   onClose: () => void;
   description: string;
   setDescription: (text: string) => void;
-  onSubmit: (SubjectType: SubjectType, Subject: Subject) => void;
+  onSubmit: (Subject: Subject) => void;
 }
 
 const AddSubject: React.FC<AddSubjectProps> = ({
@@ -42,7 +42,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
     }
   };
 
-  const handleUnassignedCreation = async () => {
+  const handleCreation = async () => {
     try {
       //Add directly to data and to the list of questionsID
       const subject: SubjectResponse = await subjectService.createSubject(
@@ -60,34 +60,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
     }
   };
 
-  const handleQuestionCreation = async () => {
-    try {
-      //Add directly to data and to the list of questionsID
-      const question: QuestionResponse = await subjectService.createQuestion(
-        description
-      );
-      setDescription("");
-      onClose();
-      return question.subject;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handlePromptCreation = async () => {
-    //Add directly to data and to the list of promptID
-    try {
-      const prompt: PromptResponse = await subjectService.createPrompt(
-        description
-      );
-      setDescription("");
-      onClose();
-
-      return prompt.subject;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+ 
   const handleSubjectCreation = async () => {
     try {
       if (description == "") {
@@ -102,20 +75,10 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         throw new Error("The description is too short");
       }
 
-      let createdSubject: Subject | undefined;
-      switch (subjectSelector) {
-        case SubjectType.NONE:
-          createdSubject = await handleUnassignedCreation();
-          break;
-        case SubjectType.QUESTION:
-          createdSubject = await handleQuestionCreation();
-          break;
-        case SubjectType.PROMPT:
-          createdSubject = await handlePromptCreation();
-          break;
-      }
+      const  createdSubject = await handleCreation();
+     
       if (createdSubject) {
-        onSubmit(subjectSelector, createdSubject);
+        onSubmit(createdSubject);
         onClose();
       }
     } catch (error) {
@@ -138,20 +101,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         description={description}
         onDescriptionChange={setDescription}
       />
-      <Text style={styles.text}>Mode</Text>
-      <View style={styles.underline} />
-      <View style={styles.horizontal}>
-        <PanelButton
-          title="Prompt"
-          selected={subjectSelector === SubjectType.PROMPT}
-          onPress={() => handleSubjectSelector(SubjectType.PROMPT)}
-        />
-        <PanelButton
-          title="Question"
-          onPress={() => handleSubjectSelector(SubjectType.QUESTION)}
-          selected={subjectSelector === SubjectType.QUESTION}
-        />
-      </View>
+     
       
         <DefiniteActionButton title="CREATE" onPress={handleSubjectCreation} buttonStyle={styles.confirmButton} />
 

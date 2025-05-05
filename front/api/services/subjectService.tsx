@@ -68,50 +68,6 @@ const subjectService = {
     }
   },
 
-  getPrompts: async () => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompts`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: apiConfig.headers,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
-
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error retreiving prompts:", error);
-      throw error;
-    }
-  },
-
-  getQuestions: async () => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/questions`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: apiConfig.headers,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
-
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error retreiving questions:", error);
-      throw error;
-    }
-  },
-
   createSubject: async (description: string) => {
     try {
       const url = `${apiConfig.baseURL}/${subjectEndpoint}/`;
@@ -135,93 +91,9 @@ const subjectService = {
     }
   },
 
-  createQuestion: async (description: string) => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/questions/`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: apiConfig.headers,
-        body: JSON.stringify({ description: description }),
-      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
 
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error creating questions:", error);
-      throw error;
-    }
-  },
-
-  createPrompt: async (description: string) => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/prompts/`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: apiConfig.headers,
-        body: JSON.stringify({ description: description }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
-
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error creating questions", error);
-      throw error;
-    }
-  },
-
-  getSubjectType: async (idSubject: string) => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/type/${idSubject}`;
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: apiConfig.headers,
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error getting SubjectType", error);
-      throw error;
-    }
-  },
-
-  getUnassignedSubjectIds: async () => {
-    try {
-      const url = `${apiConfig.baseURL}/${subjectEndpoint}/unassigned`;
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: apiConfig.headers,
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`${response.status}-${errorData.error}`);
-      }
-      const data = await response.json();
-      console.log("Response Status:", data);
-      return data;
-    } catch (error) {
-      console.error("Error getting SubjectType", error);
-      throw error;
-    }
-  },
+ 
 };
 
 export default subjectService;

@@ -25,7 +25,6 @@ import {
 } from "../../components";
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
-import FilterModal from "../../components/Page/FilterModal";
 import { useSubjects } from "../../hook";
 import { FilterPanel } from "../../components/SubjectBank";
 
@@ -33,13 +32,7 @@ const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const {
     data,
-    promptIds,
-    questionIds,
-    unassignedIds,
     setData,
-    setPromptIds,
-    setQuestionIds,
-    setUnassignedIds
   } = useSubjects(setLoading);
   const [filteredData, setFilteredData] = useState(data);
   const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
@@ -49,28 +42,14 @@ const SubjectBankScreen = () => {
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
   const handleSubjectCreated = (
-    subjectType: SubjectType,
     createdSubject: Subject
   ) => {
-    console.log("Received from modal:", subjectType, createdSubject);
+    console.log("Received from modal:", createdSubject);
 
     setData((prevData) => [...prevData, createdSubject]);
-    switch (subjectType) {
-      case SubjectType.PROMPT:
-        setPromptIds((prev) => [...prev, createdSubject.idSubject]);
-
-        break;
-      case SubjectType.QUESTION:
-        setQuestionIds((prev) => [...prev, createdSubject.idSubject]);
-        break;
-    }
   };
 
   const removeSubjectFromData = (subjectId: string) => {
-    setPromptIds((prev) => prev.filter((id) => id !== subjectId));
-    setQuestionIds((prev) => prev.filter((id) => id !== subjectId));
-    setUnassignedIds((prev)=> prev.filter((id) => id !==subjectId));
-
     setData((prev) =>
       prev.filter((subject) => subject.idSubject !== subjectId)
     );
@@ -98,34 +77,9 @@ const SubjectBankScreen = () => {
       );
     }
 
-    switch (isFiltered) {
-      case SubjectType.QUESTION:
-        filtered = filtered.filter((subject) =>
-          questionIds.includes(subject.idSubject)
-        );
-        break;
-      case SubjectType.PROMPT:
-        filtered = filtered.filter((subject) =>
-          promptIds.includes(subject.idSubject)
-        );
-        break;
-      case SubjectType.UNASSIGNED: {
-        filtered = filtered.filter((subject) =>
-          unassignedIds.includes(subject.idSubject)
-        );
-      }
-    }
-
     setFilteredData(filtered);
   };
 
-  const handleFilterByType = (type: SubjectType) => {
-    if (type != isFiltered) {
-      setIsFiltered(type);
-    } else {
-      setIsFiltered(SubjectType.NONE);
-    }
-  };
 
  
   useEffect(() => {
@@ -176,8 +130,8 @@ const SubjectBankScreen = () => {
   isVisible={isFilterModalVisible}
   isFiltered={isFiltered}
   setIsFilterModalVisible={setIsFilterModalVisible}
-  setIsFiltered={setIsFiltered}
-  handleFilterByType={handleFilterByType}
+  
+
 />
     </View>
   );

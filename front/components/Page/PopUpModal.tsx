@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: COLORS.background,
     width: responsiveWidth(90),
-    height: responsiveHeight(66),
     borderRadius: DIMENSIONS.radius,
     padding: DIMENSIONS.padding,
     justifyContent: "center",
