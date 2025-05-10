@@ -25,25 +25,37 @@ import {
 } from "../../components";
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
-import { useSubjects } from "../../hook";
+import { useAnsweredSubjectIds, useSubjects } from "../../hook";
 import { FilterPanel } from "../../components/SubjectBank";
+
+enum AnswerState {
+  ANSWERED = "answer",
+  UNANSWERD = "unanswered",
+  NONE = "none",
+}
+
+enum OrderState {
+  ASCENDING = "ascending",
+  DESCENDING = "descending",
+  NONE = "none",
+}
 
 const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
-  const {
-    data,
-    setData,
-  } = useSubjects(setLoading);
+  const { data, setData } = useSubjects(setLoading);
   const [filteredData, setFilteredData] = useState(data);
   const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  const [filterByAnswer, setFilterbyAnswer] = useState<AnswerState>(
+    AnswerState.NONE
+  );
+  const [orderBy, setOrderby] = useState<OrderState>(OrderState.NONE);
+  const {answeredIds} = useAnsweredSubjectIds();
 
-  const handleSubjectCreated = (
-    createdSubject: Subject
-  ) => {
+  const handleSubjectCreated = (createdSubject: Subject) => {
     console.log("Received from modal:", createdSubject);
 
     setData((prevData) => [...prevData, createdSubject]);
@@ -68,23 +80,55 @@ const SubjectBankScreen = () => {
     }
   };
 
+  
+
   const filterData = () => {
     let filtered = [...data];
 
+    //Search function
     if (searchQuery) {
       filtered = filtered.filter((subject) =>
         subject.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
+    //Filter by answers
+    if (filterByAnswer === AnswerState.ANSWERED) {
+      filtered = filtered.filter(subject => answeredIds.includes(subject.idSubject));
+    } else if (filterByAnswer === AnswerState.UNANSWERD) {
+      filtered = filtered.filter(subject => !answeredIds.includes(subject.idSubject));
+    }
+
+    // Apply ordering
+    if (orderBy === OrderState.ASCENDING) {
+      filtered.sort(
+        (a, b) =>
+          new Date(a.updatedAt ?? "").getTime() -
+          new Date(b.updatedAt ?? "").getTime()
+      );
+    } else if (orderBy === OrderState.DESCENDING) {
+      filtered.sort(
+        (a, b) =>
+          new Date(b.updatedAt ?? "").getTime() -
+          new Date(a.updatedAt ?? "").getTime()
+      );
+    }
+
+
     setFilteredData(filtered);
   };
 
+  const handleApplyFilters = (
+    answerFilter: AnswerState,
+    orderFilter: OrderState
+  ) => {
+    setFilterbyAnswer(answerFilter);
+    setOrderby(orderFilter);
+  };
 
- 
   useEffect(() => {
     filterData();
-  }, [data, searchQuery, isFiltered]);
+  }, [data, searchQuery, isFiltered, filterByAnswer, orderBy]);
 
   return (
     <View style={styles.container}>
@@ -127,12 +171,10 @@ const SubjectBankScreen = () => {
         onSubmit={handleSubjectCreated}
       ></AddSubjectModal>
       <FilterPanel
-  isVisible={isFilterModalVisible}
-  isFiltered={isFiltered}
-  setIsFilterModalVisible={setIsFilterModalVisible}
-  
-
-/>
+        isVisible={isFilterModalVisible}
+        setIsFilterModalVisible={setIsFilterModalVisible}
+        onApplyFilters={handleApplyFilters}
+      />
     </View>
   );
 };

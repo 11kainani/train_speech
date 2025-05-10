@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import PopUpModal from "../Page/PopUpModal";
 import { DescriptionInput } from "../Input";
-import { DefiniteActionButton, PanelButton } from "../Button";
+import { DefiniteActionButton } from "../Button";
 import { COLORS, DIMENSIONS } from "../../utils";
 import {
   SubjectType,
-  PromptResponse,
-  QuestionResponse,
   Subject,
   SubjectResponse,
 } from "../../models/Subject";

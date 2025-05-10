@@ -18,7 +18,7 @@ export const COLORS = {
   disabled: '#E5E7EB',       // Very light gray for disabled (lighter than the card)
   border: '#E5E7EB',         // Light gray border (same as disabled for consistency)
   overlay: 'rgba(0, 0, 0, 0.25)', // For modals or shadows
-
+  opacity:25,
   // Cards
   cardBackground: '#D1D5DB', // Softer card background
   cardAccent: '#D4AF37',     // Slightly darker accent for card elements

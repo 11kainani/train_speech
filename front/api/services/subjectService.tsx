@@ -2,7 +2,7 @@
 import apiConfig from "../config/apiConfig";
 
 const subjectEndpoint = "subjects";
-
+const subjectURL = `${apiConfig.baseURL}/${subjectEndpoint}/`;
 enum subjectType {
   PROMPT = "prompt",
   QUESTION = "question",
@@ -18,7 +18,6 @@ const subjectService = {
   getSubjects: async () => {
     try {
       const url = `${apiConfig.baseURL}/${subjectEndpoint}/`;
-      console.log(url);
       const response = await fetch(url, {
         method: "GET",
         headers: apiConfig.headers,
@@ -90,6 +89,52 @@ const subjectService = {
       throw error;
     }
   },
+
+  getSubjectWithAnswer: async () => {
+    try {
+      const url = `${subjectURL}/with-answers`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: apiConfig.headers,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
+      }
+
+      const data = await response.json();
+      console.log("Response Status:", data);
+      return data;
+      
+    } catch (error) {
+      console.error("Error creating subject:", error);
+      throw error;
+    }
+  },
+
+  getSubjectWithoutAnswer: async () => {
+    try {
+      const url = `${subjectURL}/without-answers`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: apiConfig.headers,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
+      }
+
+      const data = await response.json();
+      console.log("Response Status:", data);
+      return data;
+      
+    } catch (error) {
+      console.error("Error creating subject:", error);
+      throw error;
+    }
+  }
 
 
 

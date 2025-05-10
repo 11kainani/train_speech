@@ -9,6 +9,10 @@ const Comment = require('./comment')(sequelize,DataTypes);
 
 // Set up associations
 
+Subject.hasMany(Answer, {
+  foreignKey: 'idAnswer',
+  as: 'answers',
+});
 
 Answer.belongsTo(Subject, {  
       foreignKey: 'idSubject',

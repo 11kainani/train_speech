@@ -9,7 +9,7 @@ export interface Subject {
     idSubject: string;
     description: string; 
     createdAt?: string; 
-    UpdatedAt?: string;
+    updatedAt?: string;
   };
 
 export interface Prompt {
