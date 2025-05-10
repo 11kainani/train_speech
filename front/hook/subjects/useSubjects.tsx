@@ -1,7 +1,7 @@
 // hooks/useSubjects.ts
 import { useEffect, useState } from "react";
-import { subjectService } from "../api";
-import { Subject } from "../models/Subject";
+import { subjectService } from "../../api";
+import { Subject } from "../../models/Subject";
 
 export const useSubjects = (setLoading: (val:boolean)=> void) => {
   const [data, setData] = useState<Subject[]>([]);

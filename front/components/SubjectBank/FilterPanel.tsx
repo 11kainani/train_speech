@@ -22,6 +22,7 @@ enum AnswerState {
 enum OrderState {
   ASCENDING = "ascending",
   DESCENDING = "descending",
+  NONE = "none",
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -32,7 +33,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const [filterByAnswer, setFilterbyAnswer] = useState<AnswerState>(
     AnswerState.NONE
   );
-  const [isOrderBy, setOrderby] = useState<OrderState>(OrderState.DESCENDING);
+  const [isOrderBy, setOrderby] = useState<OrderState>(OrderState.NONE);
   const handleAnswer = (state: AnswerState) => {
     if (state === filterByAnswer) {
       setFilterbyAnswer(AnswerState.NONE);
@@ -41,7 +42,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     }
   };
   const handleOrder = (state: OrderState) => {
-    if (state != isOrderBy) {
+    if (state === isOrderBy) {
+      setOrderby(OrderState.NONE);
+    }
+      else{
       setOrderby(state);
     }
   };

@@ -1,2 +1,1 @@
-export * from './useSubjects';
-export * from './useAnsweredSubjectIds';
+export * from './subjects';
