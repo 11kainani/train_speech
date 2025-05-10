@@ -92,6 +92,8 @@ const SubjectBankScreen = () => {
       );
     }
 
+    console.log(filterByAnswer);
+
     //Filter by answers
     if (filterByAnswer === AnswerState.ANSWERED) {
       filtered = filtered.filter(subject => answeredIds.includes(subject.idSubject));

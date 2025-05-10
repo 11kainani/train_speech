@@ -99,6 +99,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               onPress={() => {
                 setOrderby(OrderState.DESCENDING);
                 setFilterbyAnswer(AnswerState.NONE);
+                onApplyFilters(AnswerState.NONE,OrderState.DESCENDING);
                 setIsFilterModalVisible(false);
               }}
             />
