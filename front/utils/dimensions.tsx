@@ -32,7 +32,7 @@ export const DIMENSIONS = {
   //icon
   iconSize: 16,
   iconSizeLarge: 24,
-  iconSizeXLarge: 32,
+  iconSizeXLarge: 64,
 
   // Responsive scaling
   scaleSize: (size: number) => size * PixelRatio.getFontScale(),

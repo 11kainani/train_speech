@@ -1,65 +1,100 @@
-// RecordScreen.js
+import { View, Text, StyleSheet } from "react-native";
+import { IconButton, SubjectCard } from "../../components";
+import React, { useEffect, useState } from "react";
+import { useSubjects } from "../../hook";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import { COLORS, DIMENSIONS } from "../../utils";
+import { Subject } from "../../models";
 
-import React, {useState} from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
-import PanelButton from '../../components/Button/PanelButton';
-import { COLORS } from '../../utils/colors';
-import { DIMENSIONS } from '../../utils';
+export default function Record() {
+  const [isLoading, setLoading] = useState(true);
+  const { data, setData } = useSubjects(setLoading);
+  const [randomDescription, setRandomDescription] = useState<string>("");
 
-const horizontalPanel = StyleSheet.create({
-  horizontalContainer: 
-  {
-    flexDirection: 'row', 
-    padding: 10,
-    margin: 20,
+  const [allIds, setAllIds] = useState<string[]>([]);
+  const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
+  const [validDescription, setValidDescription] = useState(true);
+
+  const handleRandomizeSubject = () => {
+    console.log(validDescription);
+    const availableIds = allIds.filter((id) => !usedIds.has(id));
+   
+    if (availableIds.length === 0) {
+      console.log("recharge of list");
+      setUsedIds(new Set());
+      setRandomDescription("Click shuffle (red) button to view a description");
+      setValidDescription(false);
+      return;
+    }
+
+    setValidDescription(true);
     
-  },
-  panel: {
-    margin: 5,
-    height: DIMENSIONS.responsiveHeight(20), 
-    width: DIMENSIONS.responsiveWidth(26),
-    
-  },
-  selectedPanel: {
-    backgroundColor: COLORS.accent,
-
-  }, 
-})
-
-const styles = StyleSheet.create({ 
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
-
-const RecordScreen = ({navigation}) => {
-
-  const [selectedTitle, setSelectedTitle] = useState(null);
-
-  const titleSelection = (title) => setSelectedTitle(title);
-
-  const [readTitle, subjectTitle, questionTitle] = ["Reading Prompt","New Subject","Random Question" ];
   
-  const panels = [<PanelButton key="1" title = {readTitle} style={[horizontalPanel.panel, selectedTitle == readTitle && horizontalPanel.selectedPanel] } onPress={() => titleSelection(readTitle)} />,
-    <PanelButton key="2" title = {subjectTitle}  style={[horizontalPanel.panel, selectedTitle == subjectTitle && horizontalPanel.selectedPanel] }  onPress={() => {titleSelection(subjectTitle)}} />,
-    <PanelButton key="3" title = {questionTitle}  style={[horizontalPanel.panel, selectedTitle == questionTitle && horizontalPanel.selectedPanel] }  onPress={() => titleSelection(questionTitle)}/> ];
+   
+    const selectedId = availableIds[Math.floor(Math.random() * availableIds.length)];
+    console.log("selected: ", selectedId);
+    setUsedIds((prev) => {
+      const updated = new Set(prev);
+      updated.add(selectedId);
+      return updated;
+    });
+  
+    const subject = data.find((subject: Subject) => subject.idSubject === selectedId);
+    setRandomDescription(subject?.description ?? "No description available");
+  };
 
+  useEffect(() => {
+    if (data.length > 0) {
+      setAllIds(data.map((subject: Subject) => subject.idSubject));
+      setUsedIds(new Set());
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const invalidDescriptions = ["No description available","Click shuffle (red) button to view a description",""];
+    setValidDescription(!invalidDescriptions.includes(randomDescription));
+  }, [randomDescription])
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={horizontalPanel.horizontalContainer}>
-        {panels}
+    <View style={styles.container}>
+      <SubjectCard description={randomDescription} />
+      <View style={styles.horizontalDisposition}>
+        <IconButton
+          backgroundColor={COLORS.red}
+          onPress={handleRandomizeSubject}
+          icon={
+            <Entypo
+              name="shuffle"
+              size={DIMENSIONS.iconSizeXLarge}
+              color={COLORS.background}
+            />
+          }
+        />
+        <IconButton
+        disable={!validDescription}
+          icon={
+            <Entypo
+              name="check"
+              size={DIMENSIONS.iconSizeXLarge}
+              color={COLORS.background}
+            />
+          }
+        />
       </View>
-      
-      <PanelButton title={"START"} onPress={() => navigation.navigate('Record Settings',{source: selectedTitle})} /> 
-      
-
-    </SafeAreaView>
+    </View>
   );
-};
+}
 
-
-
-export default RecordScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingVertical: DIMENSIONS.paddingLarge,
+  },
+  horizontalDisposition: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignContent: "flex-end",
+  },
+});

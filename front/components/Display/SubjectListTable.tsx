@@ -63,7 +63,7 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
       </TouchableOpacity>
 
       <View style={styles.buttonContainer}>
-        <SmallConfirmButton title="Create Subject" />
+        <SmallConfirmButton title="Answer" />
 
         <TouchableOpacity
           onPress={() => handleRightButtonPress(item.idSubject)}

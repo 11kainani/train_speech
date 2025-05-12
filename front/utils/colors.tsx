@@ -3,6 +3,7 @@ export const COLORS = {
   background: '#FDFDFD',     // Soft white background
   primary: '#004E98',        // Strong blue
   secondary: '#CED3DC',      // French gray (secondary tone)
+  red: '#E74C3C',
 
   // Status Colors
   success: '#2ECC71',        // Green for success
@@ -27,9 +28,5 @@ export const COLORS = {
   backgroundBlur: "rgba(0, 0, 0, 0.95)",
   black: "#000000",
 
-  primaryText: "#FFD700",
-  selection: "#36A5F0",
-  subAccent: "#A8A387",
 
-  subSecondary: "#212121",
 };

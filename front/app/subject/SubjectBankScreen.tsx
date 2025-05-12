@@ -198,7 +198,7 @@ export const styles = StyleSheet.create({
 
   table: {
     maxHeight: "90%",
-    backgroundColor: COLORS.primaryText,
+    backgroundColor: COLORS.textOnPrimary,
   },
 
   horizontalBar: {
