@@ -7,9 +7,8 @@ export default function Layout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-
-        tabBarActiveTintColor: COLORS.primary, 
-        tabBarInactiveTintColor: COLORS.disabled, 
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.disabled,
       }}
     >
       <Tabs.Screen
