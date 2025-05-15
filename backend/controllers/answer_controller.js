@@ -54,7 +54,8 @@ exports.createAnswer = async (req, res) => {
       return res.status(422).json({ error: "File location path is too long" });
     }
 
-    const idAnswer = generateHexKey();
+
+    const idAnswer = req.body.idAnswer || generateHexKey();
 
     const answerToCreate = {
       idAnswer: idAnswer,

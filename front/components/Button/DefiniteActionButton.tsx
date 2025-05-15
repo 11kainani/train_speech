@@ -6,6 +6,7 @@ interface DefiniteActionButtonProps {
   title: string;
   buttonStyle?: object;
   textStyle?: object;
+  disable?: boolean,
   onPress?: () => void;
 }
 
@@ -14,10 +15,11 @@ const DefiniteActionButton: React.FC<DefiniteActionButtonProps> = ({
   buttonStyle: style,
   textStyle,
   onPress,
+  disable=false,
 }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={[styles.content, style]}>
+      <TouchableOpacity onPress={onPress} style={[styles.content, style]} disabled={disable}>
         <Text style={[styles.text, textStyle]}>{title}</Text>
       </TouchableOpacity>
     </View>

@@ -4,23 +4,29 @@ import { COLORS } from "../../utils/colors";
 import { DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
 
 interface PanelButtonProps {
-  title: string; 
-  style?: object; 
+  title: string;
+  style?: object;
   onPress?: () => void;
+  disable?: boolean;
   selected?: boolean;
-
-  }
+}
 const PanelButton: React.FC<PanelButtonProps> = ({
   title,
   style,
   onPress,
+  disable,
   selected = true,
 }) => {
   return (
     <TouchableOpacity
+      disabled={disable}
       style={[
         panelStyle.panelBase,
-        selected ? panelStyle.panelSelected : panelStyle.panelUnselected,
+        disable
+          ? panelStyle.disablePanel
+          : selected
+          ? panelStyle.panelSelected
+          : panelStyle.panelUnselected,
         style,
       ]}
       onPress={onPress}
@@ -29,7 +35,11 @@ const PanelButton: React.FC<PanelButtonProps> = ({
         <Text
           style={[
             panelStyle.textBase,
-            selected ? panelStyle.selectedText : panelStyle.nonSelectedText,
+            disable
+              ? panelStyle.disableText
+              : selected
+              ? panelStyle.selectedText
+              : panelStyle.nonSelectedText,
           ]}
         >
           {" "}
@@ -51,10 +61,12 @@ const panelStyle = StyleSheet.create({
     borderWidth: DIMENSIONS.border,
     borderColor: COLORS.primary,
   },
-
+  disablePanel: {
+    backgroundColor: COLORS.disabled,
+    borderWidth : 0,
+  },
   panelSelected: {
     backgroundColor: COLORS.primary,
-
   },
 
   panelUnselected: {
@@ -62,11 +74,14 @@ const panelStyle = StyleSheet.create({
   },
 
   textBase: {
-    fontSize: DIMENSIONS.font,
+    fontSize: DIMENSIONS.fontLarge,
     fontWeight: "bold",
     textTransform: "uppercase",
     textAlignVertical: "center",
     textAlign: "center",
+  },
+  disableText: {
+    color: COLORS.textSecondary,
   },
   selectedText: {
     color: COLORS.textOnPrimary,

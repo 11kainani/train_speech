@@ -19,6 +19,7 @@ export const DIMENSIONS = {
   fontSmall: 8,
   font: 12,
   fontLarge: 16,
+  fontXLarge: 32,
 
   // Border radius
   radiusSmall: 4,

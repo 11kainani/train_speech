@@ -25,6 +25,8 @@ const SmallConfirmButton: React.FC<SmallConfirmButtonProps> = ({title, style, on
 
 
 
+
+
 const styles = StyleSheet.create({
     container : {
         backgroundColor: COLORS.primary,
@@ -36,7 +38,8 @@ const styles = StyleSheet.create({
     text: {
         textTransform: "uppercase",
         color: COLORS.textOnPrimary,
-        fontSize: DIM.font,
+        fontSize: DIM.fontSmall,
+        fontWeight: "500",
     }
 })
 
