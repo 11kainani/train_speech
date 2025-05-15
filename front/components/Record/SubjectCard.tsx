@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
 
     smallContainer: {
-        height: "30%",
+        height: "auto",
     },
 
     text : {

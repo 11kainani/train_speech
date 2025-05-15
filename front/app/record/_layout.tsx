@@ -9,7 +9,10 @@ export default function RecordStack() {
         headerTitleStyle: {
           fontSize: DIMENSIONS.fontLarge,
         },
+
       }}
     />
+
+
   );
 }
