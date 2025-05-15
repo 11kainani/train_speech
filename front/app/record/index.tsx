@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { IconButton, SubjectCard } from "../../components";
 import React, { useEffect, useState } from "react";
 import { useSubjects } from "../../hook";
@@ -45,7 +45,6 @@ export default function Record() {
   };
 
   const handleSelectSubject = () => {
-    
     const subject = data.find(
       (subject: Subject) => subject.description === randomDescription
     );
@@ -68,6 +67,7 @@ export default function Record() {
         "You have no subject, Go to Subject to create some !"
       );
     }
+    setLoading(false);
   }, [data]);
 
   useEffect(() => {
@@ -77,40 +77,47 @@ export default function Record() {
       "",
     ];
     setValidDescription(!invalidDescriptions.includes(randomDescription));
+    setLoading(false);
   }, [randomDescription]);
 
   return (
-    <View style={styles.container}>
-      <SubjectCard description={randomDescription} />
-      <View style={styles.horizontalDisposition}>
-        <IconButton
-          backgroundColor={COLORS.red}
-          onPress={handleRandomizeSubject}
-          icon={
-            <Entypo
-              name="shuffle"
-              size={DIMENSIONS.iconSizeXLarge}
-              color={COLORS.background}
-            />
-          }
-        />
-        <IconButton
-          disable={!validDescription}
-          onPress={handleSelectSubject}
-          icon={
-            <Entypo
-              name="check"
-              size={DIMENSIONS.iconSizeXLarge}
-              color={COLORS.background}
-            />
-          }
-        />
-      </View>
+    <View style={styles.page}>
+      {isLoading ? (<ActivityIndicator/> ): (<View style={styles.container}>
+        <SubjectCard description={randomDescription} />
+        <View style={styles.horizontalDisposition}>
+          <IconButton
+            backgroundColor={COLORS.red}
+            onPress={handleRandomizeSubject}
+            icon={
+              <Entypo
+                name="shuffle"
+                size={DIMENSIONS.iconSizeXLarge}
+                color={COLORS.background}
+              />
+            }
+          />
+          <IconButton
+            disable={!validDescription}
+            onPress={handleSelectSubject}
+            icon={
+              <Entypo
+                name="check"
+                size={DIMENSIONS.iconSizeXLarge}
+                color={COLORS.background}
+              />
+            }
+          />
+        </View>
+      </View>)}
+      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flex:1,
+  },
   container: {
     flex: 1,
     justifyContent: "space-evenly",
@@ -124,4 +131,3 @@ const styles = StyleSheet.create({
     alignContent: "flex-end",
   },
 });
-
