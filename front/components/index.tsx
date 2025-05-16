@@ -3,3 +3,4 @@ export * from './Page';
 export * from './Input';
 export * from './SubjectBank';
 export * from './Record';
+export * from './Audio';
