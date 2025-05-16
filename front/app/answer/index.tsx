@@ -28,7 +28,7 @@ const Answers = () => {
       setFilteredData(data);
     } else {
       const newData = data.filter((item:Answer) =>
-        item.subject?.description.toLowerCase().includes(text.toLowerCase())
+        item.subject?.description.toLowerCase().includes(text.toLowerCase()) || item.review?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredData(newData);
     }
@@ -44,7 +44,7 @@ const Answers = () => {
           <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
 
-          <AnswerList data={data} />
+          <AnswerList data={filteredData} />
             <View/>
           <Text>Yes NOO</Text>
         </View>
