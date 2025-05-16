@@ -1,5 +1,6 @@
 const { Answer, Subject } = require("../models");
 const crypto = require("crypto");
+const subject = require("../models/subject");
 
 /**
  * @module controller/answer_controller
@@ -53,7 +54,6 @@ exports.createAnswer = async (req, res) => {
     if (file_location.length > MAX_FILE_LOCATION_LENGTH) {
       return res.status(422).json({ error: "File location path is too long" });
     }
-
 
     const idAnswer = req.body.idAnswer || generateHexKey();
 
@@ -188,7 +188,12 @@ exports.getAnswerById = async (req, res) => {
         .json({ error: "Request doesn't have the correct argument" });
     }
 
-    const answer = await Answer.findByPk(idAnswer);
+    let answer = await Answer.findByPk(idAnswer, {
+      include: {
+        model: subject,
+        as: "subject",
+      },
+    });
     if (!answer) {
       return res.status(404).json({ error: "Answer not found" });
     }
@@ -209,10 +214,20 @@ exports.getAnswerById = async (req, res) => {
  */
 exports.getAllAnswers = async (req, res) => {
   try {
-    const answers = await Answer.findAll();
+    const answers = await Answer.findAll({
+      include: {
+        model: Subject,
+        as: "subject",
+      },
+    });
 
     if (!answers || answers.length === 0) {
       return res.status(404).json({ error: "No answers found" });
+    }
+
+    for (let answer in answers) {
+      const subject = Subject.findByPk(answer.subject);
+      answer.subject = subject;
     }
 
     return res.status(200).json({ answers });

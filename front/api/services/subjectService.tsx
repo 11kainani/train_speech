@@ -3,10 +3,7 @@ import apiConfig from "../config/apiConfig";
 
 const subjectEndpoint = "subjects";
 const subjectURL = `${apiConfig.baseURL}/${subjectEndpoint}/`;
-enum subjectType {
-  PROMPT = "prompt",
-  QUESTION = "question",
-}
+
 const subjectService = {
   /**
    * Fetches all subjects from the API.

@@ -20,6 +20,7 @@ import { Subject, SubjectType } from "../../models/Subject";
 import {
   AddSubjectModal,
   DefiniteActionButton,
+  FilterButton,
   SmallConfirmButton,
   SubjectListTable,
 } from "../../components";
@@ -44,7 +45,7 @@ const SubjectBankScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const { data, setData } = useSubjects(setLoading);
   const [filteredData, setFilteredData] = useState(data);
-  const [isFiltered, setIsFiltered] = useState<SubjectType>(SubjectType.NONE);
+
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,7 +54,7 @@ const SubjectBankScreen = () => {
     AnswerState.NONE
   );
   const [orderBy, setOrderby] = useState<OrderState>(OrderState.NONE);
-  const {answeredIds} = useAnsweredSubjectIds();
+  const { answeredIds } = useAnsweredSubjectIds();
 
   const handleSubjectCreated = (createdSubject: Subject) => {
     console.log("Received from modal:", createdSubject);
@@ -80,8 +81,6 @@ const SubjectBankScreen = () => {
     }
   };
 
-  
-
   const filterData = () => {
     let filtered = [...data];
 
@@ -94,9 +93,13 @@ const SubjectBankScreen = () => {
 
     //Filter by answers
     if (filterByAnswer === AnswerState.ANSWERED) {
-      filtered = filtered.filter(subject => answeredIds.includes(subject.idSubject));
+      filtered = filtered.filter((subject) =>
+        answeredIds.includes(subject.idSubject)
+      );
     } else if (filterByAnswer === AnswerState.UNANSWERD) {
-      filtered = filtered.filter(subject => !answeredIds.includes(subject.idSubject));
+      filtered = filtered.filter(
+        (subject) => !answeredIds.includes(subject.idSubject)
+      );
     }
 
     // Apply ordering
@@ -114,7 +117,6 @@ const SubjectBankScreen = () => {
       );
     }
 
-
     setFilteredData(filtered);
   };
 
@@ -128,39 +130,29 @@ const SubjectBankScreen = () => {
 
   useEffect(() => {
     filterData();
-  }, [data, searchQuery, isFiltered, filterByAnswer, orderBy]);
+  }, [data, searchQuery, filterByAnswer, orderBy]);
 
   return (
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <View style={styles.container}>
-          <View style={styles.control}>
-            <View style={styles.horizontalBar}>
-              <SearchBar value={searchQuery} onChangeText={handleSearch} />
-              <TouchableOpacity onPress={() => setIsFilterModalVisible(true)}>
-                <View style={styles.filterButton}>
-                  <Ionicons
-                    name="filter"
-                    size={DIMENSIONS.iconSize}
-                    color={COLORS.primary}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <SubjectListTable
-              data={filteredData}
-              onDeleteSuccess={removeSubjectFromData}
-            />
-
-            <DefiniteActionButton
-              title={"Add Subject"}
-              onPress={() => setPopUpVisible(true)}
-              buttonStyle={styles.confirmButton}
-            />
+        <View style={styles.control}>
+          <View style={styles.horizontalBar}>
+            <SearchBar value={searchQuery} onChangeText={handleSearch} />
+            <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
+
+          <SubjectListTable
+            data={filteredData}
+            onDeleteSuccess={removeSubjectFromData}
+          />
+
+          <DefiniteActionButton
+            title={"Add Subject"}
+            onPress={() => setPopUpVisible(true)}
+            buttonStyle={styles.confirmButton}
+          />
         </View>
       )}
       <AddSubjectModal
@@ -185,15 +177,13 @@ export const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: COLORS.background,
-    justifyContent: "center",
-    alignContent: "center",
+   
     flex: 1,
   },
 
   control: {
     width: "90%",
     alignSelf: "center",
-    justifyContent: "center",
   },
 
   table: {
@@ -216,16 +206,6 @@ export const styles = StyleSheet.create({
     borderWidth: DIMENSIONS.unit,
     marginBottom: DIMENSIONS.margin,
     borderColor: COLORS.textPrimary,
-  },
-
-  filterButton: {
-    flex: 1,
-    backgroundColor: COLORS.cardBackground,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: DIMENSIONS.marginSmall,
-    borderRadius: DIMENSIONS.border,
-    paddingHorizontal: DIMENSIONS.paddingSmall,
   },
 
   horizontalFilterConfirmationButton: {

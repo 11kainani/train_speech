@@ -10,12 +10,13 @@ const Comment = require('./comment')(sequelize,DataTypes);
 // Set up associations
 
 Subject.hasMany(Answer, {
-  foreignKey: 'idAnswer',
+  foreignKey: 'idSubject',
   as: 'answers',
 });
 
 Answer.belongsTo(Subject, {  
       foreignKey: 'idSubject',
+      as: 'subject',
       onDelete: 'CASCADE',  
       onUpdate: 'CASCADE',
   });
@@ -28,6 +29,7 @@ Answer.hasMany(Comment,{
 
 Comment.belongsTo(Answer, {
   foreignKey: 'idAnswer',
+  as: 'answer',
   onDelete: 'CASCADE',  
   onUpdate: 'CASCADE',
 

@@ -1,21 +1,76 @@
-import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
-import { COLORS } from '../../utils/colors';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { COLORS } from "../../utils/colors";
+import { useAnswers } from "../../hook";
+import { Answer } from "../../models";
+import { FilterButton, SearchBar } from "../../components";
+import { DIMENSIONS, responsiveHeight } from "../../utils";
+import { Ionicons } from "@expo/vector-icons";
 
 const Answers = () => {
+  const [isloading, setLoading] = useState(false);
+  const { data, setData } = useAnswers(setLoading);
+  const [filteredData, setFilteredData] = useState(data);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
+
+    if (text.trim() === "") {
+      setFilteredData(data);
+    } else {
+      const newData = data.filter((item:Answer) =>
+        item.subject?.description.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredData(newData);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Home!Sweet Home</Text>
+      {isloading ? (
+        <ActivityIndicator />
+      ) : (
+        <View style={styles.content}>
+          <View style={styles.horizontalBar}>
+          <SearchBar value={searchQuery} onChangeText={handleSearch} />
+          <FilterButton onPress={() => setIsFilterModalVisible(true)} />
+
+          </View>
+            <View/>
+          <Text>Yes NOO</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
-
-    backgroundColor: COLORS.background,
-
+  content: {
+   
+    alignSelf: "center",
+    width: "90%",
   },
-})
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    
+  },
+   horizontalBar: {
+    width: "90%",
+    alignSelf: "center",
+    flexDirection: "row",
+    marginVertical: DIMENSIONS.margin,
+    paddingVertical: DIMENSIONS.paddingSmall,
+    justifyContent: "space-between",
+    alignItems: "center",
+    maxHeight: responsiveHeight(7),
+  },
+});
 export default Answers;
