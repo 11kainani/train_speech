@@ -13,6 +13,7 @@ import { Answer } from "../../models";
 import { FilterButton, SearchBar } from "../../components";
 import { DIMENSIONS, responsiveHeight } from "../../utils";
 import { Ionicons } from "@expo/vector-icons";
+import AnswerList from "../../components/Answer/AnswerList";
 
 const Answers = () => {
   const [isloading, setLoading] = useState(false);
@@ -41,8 +42,9 @@ const Answers = () => {
           <View style={styles.horizontalBar}>
           <SearchBar value={searchQuery} onChangeText={handleSearch} />
           <FilterButton onPress={() => setIsFilterModalVisible(true)} />
-
           </View>
+
+          <AnswerList data={data} />
             <View/>
           <Text>Yes NOO</Text>
         </View>

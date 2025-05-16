@@ -27,7 +27,7 @@ import {
 import { SearchBar } from "../../components";
 import { Ionicons } from "@expo/vector-icons";
 import { useAnsweredSubjectIds, useSubjects } from "../../hook";
-import { FilterPanel } from "../../components/SubjectBank";
+import { FilterPanel } from "../../components/Subject";
 
 enum AnswerState {
   ANSWERED = "answer",

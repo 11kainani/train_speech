@@ -5,5 +5,5 @@ export type Answer = {
     file_location?: string, 
     answer_time?: string,
     review?: string, 
-    subject? : Subject, 
+    subject : Subject, 
 }
