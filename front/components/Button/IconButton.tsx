@@ -7,6 +7,7 @@ interface IconButtonProps {
   icon: React.ReactNode;
   onPress?: () => void;
   disable?: boolean;
+  small?:boolean;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
@@ -14,6 +15,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   icon,
   onPress,
   disable,
+  small=false,
 }) => {
   const finalBackgroundColor = disable
     ? COLORS.disabled
@@ -24,7 +26,7 @@ const IconButton: React.FC<IconButtonProps> = ({
       onPress={onPress}
       disabled={disable}
     >
-      <View style={[styles.content, { backgroundColor: finalBackgroundColor }]}>
+      <View style={[styles.content, small && styles.smallContent , { backgroundColor: finalBackgroundColor }]}>
         {icon}
       </View>
     </TouchableOpacity>
@@ -35,7 +37,6 @@ const styles = StyleSheet.create({
   roundContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: DIMENSIONS.margin,
     alignSelf: "center",
   },
 
@@ -45,6 +46,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: DIMENSIONS.padding,
     alignItems: "center",
     justifyContent: "center",
+    marginHorizontal: DIMENSIONS.margin,
+  },
+  smallContent : {
+     paddingVertical: DIMENSIONS.paddingSmall,
+    paddingHorizontal: DIMENSIONS.paddingSmall,
+    marginHorizontal: DIMENSIONS.marginSmall,
   },
 });
 

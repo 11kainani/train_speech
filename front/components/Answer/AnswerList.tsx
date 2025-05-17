@@ -18,6 +18,7 @@ import { subjectService } from "../../api";
 import { SmallConfirmButton } from "../Button";
 import { Answer, Subject } from "../../models";
 import { SubjectCard } from "../Record";
+import { AudioPlayer } from "../Audio";
 
 interface AnswerListProps {
   data: Answer[];
@@ -59,11 +60,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
         </View>
       </TouchableOpacity>
       {expandItemId === item.idAnswer && (
-        <View>
-          <Text style={styles.cardText}>{item ? item.review : ""}</Text>
-          <Text style={styles.cardText}>{item ? item.review : ""}</Text>
-          <Text style={styles.cardText}>{item ? item.review : ""}</Text>
-        </View>
+        <AudioPlayer answer={item} />
       )}
     </View>
   );

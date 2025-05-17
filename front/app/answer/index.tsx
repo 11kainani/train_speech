@@ -21,6 +21,7 @@ const Answers = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  
   const handleSearch = (text: string) => {
     setSearchQuery(text);
 
@@ -46,7 +47,7 @@ const Answers = () => {
 
           <AnswerList data={filteredData} />
             <View/>
-          <Text>Yes NOO</Text>
+          
         </View>
       )}
     </SafeAreaView>
