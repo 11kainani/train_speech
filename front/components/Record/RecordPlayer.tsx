@@ -1,56 +1,82 @@
 import { View, StyleSheet, Text, Alert, Button } from "react-native";
 import { COLORS, DIMENSIONS } from "../../utils";
 import { IconButton, PanelButton, SmallConfirmButton } from "../Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Entypo, Feather } from "@expo/vector-icons";
-import { AudioModule, RecordingPresets, useAudioPlayer, useAudioRecorder } from "expo-audio";
+import {
+  AudioModule,
+  RecordingPresets,
+  useAudioPlayer,
+  useAudioRecorder,
+} from "expo-audio";
 
-import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import { useNavigation, useRouter } from "expo-router";
+import { AudioRecorder } from "../Audio";
+const MAX_RECORD_TIME = 300;
 
+import { InteractionManager } from "react-native";
+
+
+//TODO : Save file transition 
 const RecordPlayer = () => {
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const audioSource = require('../../assets/wavwarehouse.mp3');
+  const [recordTimer, setRecordTimer] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
-  const RECORDING_DIR = FileSystem.documentDirectory + "recordings/";
-
-  const record = async () => {
-    
+  // Start recording
+  const startRecording = async () => {
     await audioRecorder.prepareToRecordAsync();
     audioRecorder.record();
     setIsRecording(true);
     setIsPaused(false);
   };
 
-  const pauseRecord = async () => {
+  // Pause recording
+  const pauseRecording = async () => {
     await audioRecorder.pause();
     setIsPaused(true);
   };
+
+  // Stop recording
   const stopRecording = async () => {
-    // The recording will be available on `audioRecorder.uri`.
-    console.log("url is here:", audioRecorder.uri);
-    const fileName = `recording.m4a`;
+    if (audioRecorder.isRecording) {
+      await audioRecorder.stop();
+    }
     setIsRecording(false);
     setIsPaused(false);
-    await audioRecorder.stop();
-    
+    clearIntervalIfNeeded();
+  };
+
+  const clearIntervalIfNeeded = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   };
 
   const handleRecord = async () => {
     if (!isRecording) {
-      await record();
-      setIsRecording(true);
+      await startRecording();
     } else if (isPaused) {
-      setIsPaused(false);
-      await record();
+      await startRecording(); // resume
     } else {
-      setIsPaused(true);
-      await pauseRecord();
+      await pauseRecording();
     }
   };
 
+  const handleCancel = async () => {
+    clearIntervalIfNeeded();
+    setRecordTimer(0);
+    await stopRecording();
+
+    InteractionManager.runAfterInteractions(() => {
+      router.replace("/record");
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -62,16 +88,33 @@ const RecordPlayer = () => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "isPaused:",
-      isPaused,
-      "isRecording:",
-      isRecording,
-      RECORDING_DIR
-    );
-    console.log(RECORDING_DIR)
-  }, [isPaused, isRecording]);
-const player = useAudioPlayer(audioSource);
+    if (isRecording && !isPaused) {
+      intervalRef.current = setInterval(() => {
+        setRecordTimer((prev) => {
+          if (prev >= MAX_RECORD_TIME) {
+            alert("Time Limit exceeded");
+            stopRecording(); // async but fire and forget
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    } else {
+      clearIntervalIfNeeded();
+      if (!isRecording) setRecordTimer(0);
+    }
+
+    return () => clearIntervalIfNeeded();
+  }, [isRecording, isPaused]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const secs = (seconds % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
+  };
+
   const renderRecordIcon = () => {
     if (!isRecording) {
       return (
@@ -102,7 +145,9 @@ const player = useAudioPlayer(audioSource);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.recordTime}>00:00</Text>
+      <Text style={styles.recordTime}>
+        {formatTime(recordTimer)} / {formatTime(MAX_RECORD_TIME)}
+      </Text>
       <IconButton
         backgroundColor={isRecording ? COLORS.primary : COLORS.red}
         onPress={handleRecord}
@@ -116,8 +161,11 @@ const player = useAudioPlayer(audioSource);
           style={styles.save}
           onPress={stopRecording}
         />
-        <SmallConfirmButton title="delete" style={styles.deleteText} />
-         <Button title="Play Sound" onPress={() => player.play()} />
+        <SmallConfirmButton
+          title="Cancel"
+          style={styles.deleteText}
+          onPress={handleCancel}
+        />
       </View>
     </View>
   );
