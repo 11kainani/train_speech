@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
-import { IconButton, SubjectCard } from "../../components";
+import { IconButton, SubjectCard } from "../../../components";
 import React, { useEffect, useState } from "react";
-import { useSubjects } from "../../hook";
+import { useSubjects } from "../../../hook";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import { COLORS, DIMENSIONS } from "../../utils";
-import { Subject } from "../../models";
+import { COLORS, DIMENSIONS } from "../../../utils";
+import { Subject } from "../../../models";
 import { useRouter } from "expo-router";
 
 export default function Record() {

@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { DIMENSIONS } from "../../utils";
+import { DIMENSIONS } from "../../../utils";
 
 export default function RecordStack() {
   return (

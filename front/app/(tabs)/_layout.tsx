@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { Entypo, Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { COLORS, DIMENSIONS } from "../utils";
+import { COLORS, DIMENSIONS } from "../../utils";
 
 export default function Layout() {
   return (
@@ -12,7 +12,7 @@ export default function Layout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (

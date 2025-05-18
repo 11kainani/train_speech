@@ -2,14 +2,14 @@
 
 import { useRoute } from "@react-navigation/native";
 import { Button, Text, View, StyleSheet } from "react-native";
-import { Subject } from "../../models";
+import { Subject } from "../../../models";
 import { useLocalSearchParams } from "expo-router";
-import { RecordPlayer, SubjectCard } from "../../components";
+import { RecordPlayer, SubjectCard } from "../../../components";
 import { Audio } from "expo-av";
 import React, { useState } from "react";
 import { useAudioPlayer } from 'expo-audio';
 
-const audioSource = require('../../assets/wavwarehouse.mp3');
+const audioSource = require('../../../assets/wavwarehouse.mp3');
 
 const RecordingScreen = () => {
   const route = useRoute();

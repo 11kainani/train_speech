@@ -7,13 +7,13 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { COLORS } from "../../utils/colors";
-import { useAnswers } from "../../hook";
-import { Answer } from "../../models";
-import { FilterButton, SearchBar } from "../../components";
-import { DIMENSIONS, responsiveHeight } from "../../utils";
+import { COLORS } from "../../../utils/colors";
+import { useAnswers } from "../../../hook";
+import { Answer } from "../../../models";
+import { FilterButton, SearchBar } from "../../../components";
+import { DIMENSIONS, responsiveHeight } from "../../../utils";
 import { Ionicons } from "@expo/vector-icons";
-import AnswerList from "../../components/Answer/AnswerList";
+import { AnswerList } from "../../../components";
 
 const Answers = () => {
   const [isloading, setLoading] = useState(false);

@@ -17,6 +17,7 @@ import {
 import { subjectService } from "../../api";
 import { SmallConfirmButton } from "../Button";
 import { Subject } from "../../models";
+import { useRouter } from "expo-router";
 
 interface SubjectListTableProps {
   data: Subject [];
@@ -27,6 +28,8 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
   data,
   onDeleteSuccess,
 }) => {
+
+  const router = useRouter();
   const handleItemPress = (itemName: string) => {
     console.log(itemName);
   };
@@ -49,6 +52,15 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
     }
   };
 
+  const handleSubjectAnswer = (item: Subject) => {
+      if (item) {
+        router.push({
+          pathname: "record/[idSubject]",
+          params: { subject: JSON.stringify(item) }, // must be serializable
+        });
+      }
+    };
+
   const renderItem = ({
     item,
   }: {
@@ -63,7 +75,7 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
       </TouchableOpacity>
 
       <View style={styles.buttonContainer}>
-        <SmallConfirmButton title="Answer" />
+        <SmallConfirmButton title="Answer" onPress={()=> handleSubjectAnswer(item)}/>
 
         <TouchableOpacity
           onPress={() => handleRightButtonPress(item.idSubject)}
