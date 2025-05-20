@@ -29,6 +29,7 @@ export const DIMENSIONS = {
   // Border Width
   bordersmall: 1,
   border : 2,
+  borderThick: 8,
 
   //icon
   iconSize: 16,

@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, Alert, Button } from "react-native";
-import { COLORS, DIMENSIONS } from "../../utils";
+import { COLORS, DIMENSIONS, secondsToFormat } from "../../utils";
 import { IconButton, PanelButton, SmallConfirmButton } from "../Button";
 import { useEffect, useRef, useState } from "react";
 import { Entypo, Feather } from "@expo/vector-icons";
@@ -107,13 +107,7 @@ const RecordPlayer = () => {
     return () => clearIntervalIfNeeded();
   }, [isRecording, isPaused]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const secs = (seconds % 60).toString().padStart(2, "0");
-    return `${mins}:${secs}`;
-  };
+
 
   const renderRecordIcon = () => {
     if (!isRecording) {
@@ -146,7 +140,7 @@ const RecordPlayer = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.recordTime}>
-        {formatTime(recordTimer)} / {formatTime(MAX_RECORD_TIME)}
+        {secondsToFormat(recordTimer)} / {secondsToFormat(MAX_RECORD_TIME)}
       </Text>
       <IconButton
         backgroundColor={isRecording ? COLORS.primary : COLORS.red}

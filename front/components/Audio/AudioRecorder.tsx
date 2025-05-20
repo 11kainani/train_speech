@@ -7,6 +7,7 @@ const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioSource, setAudioSource] = useState( require('../../assets/wavwarehouse.mp3'));
 
+
   const record = async () => {
     await audioRecorder.prepareToRecordAsync();
     audioRecorder.record();

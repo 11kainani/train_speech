@@ -18,7 +18,7 @@ import { subjectService } from "../../api";
 import { SmallConfirmButton } from "../Button";
 import { Answer, Subject } from "../../models";
 import { SubjectCard } from "../Record";
-import { AudioPlayer } from "../Audio";
+import { MediaPlayer } from "../Audio";
 
 interface AnswerListProps {
   data: Answer[];
@@ -60,7 +60,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
         </View>
       </TouchableOpacity>
       {expandItemId === item.idAnswer && (
-        <AudioPlayer answer={item} />
+        <MediaPlayer answer={item} />
       )}
     </View>
   );

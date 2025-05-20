@@ -5,3 +5,4 @@ export * from './Subject';
 export * from './Record';
 export * from './Audio';
 export * from './Answer';
+export * from './Display';
