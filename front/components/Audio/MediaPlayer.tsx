@@ -22,13 +22,17 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
   const [isPaused, setIsPaused] = useState(true);
   const [position, setPosition] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [completionResetKey, setCompletionResetKey] = useState(0);
 
   const audioSource = require("../../assets/wavwarehouse.mp3");
   const player = useAudioPlayer(audioSource);
 
   // soundRef = player.currentStatus;
 
-  const maxDuration: number = durationsToSecond(answer?.answer_time || "") || 1;
+  const maxDuration: number =
+    player.duration || durationsToSecond(answer?.answer_time || "");
+
+  //TODO : ALERT if the duration and answer.answer_time is incorrect
 
   const handlePlayTrigger = () => {
     if (player.playing) {
@@ -81,23 +85,42 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
       intervalRef.current = null;
     }
   };
+
+  const handleOnComplete = async () => {
+    clearIntervalIfNeeded();
+    if (player.currentTime !== 0) {
+      await player.seekTo(0);
+    }
+    player.pause();
+    setIsPaused(true);
+    setPosition(0);
+    setCompletionResetKey((prev) => prev + 1);
+  };
+
+  const handleOffsetAudio = async (value: number) => {
+    const newPosition = player.currentTime + value;
+    if (newPosition >= maxDuration) {
+      await handleOnComplete();
+      return;
+    }
+    const safePosition = Math.max(newPosition, 0);
+    await player.seekTo(safePosition);
+    setPosition(safePosition);
+  };
   return (
     <View style={styles.container}>
       <MediaSlider
         minimumValue={0}
         maximumValue={maxDuration}
         value={position}
-        onValueChange={function (newValue: number): void {
-          console.log("Function not implemented.");
-        }}
-        onComplete={function (): void {
-          console.log("Function not implemented.");
-        }}
+        onValueChange={handleOffsetAudio}
+        onComplete={handleOnComplete}
+        resetCompletionTrigger={completionResetKey}
       />
 
       <View style={styles.mediaButton}>
-     
         <IconButton
+          onPress={() => handleOffsetAudio(-5)}
           small={true}
           icon={
             <MaterialIcons
@@ -114,6 +137,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
         />
         <IconButton
           small={true}
+          onPress={() => handleOffsetAudio(5)}
           icon={
             <MaterialIcons
               name="forward-5"
@@ -140,7 +164,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "row",
     marginTop: DIMENSIONS.margin,
-
   },
 });
 

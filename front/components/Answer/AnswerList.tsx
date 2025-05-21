@@ -79,7 +79,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
 const styles = StyleSheet.create({
   segmentation: {
     width: "100%",
-    height: "80%",
+    height: "90%",
     alignSelf: "center",
   },
 

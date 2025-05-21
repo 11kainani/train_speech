@@ -1,16 +1,14 @@
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
-  PanResponderGestureState,
   Text,
   PanResponder,
   GestureResponderEvent,
+  PanResponderGestureState,
   LayoutChangeEvent,
-  findNodeHandle,
 } from "react-native";
+import { useState, useRef, useEffect } from "react";
 import { COLORS, DIMENSIONS, secondsToFormat } from "../../utils";
-import { useState, useRef } from "react";
 
 interface MediaSliderProps {
   minimumValue?: number;
@@ -18,9 +16,7 @@ interface MediaSliderProps {
   value: number;
   onValueChange: (newValue: number) => void;
   onComplete: () => void;
-  minimumTrackTintColor?: Object;
-  maximumTrackTintColor?: Object;
-  thumbTintColor?: Object;
+  resetCompletionTrigger?: number;
 }
 
 const MediaSlider: React.FC<MediaSliderProps> = ({
@@ -29,68 +25,48 @@ const MediaSlider: React.FC<MediaSliderProps> = ({
   value,
   onValueChange,
   onComplete,
-  minimumTrackTintColor,
-  maximumTrackTintColor,
-  thumbTintColor,
+  resetCompletionTrigger,
+
 }) => {
-  const [sliderWidth, setSliderWidth] = useState(0);
-  const [sliderX, setSliderX] = useState(0);
-  const sliderRef = useRef<View>(null);
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (
-        evt: GestureResponderEvent,
-        gestureState: PanResponderGestureState
-      ) => {
-        if (sliderWidth === 0) return;
-        const relativeX = gestureState.moveX - sliderX;
-        const touchX = Math.max(0, Math.min(relativeX, sliderWidth));
-        const newValue =
-          minimumValue + (touchX / sliderWidth) * (maximumValue - minimumValue);
-        onValueChange(newValue);
-      },
-      onPanResponderRelease: () => {
-        onComplete();
-      },
-    })
-  ).current;
-
-  const onLayout = () => {
-  requestAnimationFrame(() => {
-    sliderRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      setSliderWidth(width);
-      setSliderX(pageX);
-      console.log("Measured:", width, pageX);
-    });
-  });
-};
-
-  const progressPourcentage =
+  const hasCompleted = useRef(false);
+  const progressPercentage =
     maximumValue > 0 ? (value / maximumValue) * 100 : 0;
 
+  useEffect(() => {
+    if (!hasCompleted.current && progressPercentage >= 100) {
+      hasCompleted.current = true;
+      onComplete();
+    }
+    if (progressPercentage < 99 && hasCompleted.current) {
+      hasCompleted.current = false;
+    }
+  }, [progressPercentage]);
+
+  useEffect(() => {
+    hasCompleted.current = false;
+  }, [resetCompletionTrigger]);
+
+  /**
+   * Offset the positon of the playback
+   */
+
+  //TODO: Create slider for audio to reposition the audio
   return (
     <View style={styles.mainContainer}>
       <View style={styles.numberProgression}>
         <Text style={styles.numberText}>{secondsToFormat(value)}</Text>
         <Text style={styles.numberText}>{secondsToFormat(maximumValue)}</Text>
       </View>
-      <View
-        ref={sliderRef}
-        style={styles.sliderContainer}
-        onLayout={onLayout}
-        {...panResponder.panHandlers}
-      >
+      <View style={styles.sliderContainer}>
         <View
           style={[
             styles.complete,
             {
-              width: `${progressPourcentage}%`,
+              width: `${progressPercentage}%`,
               backgroundColor: COLORS.primary,
             },
           ]}
-        ></View>
+        />
       </View>
     </View>
   );
