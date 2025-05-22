@@ -1,7 +1,7 @@
 import { AudioPlayer } from "expo-audio";
 import { useState, useRef, useEffect } from "react";
 
-const usePlaybackController = (player: AudioPlayer) => {
+export const usePlaybackController = (player: AudioPlayer) => {
   const [isPaused, setIsPaused] = useState(true);
   const [position, setPosition] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -41,11 +41,22 @@ const usePlaybackController = (player: AudioPlayer) => {
     setPosition(0);
   };
 
+  const handleOnComplete = async () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (player.currentTime !== 0) {
+      await player.seekTo(0);
+    }
+    player.pause();
+    setIsPaused(true);
+    setPosition(0);
+  };
+
   return {
     isPaused,
     position,
     playPause,
     seek,
     stop,
+    handleOnComplete,
   };
 };

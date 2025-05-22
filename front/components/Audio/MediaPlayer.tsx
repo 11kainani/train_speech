@@ -11,6 +11,7 @@ import {
 import { COLORS, DIMENSIONS, durationsToSecond } from "../../utils";
 import { AudioPlayer, useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
+import {usePlaybackController} from "../../hook";
 
 interface MediaPlayerProps {
   answer: Answer;
@@ -19,8 +20,7 @@ interface MediaPlayerProps {
 const MEDIA_LOCATION = "../../assets/";
 
 const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
-  const [isPaused, setIsPaused] = useState(true);
-  const [position, setPosition] = useState<number>(0);
+ 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [completionResetKey, setCompletionResetKey] = useState(0);
 
@@ -34,15 +34,13 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
 
   //TODO : ALERT if the duration and answer.answer_time is incorrect
 
-  const handlePlayTrigger = () => {
-    if (player.playing) {
-      player.pause();
-      setIsPaused(true);
-    } else {
-      player.play();
-      setIsPaused(false);
-    }
-  };
+  const { isPaused,
+    position,
+    playPause,
+    seek,
+    stop,
+    handleOnComplete,} = usePlaybackController(player);
+  
 
   const renderPausePlayButton = () => {
     if (!isPaused) {
@@ -64,63 +62,25 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
     );
   };
 
-  useEffect(() => {
-    console.log(MEDIA_LOCATION + answer.file_location);
-    if (!isPaused) {
-      intervalRef.current = setInterval(async () => {
-        if (player.currentTime) {
-          setPosition(player.currentStatus.currentTime);
-        }
-      }, 100);
-    } else {
-      clearIntervalIfNeeded();
-    }
+  
 
-    return;
-  }, [isPaused]);
+  
 
-  const clearIntervalIfNeeded = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  };
-
-  const handleOnComplete = async () => {
-    clearIntervalIfNeeded();
-    if (player.currentTime !== 0) {
-      await player.seekTo(0);
-    }
-    player.pause();
-    setIsPaused(true);
-    setPosition(0);
-    setCompletionResetKey((prev) => prev + 1);
-  };
-
-  const handleOffsetAudio = async (value: number) => {
-    const newPosition = player.currentTime + value;
-    if (newPosition >= maxDuration) {
-      await handleOnComplete();
-      return;
-    }
-    const safePosition = Math.max(newPosition, 0);
-    await player.seekTo(safePosition);
-    setPosition(safePosition);
-  };
+  
   return (
     <View style={styles.container}>
       <MediaSlider
         minimumValue={0}
         maximumValue={maxDuration}
         value={position}
-        onValueChange={handleOffsetAudio}
+        onValueChange={seek}
         onComplete={handleOnComplete}
         resetCompletionTrigger={completionResetKey}
       />
 
       <View style={styles.mediaButton}>
         <IconButton
-          onPress={() => handleOffsetAudio(-5)}
+          onPress={() => seek(-5)}
           small={true}
           icon={
             <MaterialIcons
@@ -133,11 +93,11 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
         <IconButton
           small={true}
           icon={renderPausePlayButton()}
-          onPress={handlePlayTrigger}
+          onPress={playPause}
         />
         <IconButton
           small={true}
-          onPress={() => handleOffsetAudio(5)}
+          onPress={() => seek(5)}
           icon={
             <MaterialIcons
               name="forward-5"
