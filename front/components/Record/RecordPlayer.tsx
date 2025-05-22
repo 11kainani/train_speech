@@ -12,13 +12,11 @@ import {
 
 import * as FileSystem from "expo-file-system";
 import { useNavigation, useRouter } from "expo-router";
-import { AudioRecorder } from "../Audio";
 const MAX_RECORD_TIME = 300;
 
 import { InteractionManager } from "react-native";
 
-
-//TODO : Save file transition 
+//TODO : Save file transition
 const RecordPlayer = () => {
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const [isRecording, setIsRecording] = useState(false);
@@ -36,8 +34,8 @@ const RecordPlayer = () => {
   };
 
   // Pause recording
-  const pauseRecording = async () => {
-    await audioRecorder.pause();
+  const pauseRecording = () => {
+    audioRecorder.pause();
     setIsPaused(true);
   };
 
@@ -49,6 +47,7 @@ const RecordPlayer = () => {
     setIsRecording(false);
     setIsPaused(false);
     clearIntervalIfNeeded();
+    setRecordTimer(0);
   };
 
   const clearIntervalIfNeeded = () => {
@@ -60,11 +59,19 @@ const RecordPlayer = () => {
 
   const handleRecord = async () => {
     if (!isRecording) {
-      await startRecording();
+      // Fresh start
+      await audioRecorder.prepareToRecordAsync();
+      await audioRecorder.record();
+      setIsRecording(true);
+      setIsPaused(false);
     } else if (isPaused) {
-      await startRecording(); // resume
+      // Resume
+      await audioRecorder.record();
+      setIsPaused(false);
     } else {
-      await pauseRecording();
+      // Pause
+      await audioRecorder.pause();
+      setIsPaused(true);
     }
   };
 
@@ -88,6 +95,7 @@ const RecordPlayer = () => {
   }, []);
 
   useEffect(() => {
+    console.log(isPaused, "Pause", isRecording,"Recording");
     if (isRecording && !isPaused) {
       intervalRef.current = setInterval(() => {
         setRecordTimer((prev) => {
@@ -101,13 +109,15 @@ const RecordPlayer = () => {
       }, 1000);
     } else {
       clearIntervalIfNeeded();
-      if (!isRecording) setRecordTimer(0);
+      setIsPaused(true);
+      
+      if (!isRecording) {
+        setRecordTimer(0);
+      }
     }
 
     return () => clearIntervalIfNeeded();
   }, [isRecording, isPaused]);
-
-
 
   const renderRecordIcon = () => {
     if (!isRecording) {
@@ -127,14 +137,15 @@ const RecordPlayer = () => {
           color={COLORS.secondary}
         />
       );
+    } else {
+      return (
+        <Feather
+          name="pause"
+          size={DIMENSIONS.iconSizeXLarge}
+          color={COLORS.secondary}
+        />
+      );
     }
-    return (
-      <Feather
-        name="pause"
-        size={DIMENSIONS.iconSizeXLarge}
-        color={COLORS.secondary}
-      />
-    );
   };
 
   return (

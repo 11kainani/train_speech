@@ -68,7 +68,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
     console.log(MEDIA_LOCATION + answer.file_location);
     if (!isPaused) {
       intervalRef.current = setInterval(async () => {
-        if (player.currentStatus.currentTime) {
+        if (player.currentTime) {
           setPosition(player.currentStatus.currentTime);
         }
       }, 100);
