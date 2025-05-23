@@ -23,7 +23,7 @@ function generateHexKey() {
  * @route POST /
  * @description Creates a new answer and associates it with a subject.
  * @param {string} req.body.file_location - The location of the answer file.
- * @param {number} req.body.answer_time - The time taken to answer.
+ * @param {number} req.body.duration - The time taken to answer.
  * @param {string} req.body.idSubject - The ID of the subject the answer belongs to.
  * @param {string} [req.body.review] - Optional review text.
  * @returns {Object} 201 - Created answer object.
@@ -34,9 +34,11 @@ function generateHexKey() {
 
 exports.createAnswer = async (req, res) => {
   try {
-    const { file_location, answer_time, idSubject, review } = req.body;
+    const { file_location, duration, idSubject, review } = req.body;
 
-    if (!file_location || !answer_time || !idSubject) {
+    console.log(req.body);
+
+    if (!file_location || !duration || !idSubject) {
       return res.status(400).json({ error: "Request body incomplete" });
     }
 
@@ -60,7 +62,7 @@ exports.createAnswer = async (req, res) => {
     const answerToCreate = {
       idAnswer: idAnswer,
       file_location: file_location,
-      answer_time: answer_time,
+      duration: duration,
       idSubject: idSubject,
       review: review,
     };
@@ -112,7 +114,7 @@ exports.deleteAnswer = async (req, res) => {
  * @param {string} req.body.idAnswer - The ID of the answer to update (required)
  * @param {string} [req.body.review] - The updated review (optional)
  * @param {string} [req.body.file_location] - The updated file location (optional)
- * @param {number} [req.body.answer_time] - The updated answer time (optional)
+ * @param {number} [req.body.duration] - The updated answer time (optional)
  * @returns {Object} 400 - Request body is incomplete
  * @returns {Object} 404 - Answer not found
  * @returns {Object} 304 - No changes detected
@@ -121,7 +123,7 @@ exports.deleteAnswer = async (req, res) => {
  */
 exports.updateAnswer = async (req, res) => {
   try {
-    const { idAnswer, review, file_location, answer_time } = req.body;
+    const { idAnswer, review, file_location, duration } = req.body;
 
     if (!idAnswer) {
       return res.status(400).json({ error: "Request body is incomplete" });
@@ -135,7 +137,7 @@ exports.updateAnswer = async (req, res) => {
     if (
       (review === undefined || review === answer.review) &&
       (file_location === undefined || file_location === answer.file_location) &&
-      (answer_time === undefined || answer_time === answer.answer_time)
+      (duration === undefined || duration === answer.duration)
     ) {
       return res
         .status(304)
@@ -157,7 +159,7 @@ exports.updateAnswer = async (req, res) => {
       }
       answer.file_location = file_location;
     }
-    if (answer_time !== undefined) answer.answer_time = answer_time;
+    if (duration !== undefined) answer.duration = duration;
 
     await answer.save();
 

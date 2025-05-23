@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) =>
         
         },
 
-        answer_time: {
+        duration: {
             type: DataTypes.TIME,
             allowNull: false,
 

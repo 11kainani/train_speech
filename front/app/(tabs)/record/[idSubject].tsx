@@ -4,8 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import { Button, Text, View, StyleSheet } from "react-native";
 import { Subject } from "../../../models";
 import { useLocalSearchParams } from "expo-router";
-import { RecordPlayer, SubjectCard } from "../../../components";
-import { Audio } from "expo-av";
+import { MediaRecorder, SubjectCard } from "../../../components";
 import React, { useState } from "react";
 import { useAudioPlayer } from 'expo-audio';
 import { COLORS } from "../../../utils";
@@ -25,7 +24,7 @@ const RecordingScreen = () => {
     <View style={styles.container}>
       <SubjectCard small={true} description={parsedSubject.description} />
        
-      <RecordPlayer />
+      <MediaRecorder subject={parsedSubject}  />
      
     </View>
   );

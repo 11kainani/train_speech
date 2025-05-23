@@ -20,17 +20,13 @@ interface MediaPlayerProps {
 const MEDIA_LOCATION = "../../assets/";
 
 const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
- 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [completionResetKey, setCompletionResetKey] = useState(0);
 
   const audioSource = require("../../assets/wavwarehouse.mp3");
   const player = useAudioPlayer(audioSource);
 
-  // soundRef = player.currentStatus;
 
   const maxDuration: number =
-    player.duration || durationsToSecond(answer?.answer_time || "");
+    player.duration || durationsToSecond(answer?.duration || "");
 
   //TODO : ALERT if the duration and answer.answer_time is incorrect
 
@@ -75,7 +71,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
         value={position}
         onValueChange={seek}
         onComplete={handleOnComplete}
-        resetCompletionTrigger={completionResetKey}
+      
       />
 
       <View style={styles.mediaButton}>
