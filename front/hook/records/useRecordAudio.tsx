@@ -1,26 +1,12 @@
-import { View, StyleSheet, Text, Alert, Button } from "react-native";
-import {
-  secondsToFormat,
-  ensureRecordingDirExists, 
-  generateIdKey,
-} from "../../utils";
+import { Alert } from "react-native";
+import { ensureRecordingDirExists } from "../../utils";
 import { useEffect, useRef, useState } from "react";
-import {
-  AudioModule,
-  RecordingPresets,
-  useAudioRecorder,
-} from "expo-audio";
-
+import { AudioModule, RecordingPresets, useAudioRecorder } from "expo-audio";
 import * as FileSystem from "expo-file-system";
-
-import { answerService, saveRecording } from "../../services";
 import { Subject } from "../../models";
-
+import { saveRecording } from "../../components";
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
 const MAX_RECORD_TIME = 300;
-
-
-
 
 export const useRecordAudio = (subject: Subject) => {
   const audioRecorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
@@ -42,9 +28,7 @@ export const useRecordAudio = (subject: Subject) => {
     ensureRecordingDirExists(RECORD_DIR);
   }, []);
 
-
-
-  const stopRecording = async () => {
+  const stopRecording = async (save: boolean = true) => {
     if (audioRecorder.isRecording) {
       await audioRecorder.stop();
     }
@@ -53,40 +37,33 @@ export const useRecordAudio = (subject: Subject) => {
     setIsPaused(false);
     clearIntervalIfNeeded();
     setRecordTimer(0);
+    if (save) {
+      try {
+        let retries = 0;
+        let uri: string | null = null;
 
-    try {
-      let retries = 0;
-      let uri: string | null = null;
-
-      while (retries < 10) {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        if (audioRecorder.uri) {
-          const info = await FileSystem.getInfoAsync(audioRecorder.uri);
-          if (info.exists) {
-            uri = audioRecorder.uri;
-            break;
+        while (retries < 10) {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          if (audioRecorder.uri) {
+            const info = await FileSystem.getInfoAsync(audioRecorder.uri);
+            if (info.exists) {
+              uri = audioRecorder.uri;
+              break;
+            }
           }
+          retries++;
         }
-        retries++;
+
+        if (!uri) {
+          //TODO : Stop the recording and display an alert
+          console.error("Failed to retrieve valid URI after recording.");
+          return;
+        }
+
+        await saveRecording(uri, subject, recordTimer);
+      } catch (error) {
+        console.error("Error while copying recording:", error);
       }
-
-      if (!uri) {
-        //TODO : Stop the recording and display an alert
-        console.error("Failed to retrieve valid URI after recording.");
-        return;
-      }
-
-  
-
-      await saveRecording(uri, subject, recordTimer);
-
-
-
-    } catch (error) {
-      console.error("Error while copying recording:", error);
-    }finally
-    {
-      audioRecorder.release();
     }
   };
 
@@ -139,12 +116,6 @@ export const useRecordAudio = (subject: Subject) => {
     return () => clearIntervalIfNeeded();
   }, [isRecording, isPaused]);
 
-  //Clean up incase of unmout
-  useEffect(() => {
-    return () => {
-      if (audioRecorder.isRecording) stopRecording();
-    };
-  }, []);
   return {
     recordTimer,
     audioRecorder,

@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { IconButton, SubjectCard } from "../../../components";
 import React, { useEffect, useState } from "react";
 import { useSubjects } from "../../../hook";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { COLORS, DIMENSIONS } from "../../../utils";
 import { Subject } from "../../../models";
 import { useRouter } from "expo-router";

@@ -28,7 +28,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
   const maxDuration: number =
     player.duration || durationsToSecond(answer?.duration || "");
 
-  //TODO : ALERT if the duration and answer.answer_time is incorrect
+  //TODO : ALERT if the duration and answer.duration is incorrect
 
   const { isPaused,
     position,

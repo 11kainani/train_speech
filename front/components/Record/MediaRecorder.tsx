@@ -1,5 +1,4 @@
 import { View, StyleSheet, Text, InteractionManager } from "react-native";
-import { useEffect, useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import { Entypo, Feather } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system";
@@ -14,13 +13,17 @@ const MAX_RECORD_TIME = 300;
 
 interface MediaRecorderProps {
   subject: Subject;
+  onRelease: () => void;
 }
 
 /**
  * MediaRecorder component for handling audio recording logic.
  * Displays record timer, record/pause/play buttons, and cancel/save actions.
  */
-const MediaRecorder: React.FC<MediaRecorderProps> = ({ subject }) => {
+const MediaRecorder: React.FC<MediaRecorderProps> = ({
+  subject,
+  onRelease,
+}) => {
   const {
     recordTimer,
     isRecording,
@@ -40,13 +43,17 @@ const MediaRecorder: React.FC<MediaRecorderProps> = ({ subject }) => {
   const handleCancel = async () => {
     clearIntervalIfNeeded();
     setRecordTimer(0);
-    await stopRecording();
+    await stopRecording(false);
 
     InteractionManager.runAfterInteractions(() => {
       router.replace("/record");
     });
   };
 
+  const handleAudioRecord = async () => {
+    await stopRecording();
+    onRelease();
+  };
   /**
    * Renders the appropriate record button icon based on recording state.
    */
@@ -87,7 +94,7 @@ const MediaRecorder: React.FC<MediaRecorderProps> = ({ subject }) => {
           title="Save"
           disable={!isRecording}
           style={styles.save}
-          onPress={stopRecording}
+          onPress={handleAudioRecord}
         />
         <SmallConfirmButton
           title="Cancel"
