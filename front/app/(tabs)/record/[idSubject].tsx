@@ -6,7 +6,6 @@ import { Subject } from "../../../models";
 import { useLocalSearchParams } from "expo-router";
 import { MediaRecorder, SubjectCard } from "../../../components";
 import React, { useState } from "react";
-import { useAudioPlayer } from 'expo-audio';
 import { COLORS } from "../../../utils";
 
 const audioSource = require('../../../assets/wavwarehouse.mp3');

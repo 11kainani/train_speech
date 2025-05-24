@@ -1,6 +1,6 @@
 // hooks/useAnsweredSubjectIds.ts
 import { useEffect, useState } from "react";
-import { subjectService } from "../../api"; // assuming subjectService has the API call
+import { subjectService } from "../../services"; // assuming subjectService has the API call
 import { Subject } from "../../models";
 
 export const useAnsweredSubjectIds = () => {

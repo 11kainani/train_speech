@@ -14,13 +14,13 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from "../../utils";
-import { subjectService } from "../../api";
+import { subjectService } from "../../services";
 import { SmallConfirmButton } from "../Button";
 import { Subject } from "../../models";
 import { useRouter } from "expo-router";
 
 interface SubjectListTableProps {
-  data: Subject [];
+  data: Subject[];
   onDeleteSuccess?: (idSubject: string) => void;
 }
 
@@ -28,7 +28,6 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
   data,
   onDeleteSuccess,
 }) => {
-
   const router = useRouter();
   const handleItemPress = (itemName: string) => {
     console.log(itemName);
@@ -53,13 +52,13 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
   };
 
   const handleSubjectAnswer = (item: Subject) => {
-      if (item) {
-        router.push({
-          pathname: "record/[idSubject]",
-          params: { subject: JSON.stringify(item) }, // must be serializable
-        });
-      }
-    };
+    if (item) {
+      router.push({
+        pathname: "record/[idSubject]",
+        params: { subject: JSON.stringify(item) }, // must be serializable
+      });
+    }
+  };
 
   const renderItem = ({
     item,
@@ -75,7 +74,10 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
       </TouchableOpacity>
 
       <View style={styles.buttonContainer}>
-        <SmallConfirmButton title="Answer" onPress={()=> handleSubjectAnswer(item)}/>
+        <SmallConfirmButton
+          title="Answer"
+          onPress={() => handleSubjectAnswer(item)}
+        />
 
         <TouchableOpacity
           onPress={() => handleRightButtonPress(item.idSubject)}

@@ -8,24 +8,19 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import { subjectService } from "../../../api";
 import {
   COLORS,
   DIMENSIONS,
   responsiveHeight,
-  responsiveWidth,
 } from "../../../utils";
-import PanelButton from "../../../components/Button/PanelButton";
-import { Subject, SubjectType } from "../../../models/Subject";
+import { Subject } from "../../../models/Subject";
 import {
   AddSubjectModal,
   DefiniteActionButton,
   FilterButton,
-  SmallConfirmButton,
   SubjectListTable,
 } from "../../../components";
 import { SearchBar } from "../../../components";
-import { Ionicons } from "@expo/vector-icons";
 import { useAnsweredSubjectIds, useSubjects } from "../../../hook";
 import { FilterPanel } from "../../../components/Subject";
 

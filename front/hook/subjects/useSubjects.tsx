@@ -1,6 +1,6 @@
 // hooks/useSubjects.ts
 import { useEffect, useState } from "react";
-import { subjectService } from "../../api";
+import { subjectService } from "../../services";
 import { Subject } from "../../models/Subject";
 
 export const useSubjects = (setLoading: (val: boolean) => void) => {

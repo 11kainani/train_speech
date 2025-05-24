@@ -1,5 +1,5 @@
 // api/services/subjectService.js
-import apiConfig from "../config/apiConfig";
+import {apiConfig} from "../config";
 
 const answerEndpoint = "answers";
 const answerURL = `${apiConfig.baseURL}/${answerEndpoint}`;

@@ -13,7 +13,7 @@ import {
 
 import * as FileSystem from "expo-file-system";
 
-import { answerService } from "../../api";
+import { answerService, saveRecording } from "../../services";
 import { Subject } from "../../models";
 
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
@@ -76,27 +76,10 @@ export const useRecordAudio = (subject: Subject) => {
         return;
       }
 
-      const idAnswer = generateIdKey();
-      const fileName = `recording-${idAnswer}.m4a`;
-      const newPath = RECORD_DIR + fileName;
+  
 
-      await FileSystem.copyAsync({
-        from: uri,
-        to: newPath,
-      });
+      await saveRecording(uri, subject, recordTimer);
 
-      console.log("Saved to:", newPath);
-
-      const result = await answerService.createAnswer(
-        idAnswer,
-        newPath,
-        secondsToFormat(recordTimer),
-        subject.idSubject
-      );
-      if (result) {
-        //TODO ALERT saved answer
-        console.log("Answer saved");
-      }
 
 
     } catch (error) {

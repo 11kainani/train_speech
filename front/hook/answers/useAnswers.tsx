@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { answerService } from "../../api";
+import { answerService } from "../../services";
 import { Answer } from "../../models";
 
 export const useAnswers =  (setLoading: (val: boolean) => void) => {

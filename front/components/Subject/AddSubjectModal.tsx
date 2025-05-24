@@ -9,7 +9,7 @@ import {
   Subject,
   SubjectResponse,
 } from "../../models/Subject";
-import { subjectService } from "../../api";
+import { subjectService } from "../../services";
 
 interface AddSubjectProps {
   isVisible: boolean;

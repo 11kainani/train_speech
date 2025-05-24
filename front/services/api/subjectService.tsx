@@ -1,5 +1,5 @@
 // api/services/subjectService.js
-import apiConfig from "../config/apiConfig";
+import {apiConfig} from "../config";
 
 const subjectEndpoint = "subjects";
 const subjectURL = `${apiConfig.baseURL}/${subjectEndpoint}/`;

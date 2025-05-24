@@ -3,21 +3,15 @@ import {
   FlatList,
   Text,
   StyleSheet,
-  SafeAreaView,
   View,
   TouchableOpacity,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   COLORS,
   DIMENSIONS,
-  responsiveHeight,
-  responsiveWidth,
 } from "../../utils";
-import { subjectService } from "../../api";
-import { SmallConfirmButton } from "../Button";
-import { Answer, Subject } from "../../models";
-import { SubjectCard } from "../Record";
+import { subjectService } from "../../services";
+import { Answer } from "../../models";
 import { MediaPlayer } from "../Audio";
 
 interface AnswerListProps {
