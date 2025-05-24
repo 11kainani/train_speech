@@ -65,15 +65,6 @@ const SubjectBankScreen = () => {
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
-
-    if (text.trim() === "") {
-      setFilteredData(data);
-    } else {
-      const newData = data.filter((item) =>
-        item.description.toLowerCase().includes(text.toLowerCase())
-      );
-      setFilteredData(newData);
-    }
   };
 
   const filterData = () => {

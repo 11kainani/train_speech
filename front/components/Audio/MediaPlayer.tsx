@@ -5,38 +5,33 @@ import { IconButton } from "../Button";
 import {
   Feather,
   FontAwesome6,
+  Fontisto,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import { COLORS, DIMENSIONS, durationsToSecond } from "../../utils";
-import { AudioPlayer, useAudioPlayer } from "expo-audio";
+import {  useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
-import {usePlaybackController} from "../../hook";
+import { usePlaybackController } from "../../hook";
+
 
 interface MediaPlayerProps {
   answer: Answer;
+  onDelete : (idAnswer:string)=>void;
 }
 
-const MEDIA_LOCATION = "../../assets/";
 
-const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
-
+const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete }) => {
   const audioSource = require("../../assets/wavwarehouse.mp3");
   const player = useAudioPlayer(audioSource);
-
 
   const maxDuration: number =
     player.duration || durationsToSecond(answer?.duration || "");
 
   //TODO : ALERT if the duration and answer.duration is incorrect
 
-  const { isPaused,
-    position,
-    playPause,
-    seek,
-    stop,
-    handleOnComplete,} = usePlaybackController(player);
-  
+  const { isPaused, position, playPause, seek, stop, handleOnComplete } =
+    usePlaybackController(player);
 
   const renderPausePlayButton = () => {
     if (!isPaused) {
@@ -58,11 +53,6 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
     );
   };
 
-  
-
-  
-
-  
   return (
     <View style={styles.container}>
       <MediaSlider
@@ -71,32 +61,56 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer }) => {
         value={position}
         onValueChange={seek}
         onComplete={handleOnComplete}
-      
       />
 
-      <View style={styles.mediaButton}>
+      <View style={styles.horizontalButtons}>
         <IconButton
-          onPress={() => seek(-5)}
           small={true}
+          backgroundColor={COLORS.red}
+          onPress={() => onDelete(answer?.idAnswer)}
           icon={
-            <MaterialIcons
-              name="replay-5"
+            <Feather
+              name="trash"
               size={DIMENSIONS.iconSize}
               color={COLORS.background}
             />
           }
         />
+
+        <View style={styles.mediaButton}>
+          <IconButton
+            onPress={() => seek(-5)}
+            small={true}
+            icon={
+              <MaterialIcons
+                name="replay-5"
+                size={DIMENSIONS.iconSize}
+                color={COLORS.background}
+              />
+            }
+          />
+          <IconButton
+            small={true}
+            icon={renderPausePlayButton()}
+            onPress={playPause}
+          />
+          <IconButton
+            small={true}
+            onPress={() => seek(5)}
+            icon={
+              <MaterialIcons
+                name="forward-5"
+                size={DIMENSIONS.iconSize}
+                color={COLORS.background}
+              />
+            }
+          />
+        </View>
         <IconButton
           small={true}
-          icon={renderPausePlayButton()}
-          onPress={playPause}
-        />
-        <IconButton
-          small={true}
-          onPress={() => seek(5)}
           icon={
-            <MaterialIcons
-              name="forward-5"
+            <Feather
+              name="settings"
               size={DIMENSIONS.iconSize}
               color={COLORS.background}
             />
@@ -119,7 +133,15 @@ const styles = StyleSheet.create({
   mediaButton: {
     alignSelf: "center",
     flexDirection: "row",
+  
+  },
+
+  horizontalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: DIMENSIONS.margin,
+   
   },
 });
 

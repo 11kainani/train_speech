@@ -10,13 +10,13 @@ import {
   COLORS,
   DIMENSIONS,
 } from "../../utils";
-import { subjectService } from "../../services";
+import { answerService, subjectService } from "../../services";
 import { Answer } from "../../models";
 import { MediaPlayer } from "../Audio";
 
 interface AnswerListProps {
   data: Answer[];
-  onDeleteSuccess?: (idSubject: string) => void;
+  onDeleteSuccess?: (idAnswer: string) => void;
 }
 
 const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
@@ -26,14 +26,14 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
     setExpandItemId((prev) => (prev === id ? null : id));
   };
 
-  const handleRightButtonPress = async (idSubject: string) => {
-    console.log(`Deleting subject ${idSubject}`);
+  const handleDelete = async (idAnswer: string) => {
+    console.log(`Deleting subject ${idAnswer}`);
     try {
-      await subjectService.deleteSubject(idSubject);
+      await answerService.deleteAnswer(idAnswer);
       console.log("Deleted successfully");
 
       if (onDeleteSuccess) {
-        onDeleteSuccess(idSubject);
+        onDeleteSuccess(idAnswer);
       }
     } catch (err) {
       console.error("Delete failed", err);
@@ -54,7 +54,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
         </View>
       </TouchableOpacity>
       {expandItemId === item.idAnswer && (
-        <MediaPlayer answer={item} />
+        <MediaPlayer answer={item} onDelete={handleDelete}/>
       )}
     </View>
   );

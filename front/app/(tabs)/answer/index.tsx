@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -21,19 +21,47 @@ const Answers = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  
+
   const handleSearch = (text: string) => {
     setSearchQuery(text);
 
     if (text.trim() === "") {
       setFilteredData(data);
     } else {
-      const newData = data.filter((item:Answer) =>
-        item.subject?.description.toLowerCase().includes(text.toLowerCase()) || item.review?.toLowerCase().includes(text.toLowerCase())
+      const newData = data.filter(
+        (item: Answer) =>
+          item.subject?.description
+            .toLowerCase()
+            .includes(text.toLowerCase()) ||
+          item.review?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredData(newData);
     }
   };
+
+  const onDeleteSuccess = (idAnswer: string) => {
+    setData((prev) => prev.filter((answer) => answer.idAnswer != idAnswer));
+  };
+
+  const filterData = () => {
+    let filtered = [...data];
+
+    if (searchQuery) {
+      if (searchQuery != "") {
+        filtered = filtered.filter(
+          (answer) =>
+            answer.review?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            answer.subject?.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    filterData();
+  }, [data, searchQuery]);
   return (
     <SafeAreaView style={styles.container}>
       {isloading ? (
@@ -41,13 +69,12 @@ const Answers = () => {
       ) : (
         <View style={styles.content}>
           <View style={styles.horizontalBar}>
-          <SearchBar value={searchQuery} onChangeText={handleSearch} />
-          <FilterButton onPress={() => setIsFilterModalVisible(true)} />
+            <SearchBar value={searchQuery} onChangeText={handleSearch} />
+            <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
 
-          <AnswerList data={filteredData} />
-            <View/>
-          
+          <AnswerList data={filteredData} onDeleteSuccess={onDeleteSuccess} />
+          <View />
         </View>
       )}
     </SafeAreaView>
@@ -56,16 +83,14 @@ const Answers = () => {
 
 const styles = StyleSheet.create({
   content: {
-   
     alignSelf: "center",
     width: "90%",
   },
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    
   },
-   horizontalBar: {
+  horizontalBar: {
     width: "90%",
     alignSelf: "center",
     flexDirection: "row",

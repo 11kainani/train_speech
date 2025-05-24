@@ -1,6 +1,6 @@
 import * as FileSystem from "expo-file-system";
 import { generateIdKey, secondsToFormat } from "../../utils";
-import { answerService } from "../../services";
+import { answerService } from "../api";
 import { Subject } from "../../models";
 
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
