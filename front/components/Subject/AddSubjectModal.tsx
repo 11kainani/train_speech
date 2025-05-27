@@ -42,7 +42,7 @@ const AddSubject: React.FC<AddSubjectProps> = ({
 
   const handleCreation = async () => {
     try {
-      //Add directly to data and to the list of questionsID
+      // TODO Add directly to data and to the list of questionsID
       const subject: SubjectResponse = await subjectService.createSubject(
         description
       );
@@ -112,11 +112,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 10,
   },
 
   defaultButton: {

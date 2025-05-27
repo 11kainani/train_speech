@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 0,
-    
+    paddingVertical: DIMENSIONS.paddingSmall,
   },
 
   title: {
@@ -57,12 +57,15 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     color: COLORS.textPrimary,
   },
+
   modalContent: {
     backgroundColor: COLORS.background,
-    width: responsiveWidth(90),
+    width: "90%",
     borderRadius: DIMENSIONS.radius,
-    padding: DIMENSIONS.padding,
-    justifyContent: "center",
+    paddingHorizontal: DIMENSIONS.padding,
+    paddingVertical: DIMENSIONS.paddingSmall,
+    maxHeight: "50%",
+    justifyContent: "space-evenly",
   },
 });
 
