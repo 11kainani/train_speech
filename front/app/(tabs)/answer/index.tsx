@@ -57,7 +57,12 @@ const Answers = () => {
         );
       }
     }
+
+      setFilteredData(filtered);
   };
+
+  
+
 
   useEffect(() => {
     filterData();

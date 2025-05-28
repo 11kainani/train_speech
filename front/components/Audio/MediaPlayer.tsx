@@ -1,27 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import { Answer } from "../../models";
 import { IconButton } from "../Button";
 import {
   Feather,
-  FontAwesome6,
-  Fontisto,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import { COLORS, DIMENSIONS, durationsToSecond } from "../../utils";
-import {  useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
 import { usePlaybackController } from "../../hook";
 
-
 interface MediaPlayerProps {
   answer: Answer;
-  onDelete : (idAnswer:string)=>void;
+  onDelete?: (idAnswer: string) => void;
+  onSettingsPress?: (answer: Answer)=>void;  
+  onSettingsLongPress?:  (answer: Answer) => void;
 }
 
-
-const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete }) => {
+const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete, onSettingsLongPress, onSettingsPress }) => {
   const audioSource = require("../../assets/wavwarehouse.mp3");
   const player = useAudioPlayer(audioSource);
 
@@ -67,7 +65,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete }) => {
         <IconButton
           small={true}
           backgroundColor={COLORS.red}
-          onPress={() => onDelete(answer?.idAnswer)}
+          onPress={() => onDelete?.(answer.idAnswer)}
           icon={
             <Feather
               name="trash"
@@ -106,16 +104,19 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete }) => {
             }
           />
         </View>
-        <IconButton
-          small={true}
-          icon={
-            <Feather
-              name="settings"
-              size={DIMENSIONS.iconSize}
-              color={COLORS.background}
-            />
-          }
-        />
+      
+          <IconButton
+          onPress={() => onSettingsPress?.(answer)}
+          onLongPress={() =>onSettingsLongPress?.(answer)}
+            small={true}
+            icon={
+              <Feather
+                name="settings"
+                size={DIMENSIONS.iconSize}
+                color={COLORS.background}
+              />
+            }
+          />
       </View>
     </View>
   );
@@ -133,7 +134,6 @@ const styles = StyleSheet.create({
   mediaButton: {
     alignSelf: "center",
     flexDirection: "row",
-  
   },
 
   horizontalButtons: {
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: DIMENSIONS.margin,
-   
   },
 });
 

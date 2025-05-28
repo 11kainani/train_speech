@@ -13,6 +13,7 @@ import {
 import { answerService, subjectService } from "../../services";
 import { Answer } from "../../models";
 import { MediaPlayer } from "../Audio";
+import { useRouter } from "expo-router";
 
 interface AnswerListProps {
   data: Answer[];
@@ -21,6 +22,7 @@ interface AnswerListProps {
 
 const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
   const [expandItemId, setExpandItemId] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleItemPress = (id: string) => {
     setExpandItemId((prev) => (prev === id ? null : id));
@@ -40,6 +42,28 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
     }
   };
 
+  const handleSettingsPress = (answer: Answer) => {
+    try {
+       console.log("Ha");
+        router.push({
+    pathname: "/answer/[idAnswer]",
+    params: {
+      idAnswer: answer.idAnswer.toString(),
+      file_location: answer.file_location,
+      duration: answer.duration.toString(),
+      subject: JSON.stringify(answer.subject), // If needed
+    },
+  });
+   
+    } catch (error) {
+      console.error(error);
+    }
+   
+  }; 
+
+  const handleSettingsLongPress = (answer: Answer) => {
+    console.log("longPressed");
+  }; 
   const renderItem = ({ item }: { item: Answer }) => (
     <View style={styles.container}>
       <TouchableOpacity
@@ -54,7 +78,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
         </View>
       </TouchableOpacity>
       {expandItemId === item.idAnswer && (
-        <MediaPlayer answer={item} onDelete={handleDelete}/>
+        <MediaPlayer answer={item} onDelete={handleDelete} onSettingsPress={() => handleSettingsPress(item)} onSettingsLongPress={() => handleSettingsLongPress(item)}/>
       )}
     </View>
   );

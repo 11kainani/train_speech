@@ -43,8 +43,8 @@ const MediaRecorder: React.FC<MediaRecorderProps> = ({
   const handleCancel = async () => {
     clearIntervalIfNeeded();
     setRecordTimer(0);
-    await stopRecording(false);
-
+    await stopRecording();
+    //TODO Update AnswerList 
     InteractionManager.runAfterInteractions(() => {
       router.replace("/record");
     });
