@@ -41,6 +41,7 @@ const Answers = () => {
 
   const onDeleteSuccess = (idAnswer: string) => {
     setData((prev) => prev.filter((answer) => answer.idAnswer != idAnswer));
+    //TODO Refresh page to delete selected subject and refresh answer list without deleted answer
   };
 
   const filterData = () => {

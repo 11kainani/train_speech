@@ -51,7 +51,8 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
       idAnswer: answer.idAnswer.toString(),
       file_location: answer.file_location,
       duration: answer.duration.toString(),
-      subject: JSON.stringify(answer.subject), // If needed
+      review: answer.review || "",
+      subject: JSON.stringify(answer.subject),
     },
   });
    

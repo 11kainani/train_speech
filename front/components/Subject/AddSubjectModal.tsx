@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import PopUpModal from "../Page/PopUpModal";
-import { DescriptionInput } from "../Input";
+import { ModalInput } from "../Input";
 import { DefiniteActionButton } from "../Button";
 import { COLORS, DIMENSIONS } from "../../utils";
 import {
@@ -27,18 +27,6 @@ const AddSubject: React.FC<AddSubjectProps> = ({
   onSubmit,
 }) => {
   const [isModalVisible, setModalVisible] = useState(isVisible);
-
-  const [subjectSelector, setSubjectSelector] = useState<SubjectType>(
-    SubjectType.NONE
-  );
-
-  const handleSubjectSelector = (type: SubjectType) => {
-    if (subjectSelector != type) {
-      setSubjectSelector(type);
-    } else {
-      setSubjectSelector(SubjectType.NONE);
-    }
-  };
 
   const handleCreation = async () => {
     try {
@@ -95,9 +83,10 @@ const AddSubject: React.FC<AddSubjectProps> = ({
     >
       <Text style={styles.text}>Description</Text>
       <View style={styles.underline} />
-      <DescriptionInput
-        description={description}
+      <ModalInput
+        inputText={description}
         onDescriptionChange={setDescription}
+        placeholder="Input the description"
       />
      
       

@@ -6,7 +6,7 @@ interface DefiniteActionButtonProps {
   title: string;
   buttonStyle?: object;
   textStyle?: object;
-  disable?: boolean,
+  disabled?: boolean,
   onPress?: () => void;
 }
 
@@ -15,11 +15,11 @@ const DefiniteActionButton: React.FC<DefiniteActionButtonProps> = ({
   buttonStyle: style,
   textStyle,
   onPress,
-  disable=false,
+  disabled=false,
 }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={[styles.content, style]} disabled={disable}>
+      <TouchableOpacity onPress={onPress} style={[styles.content ,style, disabled && styles.disabled]} disabled={disabled}>
         <Text style={[styles.text, textStyle]}>{title}</Text>
       </TouchableOpacity>
     </View>
@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
 
   },
+  disabled : {
+    backgroundColor: COLORS.disabled,
+  }
 });
 
 export default DefiniteActionButton;

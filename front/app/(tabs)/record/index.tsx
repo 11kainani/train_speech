@@ -70,7 +70,8 @@ export default function Record() {
     setLoading(false);
   }, [data]);
 
-  useEffect(() => {
+  useEffect(() => { 
+    setLoading(true);
     const invalidDescriptions = [
       "No description available",
       defaultDescription,
@@ -97,7 +98,7 @@ export default function Record() {
             }
           />
           <IconButton
-            disable={!validDescription}
+            disabled={!validDescription}
             onPress={handleSelectSubject}
             icon={
               <Entypo

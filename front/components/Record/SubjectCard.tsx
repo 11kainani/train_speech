@@ -10,7 +10,7 @@ interface SubjectCardProps {
 const SubjectCard: React.FC<SubjectCardProps> = ({description, small=false}) => {
     return (
         <View style={[ styles.base,small ? styles.smallContainer : styles.container]}>
-            <Text style={styles.text}>{description}</Text>
+            <Text style={[small ? styles.smallText : styles.text]}>{description}</Text>
         </View>
     )
 }
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
 
     smallContainer: {
         height: "auto",
+        minHeight: "20%",
     },
 
     text : {
@@ -39,6 +40,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign : "center",
         
+    },
+
+    smallText: {
+         fontSize: DIMENSIONS.font, 
+          fontWeight: "500",
+          textAlign : "center",
     },
 
 });

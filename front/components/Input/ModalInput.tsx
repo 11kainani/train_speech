@@ -2,9 +2,16 @@ import React from "react";
 import { SafeAreaView, TextInput, View, StyleSheet } from "react-native";
 import { COLORS, DIMENSIONS, responsiveHeight, responsiveWidth } from "../../utils";
 
-const DescriptionInput: React.FC<DescriptionInputProps> = ({description, onDescriptionChange}) => {
+interface ModalInputProps {
+    inputText : string, 
+    placeholder: string
+    onDescriptionChange : (text: string)=> void;
 
-    const [text, onChangeText] = React.useState(description||'');
+}
+
+const ModalInput: React.FC<ModalInputProps> = ({inputText: string, onDescriptionChange, placeholder}) => {
+
+    const [text, onChangeText] = React.useState(string);
 return (
 
     <SafeAreaView style= {styles.container}>
@@ -19,7 +26,7 @@ return (
             onDescriptionChange(newText);}
         }
         value={text}
-        placeholder="Input the description"
+        placeholder={placeholder}
         />
     </SafeAreaView>
 );
@@ -45,4 +52,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default DescriptionInput;
+export default ModalInput;

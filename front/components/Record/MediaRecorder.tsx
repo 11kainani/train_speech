@@ -92,7 +92,7 @@ const MediaRecorder: React.FC<MediaRecorderProps> = ({
       <View style={styles.horizontal}>
         <PanelButton
           title="Save"
-          disable={!isRecording}
+          disabled={!isRecording}
           style={styles.save}
           onPress={handleAudioRecord}
         />

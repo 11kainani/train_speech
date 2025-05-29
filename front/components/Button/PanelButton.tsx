@@ -7,22 +7,22 @@ interface PanelButtonProps {
   title: string;
   style?: object;
   onPress?: () => void;
-  disable?: boolean;
+  disabled?: boolean;
   selected?: boolean;
 }
 const PanelButton: React.FC<PanelButtonProps> = ({
   title,
   style,
   onPress,
-  disable,
+  disabled,
   selected = true,
 }) => {
   return (
     <TouchableOpacity
-      disabled={disable}
+      disabled={disabled}
       style={[
         panelStyle.panelBase,
-        disable
+        disabled
           ? panelStyle.disablePanel
           : selected
           ? panelStyle.panelSelected
@@ -35,7 +35,7 @@ const PanelButton: React.FC<PanelButtonProps> = ({
         <Text
           style={[
             panelStyle.textBase,
-            disable
+            disabled
               ? panelStyle.disableText
               : selected
               ? panelStyle.selectedText

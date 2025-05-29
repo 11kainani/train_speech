@@ -7,7 +7,7 @@ interface IconButtonProps {
   icon: React.ReactNode;
   onPress?: () => void;
   onLongPress? : () => void;
-  disable?: boolean;
+  disabled?: boolean;
   small?:boolean;
 }
 
@@ -15,18 +15,18 @@ const IconButton: React.FC<IconButtonProps> = ({
   backgroundColor,
   icon,
   onPress,
-  disable,
+  disabled,
   small=false,
   onLongPress,
 }) => {
-  const finalBackgroundColor = disable
+  const finalBackgroundColor = disabled
     ? COLORS.disabled
     : backgroundColor ?? COLORS.primary;
   return (
     <Pressable
       style={styles.roundContainer}
       onPress={onPress}
-      disabled={disable}
+      disabled={disabled}
       onLongPress={onLongPress}
     >
       <View style={[styles.content, small && styles.smallContent , { backgroundColor: finalBackgroundColor }]}>
