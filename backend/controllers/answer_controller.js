@@ -68,7 +68,7 @@ exports.createAnswer = async (req, res) => {
     };
 
     const answer = await Answer.create(answerToCreate);
-    return res.status(201).json({ answer: answer });
+    return res.status(201).json({ answer: answer, subject: subject });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
