@@ -1,11 +1,13 @@
 import { useLocalSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 import { Answer } from "../../../models";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MediaPlayer, ReviewCenter, SubjectCard } from "../../../components";
 
-interface AnswerDetailProps {}
-const AnswerDetail: React.FC<AnswerDetailProps> = () => {
+interface AnswerDetailProps {
+  handleAnswerUpdate : (answer : Answer) => void;
+}
+const AnswerDetail: React.FC<AnswerDetailProps> = ({handleAnswerUpdate}) => {
   const { idAnswer, file_location, duration, review, subject } = useLocalSearchParams();
   const parsedSubject = subject ? JSON.parse(subject as string) : null;
   const parsedAnswer: Answer = {
@@ -16,14 +18,17 @@ const AnswerDetail: React.FC<AnswerDetailProps> = () => {
     subject: parsedSubject
   }
 
+  const [answer, setAnswer] = useState<Answer>(parsedAnswer);
 
-  useEffect(() => {
-    console.log(parsedAnswer);
-  },[])
+
+   const handleReviewUpdate = (answer : Answer) => {
+      setAnswer(answer);
+      handleAnswerUpdate(parsedAnswer);
+   }
   return (
     <View>
       <SubjectCard small={true} description={parsedAnswer.subject.description} />
-      <ReviewCenter answer={parsedAnswer} />
+      <ReviewCenter answer={parsedAnswer} onReviewUpdate={handleReviewUpdate} />
       <Text>HAHAHAH</Text>
     </View>
   );

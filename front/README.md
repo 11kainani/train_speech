@@ -1,4 +1,8 @@
 
+## Libraries 
+Zustand
+
+
 ## TCP Problems with Android Studio 
 ### Presentation of the problem
 Some ptoblem may arise when try to lanuch the project in developpement mode. A lingering emulator may go on and off (namely emulator-5562) even when the emulator server is turned on and off using the following command :

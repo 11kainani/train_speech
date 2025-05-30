@@ -1,4 +1,5 @@
 // api/services/subjectService.js
+import { Answer } from "../../models";
 import { apiConfig } from "../config";
 
 const answerEndpoint = "answers";
@@ -44,6 +45,7 @@ const answerService = {
           file_location: file_location,
           duration: duration,
           idSubject: idSubject,
+          review: review,
         }),
       });
 
@@ -70,7 +72,7 @@ const answerService = {
         headers: apiConfig.headers,
       });
 
-       if (!response.ok) {
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`${response.status}-${errorData.error}`);
       }
@@ -80,6 +82,39 @@ const answerService = {
       return data;
     } catch (error) {
       console.error("Error fetching all answers:", error);
+      throw error;
+    }
+  },
+
+  patchAnswer: async (idAnswer: string, review?: string, file_location?:string, duration?:string) => {
+    try {
+      const url = answerURL;
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: apiConfig.headers,
+        body: JSON.stringify({
+          idAnswer: idAnswer, 
+          review: review,
+          file_location : file_location, 
+          duration: duration,
+        })
+      });
+
+      if (response.status === 304) {
+      console.log("No changes - Not Modified");
+      return null;
+    }
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
+      }
+
+      const data = await response.json();
+      console.log("Response Status:", data);
+      return data;
+    } catch (error) {
+      console.error("Error patching answers:", error);
       throw error;
     }
   },
