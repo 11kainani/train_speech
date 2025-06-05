@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { answerService } from "../services";
-import { Answer } from "../models";
+import { Answer, AnswerWithSubject } from "../models";
 
 interface AnswerStore {
   answers: Answer[];
   isLoading: boolean;
   setAnswers: (answers: Answer[]) => void;
-  getAnswer(idAnswer: string): Answer | undefined;
+  getAnswer(idAnswer: string): AnswerWithSubject | undefined;
   updateAnswer: (updated: Answer) => void;
   fetchAnswers: () => Promise<void>;
   deleteAnswer: (id: string) => Promise<void>;
@@ -19,11 +19,17 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
 
   setAnswers: (answers: Answer[]) => set({ answers }),
 
-  getAnswer: (id: string) => {
-    const { answers } = get();
-    return answers.find((a) => a.idAnswer === id);
-  },
+  getAnswer: (id: string): AnswerWithSubject | undefined => {
+  const { answers } = get();
+  const answer = answers.find((a) => a.idAnswer === id);
+  
+  if (!answer) return undefined;
 
+  return {
+    answer,
+    subject: answer.subject,
+  };
+},
   updateAnswer: (updated: Answer) =>
     set((state) => ({
       answers: state.answers.map((a) =>

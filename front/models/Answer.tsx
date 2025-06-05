@@ -8,3 +8,7 @@ export type Answer = {
     subject : Subject, 
 }
 
+export type AnswerWithSubject = {
+  answer: Answer;
+  subject: Subject;
+};

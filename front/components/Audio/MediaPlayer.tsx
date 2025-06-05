@@ -2,11 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import { Answer } from "../../models";
 import { IconButton } from "../Button";
-import {
-  Feather,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, DIMENSIONS, durationsToSecond } from "../../utils";
 import { useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
@@ -15,22 +11,30 @@ import { useAnswerStore } from "../../stores";
 
 interface MediaPlayerProps {
   idAnswer: string;
-  onSettingsPress?: (answer: Answer)=>void;  
-  onSettingsLongPress?:  (answer: Answer) => void;
+  onSettingsPress?: (answer: Answer) => void;
+  onSettingsLongPress?: (answer: Answer) => void;
 }
 
-const MediaPlayer: React.FC<MediaPlayerProps> = ({ idAnswer, onSettingsLongPress, onSettingsPress }) => {
-  const { deleteAnswer} = useAnswerStore();
+const MediaPlayer: React.FC<MediaPlayerProps> = ({
+  idAnswer,
+  onSettingsLongPress,
+  onSettingsPress,
+}) => {
+  const { deleteAnswer } = useAnswerStore();
+
   const audioSource = require("../../assets/wavwarehouse.mp3");
-  const player = useAudioPlayer(audioSource);
 
-  const answer = useAnswerStore().getAnswer(idAnswer);
-
-  if(!answer)
-  {
+  const answerRequest = useAnswerStore().getAnswer(idAnswer);
+  const answer = answerRequest?.answer;
+  if (!answer) {
     //TODO show alert that answer wasn"t found
     return;
   }
+
+ 
+  const player = useAudioPlayer(answer.file_location);
+  player.volume = 10;
+  console.log(player);
   const maxDuration: number =
     player.duration || durationsToSecond(answer.duration || "");
 
@@ -73,9 +77,10 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ idAnswer, onSettingsLongPress
         <IconButton
           small={true}
           backgroundColor={COLORS.red}
-          onPress={() =>{
+          onPress={() => {
             console.log(answer.idAnswer);
-             deleteAnswer(answer.idAnswer)}}
+            deleteAnswer(answer.idAnswer);
+          }}
           icon={
             <Feather
               name="trash"
@@ -114,19 +119,19 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ idAnswer, onSettingsLongPress
             }
           />
         </View>
-      
-          <IconButton
+
+        <IconButton
           onPress={() => onSettingsPress?.(answer)}
-          onLongPress={() =>onSettingsLongPress?.(answer)}
-            small={true}
-            icon={
-              <Feather
-                name="settings"
-                size={DIMENSIONS.iconSize}
-                color={COLORS.background}
-              />
-            }
-          />
+          onLongPress={() => onSettingsLongPress?.(answer)}
+          small={true}
+          icon={
+            <Feather
+              name="settings"
+              size={DIMENSIONS.iconSize}
+              color={COLORS.background}
+            />
+          }
+        />
       </View>
     </View>
   );

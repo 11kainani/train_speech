@@ -1,14 +1,12 @@
 import { View, StyleSheet, Text, InteractionManager } from "react-native";
 import { useRouter } from "expo-router";
 import { Entypo, Feather } from "@expo/vector-icons";
-import * as FileSystem from "expo-file-system";
 
 import { IconButton, PanelButton, SmallConfirmButton } from "../Button";
 import { COLORS, DIMENSIONS, secondsToFormat } from "../../utils";
 import { useRecordAudio } from "../../hook";
 import { Subject } from "../../models";
 
-const RECORD_DIR = FileSystem.documentDirectory + "recording/";
 const MAX_RECORD_TIME = 300;
 
 interface MediaRecorderProps {

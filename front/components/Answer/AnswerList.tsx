@@ -74,8 +74,10 @@ const AnswerList: React.FC<AnswerListProps> = ({ onDeleteSuccess }) => {
       )}
     </View>
   );
+   //TODO List empty so show a message : same for subject list
   return (
     <View style={styles.segmentation}>
+     
       <FlatList
         data={answers}
         keyExtractor={(item) => item.idAnswer}
