@@ -28,24 +28,20 @@ const answerService = {
     }
   },
 
-  createAnswer: async (
-    idAnswer: string,
-    file_location: string,
-    duration: string,
-    idSubject: string,
-    review?: string
-  ) => {
+
+  createAnswer: async (answer:Answer) =>
+  {
     try {
       const url = answerURL;
       const response = await fetch(url, {
         method: "POST",
         headers: apiConfig.headers,
         body: JSON.stringify({
-          idAnswer: idAnswer,
-          file_location: file_location,
-          duration: duration,
-          idSubject: idSubject,
-          review: review,
+          idAnswer: answer.idAnswer,
+          file_location: answer.file_location,
+          duration: answer.duration,
+          idSubject: answer.subject.idSubject,
+          review: answer.review,
         }),
       });
 

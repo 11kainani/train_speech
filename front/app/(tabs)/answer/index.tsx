@@ -14,11 +14,12 @@ import { FilterButton, SearchBar } from "../../../components";
 import { DIMENSIONS, responsiveHeight } from "../../../utils";
 import { Ionicons } from "@expo/vector-icons";
 import { AnswerList } from "../../../components";
+import { useAnswerStore } from "../../../stores";
 
 const Answers = () => {
-  const [isloading, setLoading] = useState(false);
-  const { data, setData } = useAnswers(setLoading);
-  const [filteredData, setFilteredData] = useState(data);
+ 
+  const { answers, fetchAnswers, deleteAnswer , isLoading } = useAnswerStore();
+  const [filteredData, setFilteredData] = useState(answers);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
@@ -26,9 +27,9 @@ const Answers = () => {
     setSearchQuery(text);
 
     if (text.trim() === "") {
-      setFilteredData(data);
+      setFilteredData(answers);
     } else {
-      const newData = data.filter(
+      const newData = answers.filter(
         (item: Answer) =>
           item.subject?.description
             .toLowerCase()
@@ -40,12 +41,13 @@ const Answers = () => {
   };
 
   const onDeleteSuccess = (idAnswer: string) => {
-    setData((prev) => prev.filter((answer) => answer.idAnswer != idAnswer));
+    //setData((prev) => prev.filter((answer) => answer.idAnswer != idAnswer));
+    
     //TODO Refresh page to delete selected subject and refresh answer list without deleted answer
   };
 
   const filterData = () => {
-    let filtered = [...data];
+    let filtered = [...answers];
 
     if (searchQuery) {
       if (searchQuery != "") {
@@ -59,18 +61,20 @@ const Answers = () => {
       }
     }
 
-      setFilteredData(filtered);
+    setFilteredData(filtered);
   };
 
-  
-
+  useEffect(() => {
+    fetchAnswers(); // Optionally set a separate loading state here if needed
+    console.log("From Store", answers);
+  }, []);
 
   useEffect(() => {
     filterData();
-  }, [data, searchQuery]);
+  }, [answers, searchQuery]);
   return (
     <SafeAreaView style={styles.container}>
-      {isloading ? (
+      {isLoading ? (
         <ActivityIndicator />
       ) : (
         <View style={styles.content}>
@@ -79,7 +83,7 @@ const Answers = () => {
             <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
 
-          <AnswerList data={filteredData} onDeleteSuccess={onDeleteSuccess} />
+          <AnswerList onDeleteSuccess={onDeleteSuccess} />
           <View />
         </View>
       )}

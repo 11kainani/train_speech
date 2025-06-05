@@ -64,7 +64,7 @@ export default function Record() {
       handleRandomizeSubject();
     } else {
       setRandomDescription(
-        "You have no subject, Go to Subject to create some !"
+       data ? "You have no subject, Go to Subject to create some !" : "Click shuffle (red) button to view a description !"
       );
     }
     setLoading(false);

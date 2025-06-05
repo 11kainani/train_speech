@@ -8,6 +8,8 @@ const apiConfig = {
     'Content-Type': 'application/json',
     'x-api-key': API_KEY,
   },
+
+  
 };
 
 export default apiConfig;

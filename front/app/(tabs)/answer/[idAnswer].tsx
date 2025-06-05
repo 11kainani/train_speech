@@ -3,33 +3,46 @@ import { View, Text } from "react-native";
 import { Answer } from "../../../models";
 import { useEffect, useState } from "react";
 import { MediaPlayer, ReviewCenter, SubjectCard } from "../../../components";
+import { useAnswerStore } from "../../../stores";
 
 interface AnswerDetailProps {
-  handleAnswerUpdate : (answer : Answer) => void;
+  handleAnswerUpdate: (answer: Answer) => void;
 }
-const AnswerDetail: React.FC<AnswerDetailProps> = ({handleAnswerUpdate}) => {
-  const { idAnswer, file_location, duration, review, subject } = useLocalSearchParams();
-  const parsedSubject = subject ? JSON.parse(subject as string) : null;
-  const parsedAnswer: Answer = {
-    idAnswer : idAnswer as string, 
-    file_location: file_location  as string, 
-    duration: duration as string ,
-    review: review as string,
-    subject: parsedSubject
+const AnswerDetail: React.FC<AnswerDetailProps> = ({ handleAnswerUpdate }) => {
+  const { idAnswer } = useLocalSearchParams<{ idAnswer: string }>();
+  const answer = useAnswerStore().getAnswer(idAnswer);
+  const [localAnswer, setLocalAnswer] = useState<Answer | null>(null);
+
+  useEffect(() => {
+    if (answer) {
+      setLocalAnswer(answer);
+    } else {
+      //TODO ALERT
+     // Alert.alert("Answer Not Found", `No answer found for id: ${idAnswer}`);
+    }
+  }, [answer, idAnswer]);
+
+  if (!localAnswer) {
+    return (
+      <View>
+        <Text>ID Answer hasn't been found</Text>
+      </View>
+    );
   }
 
-  const [answer, setAnswer] = useState<Answer>(parsedAnswer);
+  const handleReviewUpdate = (updatedAnswer: Answer) => {
+    setLocalAnswer(updatedAnswer);
+    handleAnswerUpdate(updatedAnswer);
+  };
 
-
-   const handleReviewUpdate = (answer : Answer) => {
-      setAnswer(answer);
-      handleAnswerUpdate(parsedAnswer);
-   }
   return (
     <View>
-      <SubjectCard small={true} description={parsedAnswer.subject.description} />
-      <ReviewCenter answer={parsedAnswer} onReviewUpdate={handleReviewUpdate} />
-      <Text>HAHAHAH</Text>
+      <SubjectCard
+        small={true}
+        description={localAnswer.subject.description}
+      />
+      <ReviewCenter answer={localAnswer} onReviewUpdate={handleReviewUpdate} />
+    
     </View>
   );
 };

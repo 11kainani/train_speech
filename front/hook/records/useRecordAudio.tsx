@@ -1,10 +1,11 @@
 import { Alert } from "react-native";
-import { ensureRecordingDirExists } from "../../utils";
+import { ensureRecordingDirExists, generateIdKey, secondsToFormat } from "../../utils";
 import { useEffect, useRef, useState } from "react";
 import { AudioModule, RecordingPresets, useAudioRecorder } from "expo-audio";
 import * as FileSystem from "expo-file-system";
-import { Subject } from "../../models";
+import { Answer, Subject } from "../../models";
 import { saveRecording } from "../../services";
+import { useAnswerStore } from "../../stores";
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
 const MAX_RECORD_TIME = 300;
 
@@ -14,6 +15,7 @@ export const useRecordAudio = (subject: Subject) => {
   const [isPaused, setIsPaused] = useState(false);
   const [recordTimer, setRecordTimer] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const {createAnswer} = useAnswerStore();
 
   useEffect(() => {
     (async () => {
@@ -29,6 +31,7 @@ export const useRecordAudio = (subject: Subject) => {
   }, []);
 
   const stopRecording = async (save: boolean = true) => {
+
     if (audioRecorder.isRecording) {
       await audioRecorder.stop();
     }
@@ -60,7 +63,28 @@ export const useRecordAudio = (subject: Subject) => {
           return;
         }
 
-        await saveRecording(uri, subject, recordTimer);
+        //TODO Orginize the saving process so it is not done directly here but in a pure fonction then use store
+        const idAnswer = generateIdKey();
+        const fileName = `recording-${idAnswer}.m4a`;
+        const newPath = RECORD_DIR + fileName;
+
+        await FileSystem.copyAsync({
+          from: uri,
+          to: newPath,
+        });
+
+        console.log("Recording saved to:", newPath);
+        console.log("Description", subject);
+
+        const answerToCreate: Answer = {
+          idAnswer: idAnswer,
+          duration: secondsToFormat(recordTimer),
+          subject: subject,
+          file_location: newPath,
+        };
+        await createAnswer(answerToCreate);
+
+     
       } catch (error) {
         console.error("Error while copying recording:", error);
       }
@@ -127,3 +151,4 @@ export const useRecordAudio = (subject: Subject) => {
     stopRecording,
   };
 };
+

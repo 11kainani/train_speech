@@ -6,22 +6,20 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import {
-  COLORS,
-  DIMENSIONS,
-} from "../../utils";
+import { COLORS, DIMENSIONS } from "../../utils";
 import { answerService, subjectService } from "../../services";
 import { Answer } from "../../models";
 import { MediaPlayer } from "../Audio";
 import { useRouter } from "expo-router";
+import { useAnswerStore } from "../../stores";
 
 interface AnswerListProps {
-  data: Answer[];
   onDeleteSuccess?: (idAnswer: string) => void;
 }
 
-const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
+const AnswerList: React.FC<AnswerListProps> = ({ onDeleteSuccess }) => {
   const [expandItemId, setExpandItemId] = useState<string | null>(null);
+  const { answers, deleteAnswer } = useAnswerStore();
   const router = useRouter();
 
   const handleItemPress = (id: string) => {
@@ -31,12 +29,7 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
   const handleDelete = async (idAnswer: string) => {
     console.log(`Deleting subject ${idAnswer}`);
     try {
-      await answerService.deleteAnswer(idAnswer);
-      console.log("Deleted successfully");
-
-      if (onDeleteSuccess) {
-        onDeleteSuccess(idAnswer);
-      }
+      deleteAnswer(idAnswer);
     } catch (err) {
       console.error("Delete failed", err);
     }
@@ -44,27 +37,21 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
 
   const handleSettingsPress = (answer: Answer) => {
     try {
-       console.log("Ha");
-        router.push({
-    pathname: "/answer/[idAnswer]",
-    params: {
-      idAnswer: answer.idAnswer.toString(),
-      file_location: answer.file_location,
-      duration: answer.duration.toString(),
-      review: answer.review || "",
-      subject: JSON.stringify(answer.subject),
-    },
-  });
-   
+    
+      router.push({
+        pathname: "/answer/[idAnswer]",
+        params: {
+          idAnswer: answer.idAnswer,
+        },
+      });
     } catch (error) {
       console.error(error);
     }
-   
-  }; 
+  };
 
   const handleSettingsLongPress = (answer: Answer) => {
     console.log("longPressed");
-  }; 
+  };
   const renderItem = ({ item }: { item: Answer }) => (
     <View style={styles.container}>
       <TouchableOpacity
@@ -79,14 +66,18 @@ const AnswerList: React.FC<AnswerListProps> = ({ data, onDeleteSuccess }) => {
         </View>
       </TouchableOpacity>
       {expandItemId === item.idAnswer && (
-        <MediaPlayer answer={item} onDelete={handleDelete} onSettingsPress={() => handleSettingsPress(item)} onSettingsLongPress={() => handleSettingsLongPress(item)}/>
+        <MediaPlayer
+          idAnswer={item.idAnswer}
+          onSettingsPress={() => handleSettingsPress(item)}
+          onSettingsLongPress={() => handleSettingsLongPress(item)}
+        />
       )}
     </View>
   );
   return (
     <View style={styles.segmentation}>
       <FlatList
-        data={data}
+        data={answers}
         keyExtractor={(item) => item.idAnswer}
         renderItem={renderItem}
         persistentScrollbar={true}
@@ -116,7 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: DIMENSIONS.border,
     borderRadius: DIMENSIONS.radius,
     marginVertical: DIMENSIONS.marginSmall,
-    paddingVertical : DIMENSIONS.marginSmall,
+    paddingVertical: DIMENSIONS.marginSmall,
   },
 
   content: {

@@ -11,20 +11,28 @@ import { COLORS, DIMENSIONS, durationsToSecond } from "../../utils";
 import { useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
 import { usePlaybackController } from "../../hook";
+import { useAnswerStore } from "../../stores";
 
 interface MediaPlayerProps {
-  answer: Answer;
-  onDelete?: (idAnswer: string) => void;
+  idAnswer: string;
   onSettingsPress?: (answer: Answer)=>void;  
   onSettingsLongPress?:  (answer: Answer) => void;
 }
 
-const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete, onSettingsLongPress, onSettingsPress }) => {
+const MediaPlayer: React.FC<MediaPlayerProps> = ({ idAnswer, onSettingsLongPress, onSettingsPress }) => {
+  const { deleteAnswer} = useAnswerStore();
   const audioSource = require("../../assets/wavwarehouse.mp3");
   const player = useAudioPlayer(audioSource);
 
+  const answer = useAnswerStore().getAnswer(idAnswer);
+
+  if(!answer)
+  {
+    //TODO show alert that answer wasn"t found
+    return;
+  }
   const maxDuration: number =
-    player.duration || durationsToSecond(answer?.duration || "");
+    player.duration || durationsToSecond(answer.duration || "");
 
   //TODO : ALERT if the duration and answer.duration is incorrect
 
@@ -65,7 +73,9 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ answer, onDelete, onSettingsL
         <IconButton
           small={true}
           backgroundColor={COLORS.red}
-          onPress={() => onDelete?.(answer.idAnswer)}
+          onPress={() =>{
+            console.log(answer.idAnswer);
+             deleteAnswer(answer.idAnswer)}}
           icon={
             <Feather
               name="trash"
