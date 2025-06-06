@@ -10,17 +10,17 @@ interface AnswerDetailProps {
 }
 const AnswerDetail: React.FC<AnswerDetailProps> = ({ handleAnswerUpdate }) => {
   const { idAnswer } = useLocalSearchParams<{ idAnswer: string }>();
-  const answer = useAnswerStore().getAnswer(idAnswer);
+  const answerWithSubject = useAnswerStore().getAnswer(idAnswer);
   const [localAnswer, setLocalAnswer] = useState<Answer | null>(null);
 
   useEffect(() => {
-    if (answer) {
-      setLocalAnswer(answer);
+    if (answerWithSubject) {
+      setLocalAnswer(answerWithSubject.answer);
     } else {
       //TODO ALERT
      // Alert.alert("Answer Not Found", `No answer found for id: ${idAnswer}`);
     }
-  }, [answer, idAnswer]);
+  }, [answerWithSubject, idAnswer]);
 
   if (!localAnswer) {
     return (
