@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { AudioModule, RecordingPresets, useAudioRecorder } from "expo-audio";
 import * as FileSystem from "expo-file-system";
 import { Answer, Subject } from "../../models";
-import { saveRecording } from "../../services";
 import { useAnswerStore } from "../../stores";
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
 const MAX_RECORD_TIME = 300;

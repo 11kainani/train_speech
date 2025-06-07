@@ -8,7 +8,10 @@ import { useAudioPlayer } from "expo-audio";
 import { MediaSlider } from "../Display";
 import { usePlaybackController } from "../../hook";
 import { useAnswerStore } from "../../stores";
+import { answerService } from "../../services";
 
+
+//TODO Add a buffer so that when the video is loading it is shown
 interface MediaPlayerProps {
   idAnswer: string;
   onSettingsPress?: (answer: Answer) => void;
@@ -22,8 +25,12 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
 }) => {
   const { deleteAnswer } = useAnswerStore();
 
-  const audioSource = require("../../assets/wavwarehouse.mp3");
-
+  const handleDeleteAnswer = async (idAnswer : string) => {
+     const response = await answerService.deleteAnswer(idAnswer);
+      if (response) {
+        deleteAnswer(idAnswer);
+  }
+  }
   const answerRequest = useAnswerStore().getAnswer(idAnswer);
   const answer = answerRequest?.answer;
   if (!answer) {
@@ -33,8 +40,8 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
 
  
   const player = useAudioPlayer(answer.file_location);
-  player.volume = 10;
-  console.log(player);
+  player.volume = 99;
+
   const maxDuration: number =
     player.duration || durationsToSecond(answer.duration || "");
 
@@ -54,6 +61,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
       );
     }
 
+  
     return (
       <Feather
         name="play-circle"
@@ -77,10 +85,9 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
         <IconButton
           small={true}
           backgroundColor={COLORS.red}
-          onPress={() => {
-            console.log(answer.idAnswer);
-            deleteAnswer(answer.idAnswer);
-          }}
+          onPress={() =>
+            handleDeleteAnswer(idAnswer)
+          }
           icon={
             <Feather
               name="trash"

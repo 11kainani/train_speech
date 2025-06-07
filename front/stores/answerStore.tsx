@@ -20,16 +20,16 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
   setAnswers: (answers: Answer[]) => set({ answers }),
 
   getAnswer: (id: string): AnswerWithSubject | undefined => {
-  const { answers } = get();
-  const answer = answers.find((a) => a.idAnswer === id);
-  
-  if (!answer) return undefined;
+    const { answers } = get();
+    const answer = answers.find((a) => a.idAnswer === id);
 
-  return {
-    answer,
-    subject: answer.subject,
-  };
-},
+    if (!answer) return undefined;
+
+    return {
+      answer,
+      subject: answer.subject,
+    };
+  },
   updateAnswer: (updated: Answer) =>
     set((state) => ({
       answers: state.answers.map((a) =>
@@ -51,37 +51,16 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
   },
 
   deleteAnswer: async (id: string) => {
-    try {
-      const response = await answerService.deleteAnswer(id);
-      if (response) {
-        console.log("Answer deleted successfully");
-        set((state) => ({
-          answers: state.answers.filter((a) => a.idAnswer !== id),
-        }));
-      } else {
-        console.warn("Delete request returned no confirmation");
-      }
-    } catch (error) {
-      console.error("Failed to delete answer", error);
-      // TODO: Show toast or alert for error
-    }
+    console.log("Answer deleted successfully");
+    set((state) => ({
+      answers: state.answers.filter((a) => a.idAnswer !== id),
+    }));
   },
 
   createAnswer: async (newAnswer: Answer) => {
-    try {
-      console.log("Crrrr", newAnswer);
-      const created = await answerService.createAnswer(newAnswer);
-      if (created) {
-        set((state) => ({
-          answers: [...state.answers, created],
-        }));
-        console.log("Answer added successfully");
-      } else {
-        console.warn("API did not return a valid answer object");
-      }
-    } catch (error) {
-      console.error("Failed to add answer", error);
-      // TODO: Add toast/alert here
-    }
+    set((state) => ({
+      answers: [...state.answers, newAnswer],
+    }));
+    console.log("Answer added successfully");
   },
 }));

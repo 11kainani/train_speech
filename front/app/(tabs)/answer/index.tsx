@@ -18,7 +18,7 @@ import { useAnswerStore } from "../../../stores";
 
 const Answers = () => {
  
-  const { answers, fetchAnswers, deleteAnswer , isLoading } = useAnswerStore();
+  const { answers, fetchAnswers , isLoading } = useAnswerStore();
   const [filteredData, setFilteredData] = useState(answers);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);

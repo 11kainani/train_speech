@@ -12,7 +12,7 @@ const AnswerDetail: React.FC<AnswerDetailProps> = ({ handleAnswerUpdate }) => {
   const { idAnswer } = useLocalSearchParams<{ idAnswer: string }>();
   const answerWithSubject = useAnswerStore().getAnswer(idAnswer);
   const [localAnswer, setLocalAnswer] = useState<Answer | null>(null);
-
+const updateAnswer = useAnswerStore((state) => state.updateAnswer); 
   useEffect(() => {
     if (answerWithSubject) {
       setLocalAnswer(answerWithSubject.answer);
@@ -32,7 +32,7 @@ const AnswerDetail: React.FC<AnswerDetailProps> = ({ handleAnswerUpdate }) => {
 
   const handleReviewUpdate = (updatedAnswer: Answer) => {
     setLocalAnswer(updatedAnswer);
-    handleAnswerUpdate(updatedAnswer);
+    updateAnswer(updatedAnswer);
   };
 
   return (

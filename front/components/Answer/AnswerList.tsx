@@ -19,25 +19,16 @@ interface AnswerListProps {
 
 const AnswerList: React.FC<AnswerListProps> = ({ onDeleteSuccess }) => {
   const [expandItemId, setExpandItemId] = useState<string | null>(null);
-  const { answers, deleteAnswer } = useAnswerStore();
+  const { answers } = useAnswerStore();
   const router = useRouter();
 
   const handleItemPress = (id: string) => {
     setExpandItemId((prev) => (prev === id ? null : id));
   };
 
-  const handleDelete = async (idAnswer: string) => {
-    console.log(`Deleting subject ${idAnswer}`);
-    try {
-      deleteAnswer(idAnswer);
-    } catch (err) {
-      console.error("Delete failed", err);
-    }
-  };
 
   const handleSettingsPress = (answer: Answer) => {
     try {
-    
       router.push({
         pathname: "/answer/[idAnswer]",
         params: {
@@ -74,10 +65,9 @@ const AnswerList: React.FC<AnswerListProps> = ({ onDeleteSuccess }) => {
       )}
     </View>
   );
-   //TODO List empty so show a message : same for subject list
+  //TODO List empty so show a message : same for subject list
   return (
     <View style={styles.segmentation}>
-     
       <FlatList
         data={answers}
         keyExtractor={(item) => item.idAnswer}
