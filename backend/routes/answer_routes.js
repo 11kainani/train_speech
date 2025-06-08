@@ -17,11 +17,7 @@ const answerController = require('../controllers/answer_controller');
  */
 router.post('/', answerController.createAnswer);
 
-/**
- * @description Delete a answer
- * @route DELETE /delete
- */
-router.delete('/:idAnswer',answerController.deleteAnswer);
+
 
 /**
  * @description Update a field for an answer
@@ -34,6 +30,13 @@ router.patch('/', answerController.updateAnswer);
  * @route GET /
  */
 router.get('/',answerController.getAllAnswers);
+
+router.get('/days/:days',answerController.getAllAnswersFromXDays);
+/**
+ * @description Delete a answer
+ * @route DELETE /delete
+ */
+router.delete('/:idAnswer',answerController.deleteAnswer);
 
 /**
  * @description Retrieve an answer by its ID

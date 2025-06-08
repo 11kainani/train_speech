@@ -6,6 +6,8 @@ export type Answer = {
     duration: string,
     review?: string, 
     subject : Subject, 
+    createdAt? : string, 
+    updatedAt? : string,
 }
 
 export type AnswerWithSubject = {

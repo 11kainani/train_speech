@@ -5,12 +5,12 @@ Zustand
 
 ## TCP Problems with Android Studio 
 ### Presentation of the problem
-Some ptoblem may arise when try to lanuch the project in developpement mode. A lingering emulator may go on and off (namely emulator-5562) even when the emulator server is turned on and off using the following command :
+Some ptoblem may arise when try to lanuch the project in developpement mode. A lingering emulator may go on and off (namely emulator-xxxx) even when the emulator server is turned on and off using the following command :
 ```bash
 adb kill-server 
 adb start serverd
 ```
-When checking to se the list of emulator, (emulator-5562) will cerntainly appears as offline but this then makes the machine actively refused the connection (for unknown reasons). 
+When checking to se the list of emulator, (emulator-xxxx) will cerntainly appears as offline but this then makes the machine actively refused the connection (for unknown reasons). 
 ```bash 
 # Show the emulators and connected devices
 adb devices

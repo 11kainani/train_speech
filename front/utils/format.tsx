@@ -16,3 +16,19 @@ export function secondsToFormat(duration: number): string {
 
   return `${minutes}:${paddedSeconds}`;
 }
+
+export const getPastXDays = (xDays: number): string[]=> {
+  if (xDays > 30 || xDays < 1) {
+    console.error("X days should be between 1 and 30");
+    return [];
+  }
+  const dates: string[] = [];
+  for (let i = 0; i < xDays; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+
+    const formatted = date.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    dates.push(formatted);
+  }
+  return dates;
+};

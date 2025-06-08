@@ -3,7 +3,7 @@ import { Answer } from "../../models";
 import { apiConfig } from "../config";
 
 const answerEndpoint = "answers";
-const answerURL = `${apiConfig.baseURL}/${answerEndpoint}`;
+const answerURL = `${apiConfig.baseURL}/${answerEndpoint}/`;
 
 const answerService = {
   getAnswers: async () => {
@@ -28,9 +28,7 @@ const answerService = {
     }
   },
 
-
-  createAnswer: async (answer:Answer) =>
-  {
+  createAnswer: async (answer: Answer) => {
     try {
       const url = answerURL;
       const response = await fetch(url, {
@@ -60,7 +58,7 @@ const answerService = {
   },
 
   deleteAnswer: async (idAnswer: string) => {
-    const url = answerURL + "/" + idAnswer;
+    const url = answerURL + idAnswer;
 
     try {
       const response = await fetch(url, {
@@ -82,25 +80,30 @@ const answerService = {
     }
   },
 
-  patchAnswer: async (idAnswer: string, review?: string, file_location?:string, duration?:string) => {
+  patchAnswer: async (
+    idAnswer: string,
+    review?: string,
+    file_location?: string,
+    duration?: string
+  ) => {
     try {
       const url = answerURL;
       const response = await fetch(url, {
         method: "PATCH",
         headers: apiConfig.headers,
         body: JSON.stringify({
-          idAnswer: idAnswer, 
+          idAnswer: idAnswer,
           review: review,
-          file_location : file_location, 
+          file_location: file_location,
           duration: duration,
-        })
+        }),
       });
 
       if (response.status === 304) {
-      console.log("No changes - Not Modified");
-      return null;
-    }
-  
+        console.log("No changes - Not Modified");
+        return null;
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`${response.status}-${errorData.error}`);
@@ -111,6 +114,28 @@ const answerService = {
       return data;
     } catch (error) {
       console.error("Error patching answers:", error);
+      throw error;
+    }
+  },
+
+  //TODO test if it is working and switch to this is statemanagment is taking too long
+  getAnswerFromXDays: async (days: number) => {
+    try {
+      const url = answerURL + "days/" + days;
+      const response = await fetch(url, {
+        headers: apiConfig.headers,
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${response.status}-${errorData.error}`);
+      }
+      const data = await response.json();
+      console.log("Response Status:", data);
+      return data;
+    } catch (error) {
+      console.error("Error fecthing answers", error);
       throw error;
     }
   },

@@ -1,6 +1,8 @@
 const { Answer, Subject } = require("../models");
 const crypto = require("crypto");
 const subject = require("../models/subject");
+const { Op } = require("sequelize");
+
 
 /**
  * @module controller/answer_controller
@@ -224,7 +226,7 @@ exports.getAllAnswers = async (req, res) => {
     });
 
     if (!answers || answers.length === 0) {
-      return res.status(404).json({ error: "No answers found" });
+      return res.status(204).json({ message: "No answers found" });
     }
 
     for (let answer in answers) {
@@ -233,6 +235,48 @@ exports.getAllAnswers = async (req, res) => {
     }
 
     return res.status(200).json({ answers });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+/**
+ * @route GET /answers/from/:days
+ * @description Retrieve all answers created in the last X days
+ * @param {string} req.params.days - Number of days in the past to filter answers by
+ * @returns {Object} 200 - List of recent answers
+ * @returns {Object} 400 - Invalid input or no answers found
+ * @returns {Object} 500 - Internal server error
+ */
+exports.getAllAnswersFromXDays = async (req, res) => {
+  try {
+    const { days } = req.params;
+
+    const daysInt = parseInt(days, 10);
+    if (isNaN(daysInt)) {
+      return res.status(400).json({ error: "Days must be an integer" });
+    }
+
+    if (daysInt > 30 || daysInt <= 0) {
+      return res.status(400).json({ error: "Days must be between 1 and 30" });
+    }
+
+    const xDaysAgo = new Date();
+    xDaysAgo.setDate(xDaysAgo.getDate() - daysInt);
+
+    const recentAnswers = await Answer.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: xDaysAgo,
+        },
+      },
+    });
+
+    if (!recentAnswers || recentAnswers.length === 0) {
+      return res.status(404).json({ error: "No answers found for this period" });
+    }
+
+    return res.status(200).json({ recentAnswers });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
