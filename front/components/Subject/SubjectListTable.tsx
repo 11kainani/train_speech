@@ -18,18 +18,21 @@ import { subjectService } from "../../services";
 import { SmallConfirmButton } from "../Button";
 import { Subject } from "../../models";
 import { useRouter } from "expo-router";
+import { useSubjectStore } from "../../stores";
 
 interface SubjectListTableProps {
   data: Subject[];
-  onDeleteSuccess?: (idSubject: string) => void;
+
 }
 
 const SubjectListTable: React.FC<SubjectListTableProps> = ({
   data,
-  onDeleteSuccess,
+
 }) => {
   const router = useRouter();
+ const {subjects, deleteSubject} = useSubjectStore();
   const handleItemPress = (itemName: string) => {
+    //TODO : Create Subject detail page when click
     console.log(itemName);
   };
 
@@ -41,11 +44,8 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
     console.log(`Deleting subject ${idSubject}`);
     try {
       await subjectService.deleteSubject(idSubject);
-      console.log("Deleted successfully");
-
-      if (onDeleteSuccess) {
-        onDeleteSuccess(idSubject);
-      }
+      deleteSubject(idSubject);
+      
     } catch (err) {
       console.error("Delete failed", err);
     }
@@ -95,7 +95,7 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
   return (
     <View style={styles.segmentation}>
       <FlatList
-        data={data}
+        data={subjects}
         keyExtractor={({ idSubject }) => idSubject}
         renderItem={renderItem}
         persistentScrollbar={true}

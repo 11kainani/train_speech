@@ -57,11 +57,7 @@ const SubjectBankScreen = () => {
     setData((prevData) => [...prevData, createdSubject]);
   };
 
-  const removeSubjectFromData = (subjectId: string) => {
-    setData((prev) =>
-      prev.filter((subject) => subject.idSubject !== subjectId)
-    );
-  };
+  
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -131,7 +127,6 @@ const SubjectBankScreen = () => {
 
           <SubjectListTable
             data={filteredData}
-            onDeleteSuccess={removeSubjectFromData}
           />
 
           <DefiniteActionButton
@@ -146,7 +141,7 @@ const SubjectBankScreen = () => {
         onClose={() => setPopUpVisible(false)}
         description={description}
         setDescription={setDescription}
-        onSubmit={handleSubjectCreated}
+      
       ></AddSubjectModal>
       <FilterPanel
         isVisible={isFilterModalVisible}

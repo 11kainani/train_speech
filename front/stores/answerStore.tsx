@@ -41,7 +41,7 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
     set({ isLoading: true });
     try {
       const response = await answerService.getAnswers();
-      set({ answers: response.answers }); // ✅ Make sure this matches your actual API shape
+      set({ answers: response.answers });
     } catch (error) {
       console.error("Failed to fetch answers", error);
       // TODO: Show toast or alert for error
@@ -51,7 +51,6 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
   },
 
   deleteAnswer: async (id: string) => {
-    console.log("Answer deleted successfully");
     set((state) => ({
       answers: state.answers.filter((a) => a.idAnswer !== id),
     }));

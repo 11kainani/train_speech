@@ -11,7 +11,8 @@ const SevenDaysList = () => {
     if (answers.length == 0) {
       fetchAnswers();
     }
-  });
+  },[]);
+  
   const past7Days = getPastXDays(7);
   const countByDate = past7Days.map((dateStr) => {
     const dayAnswers = answers.filter((answer) => {

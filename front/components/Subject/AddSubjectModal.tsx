@@ -4,19 +4,15 @@ import PopUpModal from "../Page/PopUpModal";
 import { ModalInput } from "../Input";
 import { DefiniteActionButton } from "../Button";
 import { COLORS, DIMENSIONS } from "../../utils";
-import {
-  SubjectType,
-  Subject,
-  SubjectResponse,
-} from "../../models/Subject";
+import { SubjectType, Subject, SubjectResponse } from "../../models/Subject";
 import { subjectService } from "../../services";
+import { useSubjectStore } from "../../stores";
 
 interface AddSubjectProps {
   isVisible: boolean;
   onClose: () => void;
   description: string;
   setDescription: (text: string) => void;
-  onSubmit: (Subject: Subject) => void;
 }
 
 const AddSubject: React.FC<AddSubjectProps> = ({
@@ -24,33 +20,14 @@ const AddSubject: React.FC<AddSubjectProps> = ({
   onClose,
   description,
   setDescription,
-  onSubmit,
 }) => {
   const [isModalVisible, setModalVisible] = useState(isVisible);
+  const { createSubject } = useSubjectStore();
 
-  const handleCreation = async () => {
-    try {
-      // TODO Add directly to data and to the list of questionsID
-      const subject: SubjectResponse = await subjectService.createSubject(
-        description
-      );
-
-      if (!subject) {
-        throw new Error("Invalid response from createSubject.");
-      }
-      setDescription("");
-      onClose();
-      return subject.subject;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
- 
   const handleSubjectCreation = async () => {
     try {
-      if (description == "") {
-        throw new Error("The description is emplty");
+      if (description === "") {
+        throw new Error("The description is empty");
       }
 
       if (description.length > DIMENSIONS.maxDescriptionLength) {
@@ -61,12 +38,19 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         throw new Error("The description is too short");
       }
 
-      const  createdSubject = await handleCreation();
-     
-      if (createdSubject) {
-        onSubmit(createdSubject);
-        onClose();
+      const response: SubjectResponse = await subjectService.createSubject(
+        description
+      );
+
+      if (!response || !response.subject) {
+        throw new Error("Invalid response from createSubject.");
       }
+
+      const createdSubject = response.subject;
+
+      setDescription("");
+      createSubject(createdSubject);
+      onClose();
     } catch (error) {
       console.log(error);
     }
@@ -88,10 +72,12 @@ const AddSubject: React.FC<AddSubjectProps> = ({
         onDescriptionChange={setDescription}
         placeholder="Input the description"
       />
-     
-      
-        <DefiniteActionButton title="CREATE" onPress={handleSubjectCreation} buttonStyle={styles.confirmButton} />
 
+      <DefiniteActionButton
+        title="CREATE"
+        onPress={handleSubjectCreation}
+        buttonStyle={styles.confirmButton}
+      />
     </PopUpModal>
   );
 };
@@ -118,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     borderColor: COLORS.textPrimary,
   },
-  confirmButton: {backgroundColor: COLORS.primary},
+  confirmButton: { backgroundColor: COLORS.primary },
 });
 
 export default AddSubject;
