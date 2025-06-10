@@ -9,6 +9,7 @@ interface PanelButtonProps {
   onPress?: () => void;
   disabled?: boolean;
   selected?: boolean;
+  small?: boolean;
 }
 const PanelButton: React.FC<PanelButtonProps> = ({
   title,
@@ -16,6 +17,7 @@ const PanelButton: React.FC<PanelButtonProps> = ({
   onPress,
   disabled,
   selected = true,
+  small = false,
 }) => {
   return (
     <TouchableOpacity
@@ -35,6 +37,7 @@ const PanelButton: React.FC<PanelButtonProps> = ({
         <Text
           style={[
             panelStyle.textBase,
+            small && panelStyle.textSmall,
             disabled
               ? panelStyle.disableText
               : selected
@@ -63,7 +66,7 @@ const panelStyle = StyleSheet.create({
   },
   disablePanel: {
     backgroundColor: COLORS.disabled,
-    borderWidth : 0,
+    borderWidth: 0,
   },
   panelSelected: {
     backgroundColor: COLORS.primary,
@@ -79,6 +82,9 @@ const panelStyle = StyleSheet.create({
     textTransform: "uppercase",
     textAlignVertical: "center",
     textAlign: "center",
+  },
+  textSmall: {
+    fontSize: DIMENSIONS.font,
   },
   disableText: {
     color: COLORS.textSecondary,

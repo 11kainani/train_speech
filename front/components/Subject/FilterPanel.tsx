@@ -64,28 +64,33 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             selected={filterByAnswer === AnswerState.UNANSWERD}
             onPress={() => handleAnswer(AnswerState.UNANSWERD)}
             style={styles.filteringButton}
+            small= {true}
           />
           <PanelButton
             title="Answered"
             selected={filterByAnswer === AnswerState.ANSWERED}
             onPress={() => handleAnswer(AnswerState.ANSWERED)}
             style={styles.filteringButton}
+            small= {true}
           />
         </View>
         <Text style={styles.filterTitle}>Order By Date</Text>
         <View style={styles.underline} />
         <View style={styles.horizontalFilterButton}>
         <PanelButton
+
             title="Descending"
             selected={isOrderBy === OrderState.DESCENDING}
             onPress={() => handleOrder(OrderState.DESCENDING)}
             style={styles.filteringButton}
+            small= {true}
           />
           <PanelButton
             title="Ascending"
             selected={isOrderBy === OrderState.ASCENDING}
             onPress={() => handleOrder(OrderState.ASCENDING)}
             style={styles.filteringButton}
+            small= {true}
           />
         </View>
         <View style={styles.horizontalFilterConfirmationButton}>
@@ -129,6 +134,7 @@ const styles = StyleSheet.create({
 
   filteringButton: {
     width: "40%",
+  
   },
   horizontalFilterConfirmationButton: {
     flexDirection: "row",
