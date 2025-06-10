@@ -16,7 +16,7 @@ import {
   SearchBar,
   FilterPanel,
 } from "../../../components";
-import { useAnsweredSubjectIds, useSubjects } from "../../../hook";
+
 import { useSubjectStore } from "../../../stores";
 enum AnswerState {
   ANSWERED = "answer",
@@ -42,7 +42,7 @@ const SubjectBankScreen = () => {
   );
   const [orderBy, setOrderby] = useState<OrderState>(OrderState.NONE);
   //TODO Do something in the state mangment
-  const { answeredIds } = useAnsweredSubjectIds();
+  const { answeredIds } = useSubjectStore();
   
 
 

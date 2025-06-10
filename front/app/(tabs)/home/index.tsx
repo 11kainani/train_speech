@@ -6,11 +6,12 @@ import { SevenDaysList } from "../../../components";
 import { useAnswerStore, useSubjectStore } from "../../../stores";
 export default function Home() {
   const { fetchAnswers } = useAnswerStore();
-  const { fetchSubjects } = useSubjectStore();
+  const { fetchSubjects, fetchAnsweredSubjects } = useSubjectStore();
 
   useEffect(() => {
     fetchSubjects();
     fetchAnswers();
+    fetchAnsweredSubjects();
   }, []);
 
   return (
