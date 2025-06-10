@@ -5,25 +5,19 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
-  TouchableOpacity,
-  Text,
 } from "react-native";
-import {
-  COLORS,
-  DIMENSIONS,
-  responsiveHeight,
-} from "../../../utils";
+import { COLORS, DIMENSIONS, responsiveHeight } from "../../../utils";
 import { Subject } from "../../../models/Subject";
 import {
   AddSubjectModal,
   DefiniteActionButton,
   FilterButton,
   SubjectListTable,
+  SearchBar,
+  FilterPanel,
 } from "../../../components";
-import { SearchBar } from "../../../components";
 import { useAnsweredSubjectIds, useSubjects } from "../../../hook";
-import { FilterPanel } from "../../../components/Subject";
-
+import { useSubjectStore } from "../../../stores";
 enum AnswerState {
   ANSWERED = "answer",
   UNANSWERD = "unanswered",
@@ -37,10 +31,8 @@ enum OrderState {
 }
 
 const SubjectBankScreen = () => {
-  const [isLoading, setLoading] = useState(true);
-  const { data, setData } = useSubjects(setLoading);
-  const [filteredData, setFilteredData] = useState(data);
-
+  const {subjects, isLoading} = useSubjectStore();
+  const [filteredData, setFilteredData] = useState(subjects);
   const [isPopUpVisible, setPopUpVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,22 +41,18 @@ const SubjectBankScreen = () => {
     AnswerState.NONE
   );
   const [orderBy, setOrderby] = useState<OrderState>(OrderState.NONE);
+  //TODO Do something in the state mangment
   const { answeredIds } = useAnsweredSubjectIds();
-
-  const handleSubjectCreated = (createdSubject: Subject) => {
-    console.log("Received from modal:", createdSubject);
-
-    setData((prevData) => [...prevData, createdSubject]);
-  };
-
   
+
+
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
   };
 
   const filterData = () => {
-    let filtered = [...data];
+    let filtered = [...subjects];
 
     //Search function
     if (searchQuery) {
@@ -112,7 +100,7 @@ const SubjectBankScreen = () => {
 
   useEffect(() => {
     filterData();
-  }, [data, searchQuery, filterByAnswer, orderBy]);
+  }, [subjects, searchQuery, filterByAnswer, orderBy]);
 
   return (
     <View style={styles.container}>
@@ -125,9 +113,7 @@ const SubjectBankScreen = () => {
             <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
 
-          <SubjectListTable
-            data={filteredData}
-          />
+          <SubjectListTable data={filteredData} />
 
           <DefiniteActionButton
             title={"Add Subject"}
@@ -141,7 +127,6 @@ const SubjectBankScreen = () => {
         onClose={() => setPopUpVisible(false)}
         description={description}
         setDescription={setDescription}
-      
       ></AddSubjectModal>
       <FilterPanel
         isVisible={isFilterModalVisible}
@@ -158,7 +143,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: COLORS.background,
-   
+
     flex: 1,
   },
 

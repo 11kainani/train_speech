@@ -26,11 +26,11 @@ interface SubjectListTableProps {
 }
 
 const SubjectListTable: React.FC<SubjectListTableProps> = ({
-  data,
+data
 
 }) => {
   const router = useRouter();
- const {subjects, deleteSubject} = useSubjectStore();
+ const { deleteSubject} = useSubjectStore();
   const handleItemPress = (itemName: string) => {
     //TODO : Create Subject detail page when click
     console.log(itemName);
@@ -95,7 +95,7 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({
   return (
     <View style={styles.segmentation}>
       <FlatList
-        data={subjects}
+        data={data}
         keyExtractor={({ idSubject }) => idSubject}
         renderItem={renderItem}
         persistentScrollbar={true}

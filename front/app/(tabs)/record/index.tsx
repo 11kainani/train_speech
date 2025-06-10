@@ -1,17 +1,17 @@
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { IconButton, SubjectCard } from "../../../components";
 import React, { useEffect, useState } from "react";
-import { useSubjects } from "../../../hook";
 import { Entypo } from "@expo/vector-icons";
 import { COLORS, DIMENSIONS } from "../../../utils";
 import { Subject } from "../../../models";
 import { useRouter } from "expo-router";
+import { useSubjectStore } from "../../../stores";
 
 export default function Record() {
   const defaultDescription =
     "Click shuffle (red) button to view a description !";
-  const [isLoading, setLoading] = useState(true);
-  const { data, setData } = useSubjects(setLoading);
+  const {subjects , isLoading} = useSubjectStore();
+
   const [randomDescription, setRandomDescription] =
     useState<string>(defaultDescription);
   const [allIds, setAllIds] = useState<string[]>([]);
@@ -38,14 +38,14 @@ export default function Record() {
       return updated;
     });
 
-    const subject = data.find(
+    const subject = subjects.find(
       (subject: Subject) => subject.idSubject === selectedId
     );
     setRandomDescription(subject?.description ?? "No description available");
   };
 
   const handleSelectSubject = () => {
-    const subject = data.find(
+    const subject = subjects.find(
       (subject: Subject) => subject.description === randomDescription
     );
     console.log(subject);
@@ -58,28 +58,19 @@ export default function Record() {
   };
 
   useEffect(() => {
-    if (data.length > 0) {
-      setAllIds(data.map((subject: Subject) => subject.idSubject));
+  if (subjects.length > 0) {
+      setAllIds(subjects.map((subject: Subject) => subject.idSubject));
       setUsedIds(new Set());
       handleRandomizeSubject();
     } else {
       setRandomDescription(
-       data ? "You have no subject, Go to Subject to create some !" : "Click shuffle (red) button to view a description !"
+       subjects ? "You have no subject, Go to Subject to create some !" : "Click shuffle (red) button to view a description !"
       );
     }
-    setLoading(false);
-  }, [data]);
 
-  useEffect(() => { 
-    setLoading(true);
-    const invalidDescriptions = [
-      "No description available",
-      defaultDescription,
-      "",
-    ];
-    setValidDescription(!invalidDescriptions.includes(randomDescription));
-    setLoading(false);
-  }, [randomDescription]);
+  }, [subjects]);
+
+ 
 
   return (
     <View style={styles.page}>

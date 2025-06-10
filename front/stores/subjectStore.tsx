@@ -33,13 +33,13 @@ export const useSubjectStore = create<SubjectStore>((set, get) => ({
 
   fetchSubjects: async () => {
     try {
-      set({ isLoading: false });
+      set({ isLoading: true });
       const response = await subjectService.getSubjects();
       set({ subjects: response.subjects });
     } catch (error) {
       console.error("Failed to fetch subjects", error);
     } finally {
-      set({ isLoading: true });
+      set({ isLoading: false });
     }
   },
 
