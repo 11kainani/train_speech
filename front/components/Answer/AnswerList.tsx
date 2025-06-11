@@ -14,12 +14,12 @@ import { useRouter } from "expo-router";
 import { useAnswerStore } from "../../stores";
 
 interface AnswerListProps {
-  onDeleteSuccess?: (idAnswer: string) => void;
+  answers : Answer[],
 }
 
-const AnswerList: React.FC<AnswerListProps> = ({ onDeleteSuccess }) => {
+const AnswerList: React.FC<AnswerListProps> = ({ answers}) => {
   const [expandItemId, setExpandItemId] = useState<string | null>(null);
-  const { answers } = useAnswerStore();
+
   const router = useRouter();
 
   const handleItemPress = (id: string) => {

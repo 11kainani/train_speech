@@ -9,8 +9,8 @@ interface AnswerStore {
   getAnswer(idAnswer: string): AnswerWithSubject | undefined;
   updateAnswer: (updated: Answer) => void;
   fetchAnswers: () => Promise<void>;
-  deleteAnswer: (id: string) => Promise<void>;
-  createAnswer: (newAnswer: Answer) => Promise<void>;
+  deleteAnswer: (id: string) => void;
+  createAnswer: (newAnswer: Answer) => void;
 }
 
 export const useAnswerStore = create<AnswerStore>((set, get) => ({
@@ -50,13 +50,13 @@ export const useAnswerStore = create<AnswerStore>((set, get) => ({
     }
   },
 
-  deleteAnswer: async (id: string) => {
+  deleteAnswer: (id: string) => {
     set((state) => ({
       answers: state.answers.filter((a) => a.idAnswer !== id),
     }));
   },
 
-  createAnswer: async (newAnswer: Answer) => {
+  createAnswer:  (newAnswer: Answer) => {
     set((state) => ({
       answers: [...state.answers, newAnswer],
     }));

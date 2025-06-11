@@ -1,7 +1,14 @@
-import { View, StyleSheet, ActivityIndicator, Text } from "react-native";
-import { COLORS, getPastXDays } from "../../utils";
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  FlatList,
+} from "react-native";
+import { COLORS, DIMENSIONS, getPastXDays } from "../../utils";
 import { useAnswerStore } from "../../stores";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import CardDisplay from "./CardDisplay";
 
 const SevenDaysList = () => {
   const [isLoading, setLoading] = useState(false);
@@ -11,10 +18,12 @@ const SevenDaysList = () => {
     if (answers.length == 0) {
       fetchAnswers();
     }
-  },[]);
-  
+  }, []);
+
   const past7Days = getPastXDays(7);
-  const countByDate = past7Days.map((dateStr) => {
+
+  const countByDate = useMemo(() => {
+  return past7Days.map((dateStr) => {
     const dayAnswers = answers.filter((answer) => {
       if (!answer.createdAt) return false;
       return answer.createdAt.startsWith(dateStr);
@@ -26,19 +35,33 @@ const SevenDaysList = () => {
       answers: dayAnswers,
     };
   });
+}, [answers]);
 
-  useEffect(() => {
-    const seperation = countByDate;
-    console.log("This is the seperation: ", seperation);
-  }, [answers]);
+
 
   return (
     <View style={styles.display}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <View>
-          <Text>HAHAH</Text>
+        <View style={styles.container}>
+          <FlatList
+            data={countByDate}
+            keyExtractor={(item) => item.date}
+            columnWrapperStyle={styles.calanderRow}
+            numColumns={7}
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.calanderContainer}>
+                  <CardDisplay
+                    count={item.count}
+                    date={item.date}
+                    answer={item.answers}
+                  />
+                </View>
+              );
+            }}
+          />
         </View>
       )}
     </View>
@@ -48,10 +71,13 @@ const SevenDaysList = () => {
 const styles = StyleSheet.create({
   display: {
     width: "90%",
-    maxHeight: "10%",
     alignSelf: "center",
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.background,
+    marginVertical: DIMENSIONS.margin,
   },
+  container: {},
+  calanderRow: { flexDirection: "row-reverse", justifyContent: "space-around" , marginVertical: DIMENSIONS.marginSmall},
+  calanderContainer: {alignItems: "center", width: "12%"},
 });
 
 export default SevenDaysList;

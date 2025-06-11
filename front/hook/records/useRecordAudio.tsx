@@ -1,20 +1,26 @@
 import { Alert } from "react-native";
-import { ensureRecordingDirExists, generateIdKey, secondsToFormat } from "../../utils";
+import {
+  ensureRecordingDirExists,
+  generateIdKey,
+  secondsToFormat,
+} from "../../utils";
 import { useEffect, useRef, useState } from "react";
 import { AudioModule, RecordingPresets, useAudioRecorder } from "expo-audio";
 import * as FileSystem from "expo-file-system";
 import { Answer, Subject } from "../../models";
 import { useAnswerStore } from "../../stores";
+import { answerService } from "../../services";
 const RECORD_DIR = FileSystem.documentDirectory + "recording/";
 const MAX_RECORD_TIME = 300;
 
+//TODO Add loading screen between the click of record and the start of record , diable the button betwwen
 export const useRecordAudio = (subject: Subject) => {
   const audioRecorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [recordTimer, setRecordTimer] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const {createAnswer} = useAnswerStore();
+  const { createAnswer } = useAnswerStore();
 
   useEffect(() => {
     (async () => {
@@ -30,7 +36,6 @@ export const useRecordAudio = (subject: Subject) => {
   }, []);
 
   const stopRecording = async (save: boolean = true) => {
-
     if (audioRecorder.isRecording) {
       await audioRecorder.stop();
     }
@@ -81,9 +86,8 @@ export const useRecordAudio = (subject: Subject) => {
           subject: subject,
           file_location: newPath,
         };
-        await createAnswer(answerToCreate);
-
-     
+        await answerService.createAnswer(answerToCreate);
+        createAnswer(answerToCreate);
       } catch (error) {
         console.error("Error while copying recording:", error);
       }
@@ -150,4 +154,3 @@ export const useRecordAudio = (subject: Subject) => {
     stopRecording,
   };
 };
-

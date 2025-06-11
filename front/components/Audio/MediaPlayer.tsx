@@ -10,7 +10,6 @@ import { usePlaybackController } from "../../hook";
 import { useAnswerStore } from "../../stores";
 import { answerService } from "../../services";
 
-
 //TODO Add a buffer so that when the video is loading it is shown
 interface MediaPlayerProps {
   idAnswer: string;
@@ -25,12 +24,14 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
 }) => {
   const { deleteAnswer } = useAnswerStore();
 
-  const handleDeleteAnswer = async (idAnswer : string) => {
-     const response = await answerService.deleteAnswer(idAnswer);
-      if (response) {
-        deleteAnswer(idAnswer);
-  }
-  }
+  const handleDeleteAnswer = async (idAnswer: string) => {
+    try {
+      await answerService.deleteAnswer(idAnswer);
+      deleteAnswer(idAnswer);
+    } catch (error) {
+      console.error("Failed to delete answer:", error);
+    }
+  };
   const answerRequest = useAnswerStore().getAnswer(idAnswer);
   const answer = answerRequest?.answer;
   if (!answer) {
@@ -38,7 +39,6 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
     return;
   }
 
- 
   const player = useAudioPlayer(answer.file_location);
   player.volume = 99;
 
@@ -61,7 +61,6 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
       );
     }
 
-  
     return (
       <Feather
         name="play-circle"
@@ -85,9 +84,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
         <IconButton
           small={true}
           backgroundColor={COLORS.red}
-          onPress={() =>
-            handleDeleteAnswer(idAnswer)
-          }
+          onPress={() => handleDeleteAnswer(idAnswer)}
           icon={
             <Feather
               name="trash"
