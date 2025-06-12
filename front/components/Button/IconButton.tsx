@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     marginHorizontal: DIMENSIONS.margin,
   },
   smallContent : {
-     paddingVertical: DIMENSIONS.paddingSmall,
-    paddingHorizontal: DIMENSIONS.paddingSmall,
+     paddingVertical: DIMENSIONS.paddingXSmall,
+    paddingHorizontal: DIMENSIONS.paddingXSmall,
     marginHorizontal: DIMENSIONS.marginSmall,
   },
 });

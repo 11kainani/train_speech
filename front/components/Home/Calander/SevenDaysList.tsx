@@ -5,8 +5,8 @@ import {
   Text,
   FlatList,
 } from "react-native";
-import { COLORS, DIMENSIONS, getPastXDays } from "../../utils";
-import { useAnswerStore } from "../../stores";
+import { COLORS, DIMENSIONS, getPastXDays } from "../../../utils";
+import { useAnswerStore } from "../../../stores";
 import { useState, useEffect, useMemo } from "react";
 import CardDisplay from "./CardDisplay";
 

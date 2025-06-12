@@ -15,22 +15,19 @@ import {
   responsiveWidth,
 } from "../../utils";
 import { subjectService } from "../../services";
-import { SmallConfirmButton } from "../Button";
+import { IconButton, SmallConfirmButton } from "../Button";
 import { Subject } from "../../models";
 import { useRouter } from "expo-router";
 import { useSubjectStore } from "../../stores";
+import { Feather } from "@expo/vector-icons";
 
 interface SubjectListTableProps {
   data: Subject[];
-
 }
 
-const SubjectListTable: React.FC<SubjectListTableProps> = ({
-data
-
-}) => {
+const SubjectListTable: React.FC<SubjectListTableProps> = ({ data }) => {
   const router = useRouter();
- const { deleteSubject} = useSubjectStore();
+  const { deleteSubject } = useSubjectStore();
   const handleItemPress = (itemName: string) => {
     //TODO : Create Subject detail page when click
     console.log(itemName);
@@ -45,7 +42,6 @@ data
     try {
       await subjectService.deleteSubject(idSubject);
       deleteSubject(idSubject);
-      
     } catch (err) {
       console.error("Delete failed", err);
     }
@@ -79,16 +75,25 @@ data
           onPress={() => handleSubjectAnswer(item)}
         />
 
-        <TouchableOpacity
-          onPress={() => handleRightButtonPress(item.idSubject)}
-          style={styles.delete}
-        >
-          <Ionicons
-            name="settings-sharp"
-            size={DIMENSIONS.iconSize}
-            color={COLORS.primary}
-          />
-        </TouchableOpacity>
+        <IconButton
+          icon={
+            <Feather
+              name="settings"
+              size={DIMENSIONS.iconSize}
+              color={COLORS.background}
+            />
+          }
+          small={true}
+          onPress={() => {
+            //TODO subjects details page
+         
+            }}
+
+          onLongPress={() => {
+            //TODO Popup menu
+              handleRightButtonPress(item.idSubject);
+            }}
+        />
       </View>
     </View>
   );

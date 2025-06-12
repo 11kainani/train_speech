@@ -4,9 +4,10 @@ import { View, Text, Button } from "react-native";
 import { SevenDaysList } from "../../../components";
 
 import { useAnswerStore, useSubjectStore } from "../../../stores";
+import { RecentSubjects } from "../../../components/Home";
 export default function Home() {
   const { fetchAnswers } = useAnswerStore();
-  const { fetchSubjects, fetchAnsweredSubjects } = useSubjectStore();
+  const { subjects , fetchSubjects, fetchAnsweredSubjects } = useSubjectStore();
 
   useEffect(() => {
     fetchSubjects();
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <View>
       <SevenDaysList />
+      <RecentSubjects subjects={subjects} />
       <Text>Home Tab</Text>
     </View>
   );

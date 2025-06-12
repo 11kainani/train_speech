@@ -44,3 +44,5 @@ const styles = StyleSheet.create({
 })
 
 export default RecordingScreen;
+
+//TODO Limit the number of records par day possible

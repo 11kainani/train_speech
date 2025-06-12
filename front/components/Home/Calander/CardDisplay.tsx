@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
-import { COLORS, daysOfWeek, DIMENSIONS, monthsInYear } from "../../utils";
-import { Answer } from "../../models";
+import { COLORS, daysOfWeek, DIMENSIONS, monthsInYear } from "../../../utils";
+import { Answer } from "../../../models";
 
 interface CardDisplayProp {
   date: string;

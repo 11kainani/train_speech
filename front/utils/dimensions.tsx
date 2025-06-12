@@ -7,7 +7,7 @@ export const DIMENSIONS = {
   screenHeight: height,
 
   // Basic spacing
-  paddingXSmall: 6,
+  paddingXSmall: 5,
   paddingSmall: 8,
   padding: 16,
   paddingLarge: 24,
@@ -17,7 +17,7 @@ export const DIMENSIONS = {
   marginLarge: 24,
 
   // Font sizes
-  fontXSmall: 4,
+  fontXSmall: 5,
   fontSmall: 8,
   font: 12,
   fontLarge: 16,
