@@ -112,7 +112,6 @@ const SubjectListTable: React.FC<SubjectListTableProps> = ({ data }) => {
 const styles = StyleSheet.create({
   segmentation: {
     width: "100%",
-    height: "75%",
     alignSelf: "center",
   },
 

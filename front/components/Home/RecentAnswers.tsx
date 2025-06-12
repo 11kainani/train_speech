@@ -1,15 +1,17 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Subject } from "../../models";
+import { Answer } from "../../models";
 import { DIMENSIONS } from "../../utils";
 import { SubjectListTable } from "../Subject";
+import { AnswerList } from "../Answer";
 
-interface RecentSubjectsProps {
-  subjects: Subject[];
+interface RecentAnswersProps {
+  answers: Answer[];
 }
 
-const RecentSubjects: React.FC<RecentSubjectsProps> = ({ subjects }) => {
-  const orderFilterSubject = (maxSubjects: number) => {
-    let ordered = [...subjects];
+const RecentAnswers: React.FC<RecentAnswersProps> = ({ answers }) => {
+
+  const orderFilterSubject = (maxAnswers: number) => {
+    let ordered = [...answers];
     ordered = ordered
       .filter(
         (s): s is typeof s & { createdAt: string } => s.createdAt !== undefined
@@ -17,16 +19,16 @@ const RecentSubjects: React.FC<RecentSubjectsProps> = ({ subjects }) => {
       .sort((a, b) => {
         const dateA = new Date(a.createdAt!);
         const dateB = new Date(b.createdAt!);
-        return dateB.getTime() - dateA.getTime() ;
+        return dateB.getTime() - dateA.getTime();
       });
 
-    return ordered.slice(0, maxSubjects);
+    return ordered.slice(0, maxAnswers);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleLabel}> Recently Created Subjects</Text>
-      <SubjectListTable data={orderFilterSubject(3)} />
+      <Text style={styles.titleLabel}> Recent Answers</Text>
+      <AnswerList answers={orderFilterSubject(3)} />
     </View>
   );
 };
@@ -37,7 +39,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     width: "90%",
-
   },
 
   titleLabel: {
@@ -47,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecentSubjects;
+export default RecentAnswers;

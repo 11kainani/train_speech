@@ -113,7 +113,10 @@ const SubjectBankScreen = () => {
             <FilterButton onPress={() => setIsFilterModalVisible(true)} />
           </View>
 
+        <View style= {styles.subjectList}>
           <SubjectListTable data={filteredData} />
+           </View>
+          
 
           <DefiniteActionButton
             title={"Add Subject"}
@@ -168,6 +171,9 @@ export const styles = StyleSheet.create({
     maxHeight: responsiveHeight(7),
   },
 
+  subjectList: {
+    height: "80%",
+  },
   underline: {
     borderWidth: DIMENSIONS.unit,
     marginBottom: DIMENSIONS.margin,
